@@ -1,24 +1,28 @@
 //
-// Created by mlujan on 5/4/19.
+// Created by mlujan on 5/5/19.
 //
 
-#include "Lista_inst.h"
+/**
+ * @TODO Corregir metodo cabeza y terminar lista.
+ * @TODO Agregar metodos que faltan
+ */
+#include "List_Var.h"
 
-Lista_inst::Lista_inst ()
+List_Var::List_Var ()
 {
   czo = NULL;
   size = 0;
 }
 
-Lista_inst::Lista_inst(string a)
+List_Var::List_Var(char n, int v)
 {
-  czo = new Nodo_inst (a);
+  czo = new Nodo_Var (n,v);
   size = 1;
 }
 
-void Lista_inst::add (string d)
+void List_Var::add (char n, int v)
 {
-  Nodo_inst *nuevo = new Nodo_inst (d);
+  Nodo_Var *nuevo = new Nodo_Var (n,v);
   if (czo == NULL)
     {
       czo = nuevo;
@@ -29,19 +33,20 @@ void Lista_inst::add (string d)
     }
   else
     {
-      Nodo_inst *temp = get_nodo (get_size () - 1);
+      Nodo_Var *temp = get_nodo (get_size () - 1);
       temp->set_next (nuevo);
     }
 
   size = size + 1;
 }
 
-bool Lista_inst::esvacia (void)
+bool List_Var::esvacia (void)
 {
   return czo->es_vacio ();
 }
 
-string Lista_inst::cabeza (void)
+/*
+Nodo_Var* List_Var::cabeza (void)
 {
   if (esvacia ())
     {
@@ -50,17 +55,18 @@ string Lista_inst::cabeza (void)
     }
   else
     {
-      return czo->get_dato ();
+      return ;
     }
 
 }
+*/
 
-int Lista_inst::get_size ()
+int List_Var::get_size ()
 {
   return size;
 }
 
-Nodo_inst *Lista_inst::get_nodo (int a)
+Nodo_Var *List_Var::get_nodo (int a)
 {
   if (a > get_size ())
     {
@@ -69,7 +75,7 @@ Nodo_inst *Lista_inst::get_nodo (int a)
     }
   else
     {
-      Nodo_inst *temp = czo;
+      Nodo_Var *temp = czo;
       for (int i = 0; i < a; i++)
         {
           temp = temp->get_next ();
