@@ -18,9 +18,9 @@ class Lista_inst {
   int size;
 
  public:
-  Lista_inst (string);
+  Lista_inst();
 
-  //Lista_inst (Nodo_inst *n);
+  Lista_inst(string);
 
   void add (string);
 
@@ -29,10 +29,6 @@ class Lista_inst {
   string cabeza (void);
 
   Nodo_inst *get_nodo (int);
-
-  //Lista_inst *resto (void);
-
-  //std::string toPrint (std::string p);
 
   int get_size ();
 };

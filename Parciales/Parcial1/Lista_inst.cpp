@@ -4,24 +4,35 @@
 
 #include "Lista_inst.h"
 
-Lista_inst::Lista_inst (string a)
+Lista_inst::Lista_inst ()
+{
+  czo = NULL;
+  size = 0;
+}
+
+Lista_inst::Lista_inst(string a)
 {
   czo = new Nodo_inst (a);
   size = 1;
 }
 
-/*
-Lista_inst::Lista_inst (Nodo_inst *n)
-{
-  czo = new Nodo_inst();
-}
- */
-
 void Lista_inst::add (string d)
 {
   Nodo_inst *nuevo = new Nodo_inst (d);
-  nuevo->set_next (czo);
-  czo = nuevo;
+  if (czo == NULL)
+    {
+      czo = nuevo;
+    }
+  else if (get_size () < 2)
+    {
+      czo->set_next (nuevo);
+    }
+  else
+    {
+      Nodo_inst *temp = get_nodo (get_size () - 1);
+      temp->set_next (nuevo);
+    }
+
   size = size + 1;
 }
 
@@ -34,7 +45,8 @@ string Lista_inst::cabeza (void)
 {
   if (esvacia ())
     {
-      cout << " Error, Cabeza de lista vacia";
+      return " Error, Cabeza de lista vacia";
+
     }
   else
     {
