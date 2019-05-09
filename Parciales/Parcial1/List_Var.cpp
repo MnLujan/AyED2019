@@ -2,10 +2,6 @@
 // Created by mlujan on 5/5/19.
 //
 
-/**
- * @TODO Corregir metodo cabeza y terminar lista.
- * @TODO Agregar metodos que faltan
- */
 #include "List_Var.h"
 
 List_Var::List_Var ()
@@ -14,15 +10,15 @@ List_Var::List_Var ()
   size = 0;
 }
 
-List_Var::List_Var(char n, int v)
+List_Var::List_Var (char n, int v)
 {
-  czo = new Nodo_Var (n,v);
+  czo = new Nodo_Var (n, v);
   size = 1;
 }
 
-void List_Var::add (char n, int v)
+void List_Var::addVar (char n, int v)
 {
-  Nodo_Var *nuevo = new Nodo_Var (n,v);
+  Nodo_Var *nuevo = new Nodo_Var (n, v);
   if (czo == NULL)
     {
       czo = nuevo;
@@ -45,21 +41,18 @@ bool List_Var::esvacia (void)
   return czo->es_vacio ();
 }
 
-/*
-Nodo_Var* List_Var::cabeza (void)
+Nodo_Var *List_Var::cabeza (void)
 {
   if (esvacia ())
     {
-      return " Error, Cabeza de lista vacia";
-
+      cout << "Error, lista vacia" << endl;
     }
   else
     {
-      return ;
+      return czo;
     }
 
 }
-*/
 
 int List_Var::get_size ()
 {
@@ -70,7 +63,7 @@ Nodo_Var *List_Var::get_nodo (int a)
 {
   if (a > get_size ())
     {
-      cout << "Error, instruccion inexistente" << endl;
+      cout << "Error, nodo inexistente" << endl;
       return NULL;
     }
   else

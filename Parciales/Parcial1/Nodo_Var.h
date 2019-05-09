@@ -25,6 +25,10 @@ class Nodo_Var {
 
   bool es_vacio ();
 
+  char get_nombre();
+
+  int get_valor();
+
 };
 
 #endif //_NODO_VAR_H_

@@ -34,5 +34,12 @@ bool Nodo_Var::es_vacio ()
   return var->esnulo ();
 }
 
+char Nodo_Var::get_nombre ()
+{
+  return var->get_name ();
+}
 
-
+int Nodo_Var::get_valor ()
+{
+  return var->get_val ();
+}

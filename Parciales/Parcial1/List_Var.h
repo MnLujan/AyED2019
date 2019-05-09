@@ -13,23 +13,22 @@ using namespace std;
 
 class List_Var {
  private:
-  Nodo_Var* czo;
+  Nodo_Var *czo;
   int size;
  public:
   List_Var ();
 
-  List_Var(char, int);
+  List_Var (char, int);
 
-  void add (char, int);
+  void addVar (char, int);
 
   bool esvacia (void);
 
-  Nodo_Var* cabeza (void);
+  Nodo_Var *cabeza (void);
 
   Nodo_Var *get_nodo (int);
 
   int get_size ();
-
 
 };
 
