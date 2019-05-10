@@ -29,6 +29,8 @@ class Nodo_Var {
 
   int get_valor();
 
+  void set_val(int);
+
 };
 
 #endif //_NODO_VAR_H_

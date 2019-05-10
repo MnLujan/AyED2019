@@ -28,7 +28,13 @@ class List_Var {
 
   Nodo_Var *get_nodo (int);
 
+  char get_name(int);
+
+  int get_val(int);
+
   int get_size ();
+
+  void set_val(int,int);
 
 };
 

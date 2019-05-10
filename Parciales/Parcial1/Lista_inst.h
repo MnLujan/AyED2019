@@ -30,6 +30,8 @@ class Lista_inst {
 
   Nodo_inst *get_nodo (int);
 
+  string get_dato(int);
+
   int get_size ();
 };
 

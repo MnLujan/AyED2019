@@ -77,3 +77,21 @@ Nodo_inst *Lista_inst::get_nodo (int a)
       return temp;
     }
 }
+
+string Lista_inst::get_dato (int a)
+{
+  if (a > get_size ())
+    {
+      cout << "Error, instruccion inexistente" << endl;
+      return NULL;
+    }
+  else
+    {
+      Nodo_inst *temp = czo;
+      for (int i = 0; i < a; i++)
+        {
+          temp = temp->get_next ();
+        }
+      return temp->get_dato ();
+    }
+}

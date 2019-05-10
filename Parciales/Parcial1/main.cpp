@@ -5,6 +5,7 @@
 #include "Lista_inst.h"
 #include "List_Var.h"
 #include "Pila.h"
+#include "Simulador.h"
 
 #define MAX 200
 
@@ -15,6 +16,7 @@ int main ()
 
   FILE *inst;
   char cadena[MAX];
+  Lista_inst *l;
 
   inst = fopen ("secuencia", "r");
 
@@ -24,7 +26,7 @@ int main ()
     }
   else
     {
-      Lista_inst *l = new Lista_inst ();
+      l = new Lista_inst ();
       while (fgets (cadena, MAX, inst) != NULL)
         {
           l->add (cadena);
@@ -32,12 +34,8 @@ int main ()
       fclose (inst);
       cout << l->cabeza ();
     }
-  List_Var *v = new List_Var ();
-  v->addVar ('a', 20);
-  v->addVar ('b', 15);
-  v->addVar ('c', 90);
-  cout << "Primer valor guardado:" << v->cabeza ()->get_valor ();
-  cout << "Tamaño de la lista: " << v->get_size () << endl;
-  cout << "Valor del ultimo: " << v->get_nodo (v->get_size () - 1)->get_valor ();
+    Simulador *s = new Simulador(l);
+    s->ejecutar ();
+
   return EXIT_SUCCESS;
 }

@@ -43,3 +43,8 @@ int Nodo_Var::get_valor ()
 {
   return var->get_val ();
 }
+
+void Nodo_Var::set_val (int a)
+{
+  var->set_val (a);
+}
