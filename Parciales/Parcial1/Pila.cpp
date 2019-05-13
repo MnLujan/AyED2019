@@ -18,41 +18,56 @@ Pila::Pila (char x)
   apilar (x);
 }
 
-void Pila::imprimir() {
+void Pila::imprimir ()
+{
 
-  if(pilavacia()){
-      cout<<"Pila vacia, nada que imprimir"<<endl;
+  if (pilavacia ())
+    {
+      cout << "Pila vacia, nada que imprimir" << endl;
       return;
-    }else{
-      for(int i = pos; i>=0; i--){
-          cout<<arreglo[i]<<" - ";
+    }
+  else
+    {
+      for (int i = pos; i >= 0; i--)
+        {
+          cout << arreglo[i] << " - ";
         }
-      cout<<endl;
+      cout << endl;
     }
 }
-void Pila::apilar(char x) {
-  if(pos != n) {
+void Pila::apilar (char x)
+{
+  if (pos != n)
+    {
       pos++;
       arreglo[pos] = x;
-    }else{
-      cout<<"La pila esta llena"<<endl;
+    }
+  else
+    {
+      cout << "La pila esta llena" << endl;
     }
 }
 
-char Pila::tope() {
+char Pila::tope ()
+{
 
   /* Recordar que es de tipo LIFO */
   return arreglo[pos];
 }
 
-void Pila::desapilar() {
-  if (pilavacia()) {
-      cout<<"Error, pila vacia" << endl;
-    } else {
+void Pila::desapilar ()
+{
+  if (pilavacia ())
+    {
+      cout << "Error, pila vacia" << endl;
+    }
+  else
+    {
       pos--;
     }
 }
 
-bool Pila::pilavacia() {
+bool Pila::pilavacia ()
+{
   return pos == -1;
 }

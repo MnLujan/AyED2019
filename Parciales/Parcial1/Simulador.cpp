@@ -4,6 +4,10 @@
 
 #include "Simulador.h"
 
+/**
+ * Constructor de la calse Simulador
+ * @param l puntero a lista de instrucciones
+ */
 Simulador::Simulador (Lista_inst *l)
 {
   pc = 1;
@@ -12,6 +16,10 @@ Simulador::Simulador (Lista_inst *l)
 
 }
 
+/**
+ * Metodo que ejecuta las instrucciones una a una, tomando dichas instrucciones desde
+ * la Lista_inst pasada como parametro.
+ */
 void Simulador::ejecutar ()
 {
   int size = p->get_size ();
@@ -20,13 +28,15 @@ void Simulador::ejecutar ()
       char a;
       int i;
       char cadena[20];
+      char cadena_2[20];
       if (sscanf (p->get_dato (pc - 1).c_str (), "INT %c", &a) == 1)
         {
           declaracion (a);
         }
       else if (sscanf (p->get_dato (pc - 1).c_str (), "%c = %19s", &a, cadena) > 1)
         {
-          asignacion (a, cadena);
+          Expresaritmetica *e = new Expresaritmetica (cadena, v);
+          asignacion (a, e->resultado ());
         }
       else if (sscanf (p->get_dato (pc - 1).c_str (), "JUMP %i", &i) == 1)
         {
@@ -45,10 +55,23 @@ void Simulador::ejecutar ()
         {
           show (a);
         }
+      else if (sscanf ((p->get_dato (pc - 1).c_str ()), "IF ( %19s ) THEN %19s", cadena, cadena_2) == 2)
+        {
+          Expresaritmetica *e = new Expresaritmetica (cadena, v);
+          if (e->evaluacion ())
+            {
+              cout << "es verdad" << endl;
+            }
+        }
       pc = pc + 1;
     }
 }
 
+/**
+ * Metodo que ejecuta la instruccion de declaracion de variable. Corrobora si la variable
+ * ya existe.
+ * @param b nombre de la variable
+ */
 void Simulador::declaracion (char b)
 {
   if (v->esvacia ())
@@ -70,7 +93,13 @@ void Simulador::declaracion (char b)
 
 }
 
-void Simulador::asignacion (char c, string cadena)
+/**
+ * Ejecuta la instruccion de asignacion de varaibles, corroborando antes si existen variables
+ * para asignar.
+ * @param c nombre de la variable a asignar un valor
+ * @param re resultado de la expresion aritmetica ingresada
+ */
+void Simulador::asignacion (char c, int re)
 {
   if (v->esvacia ())
     {
@@ -83,7 +112,7 @@ void Simulador::asignacion (char c, string cadena)
         {
           if (v->get_name (i) == c)
             {
-              v->set_val (i, i);
+              v->set_val (i, re);
               return;
             }
         }

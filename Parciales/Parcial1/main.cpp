@@ -3,10 +3,7 @@
 #include <sstream>
 #include <cstring>
 #include "Lista_inst.h"
-#include "List_Var.h"
-#include "Pila.h"
 #include "Simulador.h"
-
 #define MAX 200
 
 using namespace std;
@@ -34,8 +31,8 @@ int main ()
       fclose (inst);
       cout << l->cabeza ();
     }
-    Simulador *s = new Simulador(l);
-    s->ejecutar ();
+  Simulador *s = new Simulador (l);
+  s->ejecutar ();
 
   return EXIT_SUCCESS;
 }

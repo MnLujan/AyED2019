@@ -6,23 +6,22 @@
 #define _SIMULADOR_H_
 #include "List_Var.h"
 #include "Lista_inst.h"
+#include "Expresaritmetica.h"
 
 class Simulador {
  private:
   int pc;
   List_Var *v;
   Lista_inst *p;
-  void declaracion(char);
-  void asignacion(char, string);
+  void declaracion (char);
+  void asignacion (char, int);
   void jump (int);
-  void show(char);
+  void show (char);
  public:
 
-  Simulador (Lista_inst*);
+  Simulador (Lista_inst *);
 
-  void ejecutar();
-
-
+  void ejecutar ();
 
 };
 

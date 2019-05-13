@@ -29,11 +29,6 @@ char Variables::get_name ()
   return this->nombre;
 }
 
-void Variables::set_name (char n)
-{
-  this->nombre = n;
-}
-
 int Variables::get_val ()
 {
   return this->valor;

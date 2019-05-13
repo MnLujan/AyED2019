@@ -24,17 +24,18 @@ class List_Var {
 
   bool esvacia (void);
 
-  Nodo_Var *cabeza (void);
-
   Nodo_Var *get_nodo (int);
 
   char get_name(int);
 
   int get_val(int);
 
+  int get_val_2 (char);
+
   int get_size ();
 
   void set_val(int,int);
+
 
 };
 
