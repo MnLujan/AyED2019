@@ -6,13 +6,13 @@
 #define _PILA_H_
 #include <iostream>
 #include <sstream>
+#define MAX2 100
 using namespace std;
 
-const int n = 100;
 class Pila {
 
  private:
-  char arreglo[n];
+  char arreglo[MAX2];
   int pos;
 
  public:
@@ -25,7 +25,6 @@ class Pila {
   void desapilar ();
 
   bool pilavacia ();
-  void imprimir ();
 };
 
 

@@ -18,26 +18,9 @@ Pila::Pila (char x)
   apilar (x);
 }
 
-void Pila::imprimir ()
-{
-
-  if (pilavacia ())
-    {
-      cout << "Pila vacia, nada que imprimir" << endl;
-      return;
-    }
-  else
-    {
-      for (int i = pos; i >= 0; i--)
-        {
-          cout << arreglo[i] << " - ";
-        }
-      cout << endl;
-    }
-}
 void Pila::apilar (char x)
 {
-  if (pos != n)
+  if (pos != MAX2)
     {
       pos++;
       arreglo[pos] = x;

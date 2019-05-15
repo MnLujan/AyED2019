@@ -7,6 +7,7 @@
 #include "List_Var.h"
 #include "Lista_inst.h"
 #include "Expresaritmetica.h"
+#define MAX3 20
 
 class Simulador {
  private:
@@ -17,11 +18,11 @@ class Simulador {
   void asignacion (char, int);
   void jump (int);
   void show (char);
+  void ejecutar (string);
  public:
 
   Simulador (Lista_inst *);
-
-  void ejecutar ();
+  void simular();
 
 };
 

@@ -29,10 +29,9 @@ int main ()
           l->add (cadena);
         }
       fclose (inst);
-      cout << l->cabeza ();
     }
   Simulador *s = new Simulador (l);
-  s->ejecutar ();
+  s->simular ();
 
   return EXIT_SUCCESS;
 }

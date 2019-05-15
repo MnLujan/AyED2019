@@ -9,7 +9,6 @@
  */
 Expresaritmetica::Expresaritmetica ()
 {
-  cadena = "nada";
   p = NULL;
   V = NULL;
 
@@ -20,21 +19,20 @@ Expresaritmetica::Expresaritmetica ()
  * @param n cadena de caracteres a resolver
  * @param aux puntero a lista de variables
  */
-Expresaritmetica::Expresaritmetica (string n, List_Var *aux)
+Expresaritmetica::Expresaritmetica (List_Var *aux)
 {
-  cadena = n;
   p = new Pila ();
   V = aux;
-
 }
 
 /**
  * Metodo que evalua una expresion y la resuelve
  * @return resultado de tipo int
  */
-int Expresaritmetica::resultado ()
+int Expresaritmetica::resultado (string cadena)
 {
-  char d, p_1;
+  char d;
+  char p_1;
   for (int j = 0; j < cadena.length (); j++)
     {
       d = cadena.at (j);
@@ -69,35 +67,37 @@ int Expresaritmetica::resultado ()
     }
 
 /* Evaluacion de la expresion en posfijo */
-  int o1, o2;
+  int o_1, o_2;
 
   for (int i = 0; (i < pf.length ()); i++)
     {
       d = pf.at (i);
-      if (d >= '0' && d <= '9') p->apilar (d - '0');
+
+      /* El programa queda limitado hasta el calculo del numero 122, por la implementacion */
+      if ((d >= '0' && d <= '9') || (d>=':' && d<='z')) p->apilar (d - '0');
       if (d == '+')
         {
-          o2 = p->tope ();
+          o_2 = p->tope ();
           p->desapilar ();
-          o1 = p->tope ();
+          o_1 = p->tope ();
           p->desapilar ();
-          p->apilar (o1 + o2);
+          p->apilar (o_1 + o_2);
         }
       if (d == '-')
         {
-          o2 = p->tope ();
+          o_2 = p->tope ();
           p->desapilar ();
-          o1 = p->tope ();
+          o_1 = p->tope ();
           p->desapilar ();
-          p->apilar (o1 - o2);
+          p->apilar (o_1 - o_2);
         }
       if (d == '*')
         {
-          o2 = p->tope ();
+          o_2 = p->tope ();
           p->desapilar ();
-          o1 = p->tope ();
+          o_1 = p->tope ();
           p->desapilar ();
-          p->apilar (o1 * o2);
+          p->apilar (o_1 * o_2);
         }
     }
   return p->tope ();
@@ -130,7 +130,7 @@ int Expresaritmetica::prcd (int o1, int o2)
  * Metodo que evalua una condicion.
  * @return true en caso de que se cumpla la condicion. False caso contrario.
  */
-bool Expresaritmetica::evaluacion ()
+bool Expresaritmetica::evaluacion (string cadena)
 {
   char d;
   char p_1;
@@ -179,7 +179,6 @@ bool Expresaritmetica::evaluacion ()
         {
           o_2 = p->tope ();
           p->desapilar ();
-          //p->desapilar ();
           o_1 = p->tope ();
           p->desapilar ();
           if (o_1 == o_2)
@@ -213,7 +212,6 @@ bool Expresaritmetica::evaluacion ()
         {
           o_2 = p->tope ();
           p->desapilar ();
-          //p->desapilar (),
           o_1 = p->tope ();
           p->desapilar ();
           if (o_1 != o_2)

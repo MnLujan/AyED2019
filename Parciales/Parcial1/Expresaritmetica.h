@@ -9,17 +9,15 @@
 
 class Expresaritmetica {
  private:
-  string cadena;
   string pf;
   Pila *p;
   List_Var *V;
  public:
   Expresaritmetica();
-  Expresaritmetica(string, List_Var*);
-  int resultado();
-  bool evaluacion();
+  Expresaritmetica(List_Var*);
+  int resultado(string);
+  bool evaluacion(string);
   int prcd(int, int);
-  void reemplazar();
 
 };
 

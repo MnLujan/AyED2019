@@ -2,8 +2,12 @@
 // Created by mlujan on 5/10/19.
 //
 
+#include <cstring>
 #include "Simulador.h"
 
+/**
+ * @TODO Cambiar lo del string en la funcion IF
+ */
 /**
  * Constructor de la calse Simulador
  * @param l puntero a lista de instrucciones
@@ -17,54 +21,70 @@ Simulador::Simulador (Lista_inst *l)
 }
 
 /**
- * Metodo que ejecuta las instrucciones una a una, tomando dichas instrucciones desde
- * la Lista_inst pasada como parametro.
+ * Simular se encarga de llamar iterativas veces al metodo ejecutar, hasta que se
+ * termine la cantidad de instrucciones a ejecutar.
  */
-void Simulador::ejecutar ()
+void Simulador::simular ()
 {
   int size = p->get_size ();
   while (pc < size + 1)
     {
-      char a;
-      int i;
-      char cadena[20];
-      char cadena_2[20];
-      if (sscanf (p->get_dato (pc - 1).c_str (), "INT %c", &a) == 1)
-        {
-          declaracion (a);
-        }
-      else if (sscanf (p->get_dato (pc - 1).c_str (), "%c = %19s", &a, cadena) > 1)
-        {
-          Expresaritmetica *e = new Expresaritmetica (cadena, v);
-          asignacion (a, e->resultado ());
-        }
-      else if (sscanf (p->get_dato (pc - 1).c_str (), "JUMP %i", &i) == 1)
-        {
-          if (i > size || i == 0)
-            {
-              printf ("Error: %i y tamaño del programa %i \n", i, size);
-            }
-          else
-            {
-              jump (i);
-              continue;
-            }
-
-        }
-      else if (sscanf (p->get_dato (pc - 1).c_str (), "SHOW %c", &a) == 1)
-        {
-          show (a);
-        }
-      else if (sscanf ((p->get_dato (pc - 1).c_str ()), "IF ( %19s ) THEN %19s", cadena, cadena_2) == 2)
-        {
-          Expresaritmetica *e = new Expresaritmetica (cadena, v);
-          if (e->evaluacion ())
-            {
-              cout << "es verdad" << endl;
-            }
-        }
+      this->ejecutar (p->get_dato (pc - 1));
       pc = pc + 1;
     }
+}
+
+/**
+ * Metodo que ejecuta las instrucciones una a una, tomando dichas instrucciones desde
+ * la Lista_inst pasada como parametro.
+ */
+void Simulador::ejecutar (string aux)
+{
+  int size = p->get_size ();
+
+  char a;
+  int i;
+  char cadena[MAX3];
+  char cadena_2[MAX3];
+  char cadena_3[MAX3];
+  if (sscanf (aux.c_str (), "INT %c", &a) == 1)
+    {
+      declaracion (a);
+    }
+  else if (sscanf (aux.c_str (), "%c = %19s", &a, cadena) > 1)
+    {
+      Expresaritmetica *e = new Expresaritmetica (v);
+      asignacion (a, e->resultado (cadena));
+    }
+  else if (sscanf (aux.c_str (), "JUMP %i", &i) == 1)
+    {
+      if (i > size || i == 0)
+        {
+          printf ("Error: %i y tamaño del programa %i \n", i, size);
+        }
+      else
+        {
+          jump (i);
+          return;
+        }
+
+    }
+  else if (sscanf (aux.c_str (), "SHOW %c", &a) == 1)
+    {
+      show (a);
+    }
+  else if (sscanf (aux.c_str (), "IF ( %19s ) THEN %19s %19s", cadena, cadena_2, cadena_3) > 2)
+    {
+      Expresaritmetica *k = new Expresaritmetica (v);
+      if (k->evaluacion (cadena))
+        {
+          strcat(cadena_2, " ");
+          strcat(cadena_2, cadena_3);
+          this->ejecutar (cadena_2);
+          return;
+        }
+    }
+
 }
 
 /**
@@ -122,7 +142,8 @@ void Simulador::asignacion (char c, int re)
 
 void Simulador::jump (int i)
 {
-  pc = i;
+  /* Le resto 1 ya que cuando vuelvo de ejecutar el pc de aumenta en 1 */
+  pc = i - 1 ;
   return;
 
 }
