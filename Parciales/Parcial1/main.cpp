@@ -24,6 +24,8 @@ int main ()
   else
     {
       l = new Lista_inst ();
+
+      /* Guardado de instrucciones en la lista */
       while (fgets (cadena, MAX, inst) != NULL)
         {
           l->add (cadena);

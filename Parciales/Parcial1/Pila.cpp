@@ -4,9 +4,7 @@
 
 #include "Pila.h"
 
-/**
- * @TODO Preguntar sobre el constructor Pila(char)
- */
+
 Pila::Pila ()
 {
   pos = -1;

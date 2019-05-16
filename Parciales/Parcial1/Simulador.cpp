@@ -73,7 +73,7 @@ void Simulador::ejecutar (string aux)
     {
       show (a);
     }
-  else if (sscanf (aux.c_str (), "IF ( %19s ) THEN %19s %19s", cadena, cadena_2, cadena_3) > 2)
+  else if (sscanf (aux.c_str (), "IF ( %19s ) THEN %19s %19s", cadena, cadena_2, cadena_3) > 1)
     {
       Expresaritmetica *k = new Expresaritmetica (v);
       if (k->evaluacion (cadena))

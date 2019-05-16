@@ -36,7 +36,7 @@ int Expresaritmetica::resultado (string cadena)
   for (int j = 0; j < cadena.length (); j++)
     {
       d = cadena.at (j);
-      if ((d >= '0') && (d <= '9'))
+      if ((d >= '0' && d <= '9'))
         {
           pf.push_back (d);
         }
