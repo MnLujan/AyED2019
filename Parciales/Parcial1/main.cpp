@@ -13,7 +13,7 @@ int main ()
 
   FILE *inst;
   char cadena[MAX];
-  Lista_inst *l;
+  Lista_inst *l = new Lista_inst ();
 
   inst = fopen ("secuencia", "r");
 
@@ -23,8 +23,6 @@ int main ()
     }
   else
     {
-      l = new Lista_inst ();
-
       /* Guardado de instrucciones en la lista */
       while (fgets (cadena, MAX, inst) != NULL)
         {
