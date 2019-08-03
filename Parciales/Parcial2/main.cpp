@@ -21,7 +21,6 @@ int main ()
   /* Almacenamiento de datos */
    while (input >> line)
     {
-
       l->AddPal (line);
     }
   input.close ();

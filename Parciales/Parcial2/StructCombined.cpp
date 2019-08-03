@@ -16,9 +16,23 @@ StructCombined::StructCombined (string x)
   size = 1;
 }
 
-int StructCombined::get_NumRep ()
+int StructCombined::get_NumRep (int a)
 {
-  return czo->get_rep ();
+  if (a > this->get_size ())
+    {
+      cout << "Error, dato iexistente" << endl;
+      return EXIT_FAILURE;
+    }
+  else
+    {
+      Nodo_Struc *temp = czo;
+      for (int i = 0; i < a; i++)
+        {
+          temp = temp->get_nextRep ();
+        }
+      return temp->get_rep ();
+    }
+
 }
 
 int StructCombined::get_size ()
@@ -92,6 +106,26 @@ void StructCombined::AddPal (string x)
     }
 
 }
+
+/**
+ * @brief Funcion encargada de ordenar la lista por numero de palabras repetidas. El ordenamiento se efectua por
+ * el algoritmo QuickSort visto en clase.
+ */
+void StructCombined::OrdeRep ()
+{
+  int b = this->get_size ();
+  Nodo_Struc *temp;
+  Nodo_Struc *temp2;
+  for (int i = 0; i < b; i++)
+    {
+      if (i == 0)
+        {
+
+        }
+    }
+
+}
+
 /**
  * @TODO Crear metodo que llame a este con el puntero czo. Asi se puede implementar de forma recursiva.
  * @param x
@@ -109,4 +143,4 @@ void StructCombined::Arbol_ABB (string x) //modificar.
     {
 
     }
-}
+} 

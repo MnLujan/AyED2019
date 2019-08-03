@@ -21,8 +21,10 @@ class StructCombined {
   StructCombined(string x);
   bool esvacia();
   int get_size();
-  int get_NumRep();
+  int get_NumRep(int);
   void AddPal(string);
+  void OrdeRep();
+  void QuickSort();
   string get_palabra();
   void LlamadoABB(string); //hacer
   void Arbol_ABB (string); //terminar
