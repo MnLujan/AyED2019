@@ -9,9 +9,6 @@
 
 using namespace std;
 
-/**
- * @TODO Implementar metodo de ordenamiento por repeticiones. Despues arrancar con arbol.
- */
 class StructCombined {
  private:
   Nodo_Struc *czo;
@@ -23,8 +20,8 @@ class StructCombined {
   int get_size();
   int get_NumRep(int);
   void AddPal(string);
-  void OrdeRep();
-  void QuickSort();
+  void QuickSort(StructCombined*, int, int);
+  void Divide(StructCombined*, int, int);
   string get_palabra();
   void LlamadoABB(string); //hacer
   void Arbol_ABB (string); //terminar

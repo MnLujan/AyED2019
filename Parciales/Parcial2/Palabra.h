@@ -17,7 +17,6 @@ class Palabra {
   string get_dato();
   int get_rep();
   void set_dato(string);
-  void set_rep();
   void incrementar();
 
 };
