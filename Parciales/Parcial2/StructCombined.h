@@ -8,7 +8,10 @@
 #include "Nodo_Struc.h"
 
 using namespace std;
-
+/**
+ * @TODO Renombrar todos los metodos para diferenciar por listas o ABB
+ * @TODO Implementar QUickSort aca
+ */
 class StructCombined {
  private:
   Nodo_Struc *czo;
@@ -23,8 +26,8 @@ class StructCombined {
   void QuickSort(StructCombined*, int, int);
   void Divide(StructCombined*, int, int);
   string get_palabra();
-  void LlamadoABB(string); //hacer
-  void Arbol_ABB (string); //terminar
+  void LlamadoABB(string);
+  void Arbol_ABB (string);
 
 };
 

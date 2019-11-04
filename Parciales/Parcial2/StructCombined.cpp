@@ -4,8 +4,7 @@
 
 #include "StructCombined.h"
 /**
- * @TODO implementar QuickSort para ordenar por cantidad de palabras repetidas
- * @TODO Despues de QuickSort implementar ARBOL
+ * @TODO implementar QuickSort para ordenar por cantidad de palabras repetidas (ultimo)
  */
 StructCombined::StructCombined ()
 {
@@ -57,6 +56,8 @@ string StructCombined::get_palabra ()
  * AddPal metodo que agrega una palabra a la lista, comprueba el orden alfabetico
  * o si se encuentra repetida.
  * @param x palabra a agregar.
+ * @TODO Reescribir metodo para poder insertar en la lista y ABB al mismo tiempo, se aconseja divirlo en dos metods
+ * mas pequeños. Primero ver si existe la palabra recorriendo el arbol
  */
 void StructCombined::AddPal (string x)
 {
