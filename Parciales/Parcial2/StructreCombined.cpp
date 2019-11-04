@@ -2,32 +2,30 @@
 // Created by mlujan on 6/7/19.
 //
 
-#include "StructCombined.h"
-/**
- * @TODO implementar QuickSort para ordenar por cantidad de palabras repetidas (ultimo)
- */
-StructCombined::StructCombined ()
+#include "StructreCombined.h"
+
+StructreCombined::StructreCombined ()
 {
   czo = NULL;
   size = 0;
 }
 
-StructCombined::StructCombined (string x)
+StructreCombined::StructreCombined (string x)
 {
-  czo = new Nodo_Struc (x);
+  czo = new NodoStructure (x);
   size = 1;
 }
 
-int StructCombined::get_NumRep (int a)
+int StructreCombined::get_NumRep (int a)
 {
-  if (a > this->get_size ())
+  if (a > this->GetSizeStruct ())
     {
       cout << "Error, dato inexistente" << endl;
       return EXIT_FAILURE;
     }
   else
     {
-      Nodo_Struc *temp = czo;
+      NodoStructure *temp = czo;
       for (int i = 0; i < a; i++)
         {
           temp = temp->get_nextRep ();
@@ -37,44 +35,39 @@ int StructCombined::get_NumRep (int a)
 
 }
 
-int StructCombined::get_size ()
+int StructreCombined::GetSizeStruct ()
 {
   return size;
 }
 
-bool StructCombined::esvacia ()
+bool StructreCombined::l_AlfEsVacia ()
 {
-  return czo == NULL;
-}
-
-string StructCombined::get_palabra ()
-{
-  return czo->get_pal ();
+  return czo->get_nextAlf () == NULL;
 }
 
 /**
- * AddPal metodo que agrega una palabra a la lista, comprueba el orden alfabetico
- * o si se encuentra repetida.
+ * @brief AddPal se encarga de insertar un nodo a la lista ordenada alfabeticamente y luego al ABB respetando el
+ * ordenamiento de este mismo
  * @param x palabra a agregar.
  * @TODO Reescribir metodo para poder insertar en la lista y ABB al mismo tiempo, se aconseja divirlo en dos metods
  * mas pequeños. Primero ver si existe la palabra recorriendo el arbol
  */
-void StructCombined::AddPal (string x)
+void StructreCombined::AddPal (string x)
 {
-  Nodo_Struc *nuevo = new Nodo_Struc (x);
-  if (this->esvacia ())
+  NodoStructure *nuevo = new NodoStructure (x);
+  if (this->l_AlfEsVacia ())
     {
       czo = nuevo;
       size++;
     }
   else
     {
-      Nodo_Struc *temp = czo;
-      Nodo_Struc *temp_2 = czo;
-      int b = this->get_size ();
+      NodoStructure *temp = czo;
+      NodoStructure *temp_2 = czo;
+      int b = this->GetSizeStruct ();
       for (int i = 0; i < b; i++)
         {
-          if ((czo->get_pal ().compare (x)) > 0)
+          if ((czo->GetDataPal ().compare (x)) > 0)
             {
               if (temp_2 == czo)
                 {
@@ -90,9 +83,9 @@ void StructCombined::AddPal (string x)
               size = size + 1;
               return;
             }
-          else if ((temp->get_pal ().compare (x)) == 0)
+          else if ((temp->GetDataPal ().compare (x)) == 0)
             {
-              temp->increment ();
+              temp->IncreaseRep ();
               return;
             }
           else if (temp->get_nextAlf () == NULL)
@@ -116,7 +109,7 @@ void StructCombined::AddPal (string x)
  * teniendo en cuenta la cantidad de veces que se encuentra repetida cada palabra
  * @param l puntero a estructura combinada a ordenar.
  */
-void StructCombined::QuickSort (StructCombined *l, int start, int end)
+void StructreCombined::QuickSort (StructreCombined *l, int start, int end)
 {
 
 }

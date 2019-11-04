@@ -31,7 +31,7 @@ void Palabra::set_dato (string a)
   rep = 0;
 }
 
-void Palabra::incrementar ()
+void Palabra::IncrementarNumRep ()
 {
   rep ++;
 }

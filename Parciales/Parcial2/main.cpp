@@ -3,7 +3,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <fstream>
-#include "StructCombined.h"
+#include "StructreCombined.h"
 
 using namespace std;
 /**
@@ -13,7 +13,7 @@ using namespace std;
 
 int main ()
 {
-  StructCombined *l = new StructCombined ();
+  StructreCombined *l = new StructreCombined ();
   fstream input;
   string line;
   input.open ("texto");
