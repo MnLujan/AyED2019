@@ -7,6 +7,7 @@
 StructreCombined::StructreCombined ()
 {
   czo = NULL;
+  raiz = NULL;
   size = 0;
 }
 
@@ -16,23 +17,19 @@ StructreCombined::StructreCombined (string x)
   size = 1;
 }
 
-int StructreCombined::get_NumRep (int a)
+/**
+ * Busca en la list ordenada alfabeticamente el nodo donde se encuentra la palabra pasada como parametro
+ * @param p: palabra a buscar en la lista
+ * @return Puntero al nodo encontrado
+ */
+NodoStructure *StructreCombined::GetNodo (string p)
 {
-  if (a > this->GetSizeStruct ())
+  NodoStructure *temp = czo;
+  while (temp->GetDataPal () != p)
     {
-      cout << "Error, dato inexistente" << endl;
-      return EXIT_FAILURE;
+      temp = temp->get_nextAlf ();
     }
-  else
-    {
-      NodoStructure *temp = czo;
-      for (int i = 0; i < a; i++)
-        {
-          temp = temp->get_nextRep ();
-        }
-      return temp->get_rep ();
-    }
-
+  return temp;
 }
 
 int StructreCombined::GetSizeStruct ()
@@ -54,58 +51,127 @@ bool StructreCombined::l_AlfEsVacia ()
  */
 void StructreCombined::AddPal (string x)
 {
-  NodoStructure *nuevo = new NodoStructure (x);
-  if (this->l_AlfEsVacia ())
+  if (!size == 0)
     {
-      czo = nuevo;
-      size++;
+      InserList (x);
+      InserABB (x);
     }
   else
     {
-      NodoStructure *temp = czo;
-      NodoStructure *temp_2 = czo;
-      int b = this->GetSizeStruct ();
-      for (int i = 0; i < b; i++)
-        {
-          if ((czo->GetDataPal ().compare (x)) > 0)
-            {
-              if (temp_2 == czo)
-                {
-                  czo = nuevo;
-                  nuevo->set_nextAlf (temp);
-
-                }
-              else
-                {
-                  temp_2->set_nextAlf (nuevo);
-                  nuevo->set_nextAlf (temp);
-                }
-              size = size + 1;
-              return;
-            }
-          else if ((temp->GetDataPal ().compare (x)) == 0)
-            {
-              temp->IncreaseRep ();
-              return;
-            }
-          else if (temp->get_nextAlf () == NULL)
-            {
-              temp->set_nextAlf (nuevo);
-              size = size + 1;
-              return;
-            }
-          else
-            {
-              temp_2 = temp;
-              temp = temp->get_nextAlf ();
-            }
-        }
+      /* Si no hay ningun nodo lo crea y lo inserta al comienzo */
+      NodoStructure *nuevo = new NodoStructure (x);
+      czo = nuevo;
+      raiz = nuevo;
+      size++;
     }
 
 }
 
 /**
- * Algoritmo de ordenamiento llamado QuickSort, el mismo devuelva la lista ordenada de mayor a menor
+ * @brief Se encarga de insertar el nodo en el lugar correspondiente de la lista ordenando alfabeticamente
+ * @param pal: Se envia la palabra a insertar en el nodo
+ */
+void StructreCombined::InserList (string pal)
+{
+  int size_struct = this->GetSizeStruct ();
+  NodoStructure *temp = czo;
+  NodoStructure *temp_2 = czo;
+
+  for (int i = 0; i < size_struct; i++)
+    { /* En caso que la palabra se deba ordenar antes que la actual */
+      if (czo->GetDataPal ().compare (pal) > 0)
+        {
+          NodoStructure *nuevo = new NodoStructure (pal);
+          if (temp_2 != czo)
+            {
+              temp_2->set_nextAlf (nuevo);
+              nuevo->set_nextAlf (temp);
+            }
+          else
+            {
+              czo = nuevo;
+              czo->set_nextAlf (temp);
+            }
+          size = size + 1;
+          return;
+        } /* Si es igual incrementa el numero de repeticiones */
+      else if ((temp->GetDataPal ().compare (pal)) == 0)
+        {
+          temp->IncreaseRep ();
+          return;
+        } /* Si se llego al final de la lista se crea un nuevo nodo y se lo inserta */
+      else if (temp->get_nextAlf () == NULL)
+        {
+          NodoStructure *nuevo = new NodoStructure (pal);
+          temp->set_nextAlf (nuevo);
+          size = size + 1;
+          return;
+        }
+      else
+        {
+          temp_2 = temp;
+          temp = temp->get_nextAlf ();
+        }
+    }
+}
+
+NodoStructure *StructreCombined::Der ()
+{
+  return raiz->GetDerABB ();
+}
+
+NodoStructure *StructreCombined::Izq ()
+{
+  return raiz->GetIzqABB ();
+}
+
+/**
+ * @brief Metodo encargado de la insercion de nodos en el ABB, con sus respectivas restricciones
+ * @param pal: Dato de tipo string que contiene la palabra a agregar.
+ */
+void StructreCombined::InserABB (string pal)
+{
+  NodoStructure *temp = raiz;
+  NodoStructure *anterior = NULL;
+  while (temp != NULL)
+    {
+      anterior = temp;
+
+      if (temp->GetDataPal ().compare (pal) > 0)
+        {
+          temp = temp->GetIzqABB ();
+        }
+      else if (temp->GetDataPal ().compare (pal) == 0)
+        { /* No incremento el valor de rep porque ya se hizo desde el metodo de lista */
+          temp = NULL;
+          anterior = NULL;
+        }
+      else
+        {
+          temp = temp->GetDerABB ();
+        }
+    }
+  if (anterior != NULL)
+    {
+      if (anterior->GetDataPal ().compare (pal) > 0)
+        {
+          anterior->set_izq (this->GetNodo (pal));
+        }
+      else
+        {
+          anterior->set_der (this->GetNodo (pal));
+        }
+    }
+  else
+    {
+      return;
+    }
+
+  return;
+}
+
+/**
+ * Algoritmo de ordenamiento QuickSort, el mismo devuelva la lista ordenada de mayor a menor
  * teniendo en cuenta la cantidad de veces que se encuentra repetida cada palabra
  * @param l puntero a estructura combinada a ordenar.
  */

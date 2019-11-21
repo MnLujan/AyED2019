@@ -42,7 +42,7 @@ NodoStructure *NodoStructure::get_nextRep ()
   return l_nextRep;
 }
 
-int NodoStructure::get_rep ()
+unsigned int NodoStructure::get_rep ()
 {
   return Data->get_rep ();
 }
@@ -52,11 +52,6 @@ string NodoStructure::GetDataPal ()
   return Data->get_dato ();
 }
 
-void NodoStructure::set_pal (string x)
-{
-  Data->set_dato (x);
-}
-
 void NodoStructure::IncreaseRep ()
 {
   Data->IncrementarNumRep ();
@@ -64,7 +59,7 @@ void NodoStructure::IncreaseRep ()
 
 NodoStructure* NodoStructure::GetDerABB ()
 {
-  return ABB_der;
+  return this->ABB_der;
 }
 
 void NodoStructure::set_der (NodoStructure *d)
@@ -79,5 +74,5 @@ void NodoStructure::set_izq (NodoStructure *i)
 
 NodoStructure* NodoStructure::GetIzqABB ()
 {
-  return ABB_izq;
+  return this->ABB_izq;
 }

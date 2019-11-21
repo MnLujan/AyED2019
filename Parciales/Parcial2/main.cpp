@@ -18,8 +18,8 @@ int main ()
   string line;
   input.open ("texto");
 
-  /* Almacenamiento de datos */
-   while (input >> line)
+  /* Lista ordenada alfabeticamente */
+  while (input >> line)
     {
       l->AddPal (line);
     }
