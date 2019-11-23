@@ -8,6 +8,7 @@ StructreCombined::StructreCombined ()
 {
   czo = NULL;
   raiz = NULL;
+  czoRep = NULL;
   size = 0;
 }
 
@@ -37,11 +38,6 @@ int StructreCombined::GetSizeStruct ()
   return size;
 }
 
-bool StructreCombined::l_AlfEsVacia ()
-{
-  return czo->get_nextAlf () == NULL;
-}
-
 /**
  * @brief AddPal se encarga de insertar un nodo a la lista ordenada alfabeticamente y luego al ABB respetando el
  * ordenamiento de este mismo
@@ -51,7 +47,7 @@ bool StructreCombined::l_AlfEsVacia ()
  */
 void StructreCombined::AddPal (string x)
 {
-  if (!size == 0)
+  if (size != 0)
     {
       InserList (x);
       InserABB (x);
@@ -62,26 +58,30 @@ void StructreCombined::AddPal (string x)
       NodoStructure *nuevo = new NodoStructure (x);
       czo = nuevo;
       raiz = nuevo;
+      czoRep = nuevo;
       size++;
     }
 
 }
 
 /**
- * @brief Se encarga de insertar el nodo en el lugar correspondiente de la lista ordenando alfabeticamente
+ * @brief Se encarga de insertar el nodo en el lugar correspondiente de la lista ordenando alfabeticamente.
+ * Posteriormente, insertale el nodo en un segunda lista, sin respetar ningun orden, solo lo insertara al final
+ * de esta.
  * @param pal: Se envia la palabra a insertar en el nodo
  */
 void StructreCombined::InserList (string pal)
 {
   int size_struct = this->GetSizeStruct ();
+  NodoStructure *nuevo = new NodoStructure (pal);
   NodoStructure *temp = czo;
   NodoStructure *temp_2 = czo;
+  NodoStructure *anterior = NULL;
 
   for (int i = 0; i < size_struct; i++)
     { /* En caso que la palabra se deba ordenar antes que la actual */
       if (czo->GetDataPal ().compare (pal) > 0)
         {
-          NodoStructure *nuevo = new NodoStructure (pal);
           if (temp_2 != czo)
             {
               temp_2->set_nextAlf (nuevo);
@@ -93,19 +93,19 @@ void StructreCombined::InserList (string pal)
               czo->set_nextAlf (temp);
             }
           size = size + 1;
-          return;
+          break;
         } /* Si es igual incrementa el numero de repeticiones */
       else if ((temp->GetDataPal ().compare (pal)) == 0)
         {
+          delete nuevo;
           temp->IncreaseRep ();
-          return;
+          break;
         } /* Si se llego al final de la lista se crea un nuevo nodo y se lo inserta */
       else if (temp->get_nextAlf () == NULL)
         {
-          NodoStructure *nuevo = new NodoStructure (pal);
           temp->set_nextAlf (nuevo);
           size = size + 1;
-          return;
+          break;
         }
       else
         {
@@ -113,6 +113,17 @@ void StructreCombined::InserList (string pal)
           temp = temp->get_nextAlf ();
         }
     }
+
+  if (size_struct != size)
+    {
+      while (temp != NULL)
+        {
+          anterior = temp;
+          temp = temp->get_nextRep ();
+        }
+      anterior->set_nextRep (nuevo);
+    }
+  return;
 }
 
 NodoStructure *StructreCombined::Der ()
@@ -175,7 +186,7 @@ void StructreCombined::InserABB (string pal)
  * teniendo en cuenta la cantidad de veces que se encuentra repetida cada palabra
  * @param l puntero a estructura combinada a ordenar.
  */
-void StructreCombined::QuickSort (StructreCombined *l, int start, int end)
+void StructreCombined::QuickSort (NodoStructure *, int start, int end)
 {
 
 }

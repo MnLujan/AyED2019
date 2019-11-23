@@ -21,8 +21,12 @@ class StructreCombined {
  private:
 
   ///@brief Puntero a objeto Nodo
+  /* Lista ordenada Alfabeticamente */
   NodoStructure *czo;
+  /* Arbol binario */
   NodoStructure *raiz;
+  /* Lista Ordenada por numero de repeticiones */
+  NodoStructure *czoRep;
   ///@brief Cantidad de nodos existentes, vale para listas y ABB
   unsigned int size;
 
@@ -37,13 +41,9 @@ class StructreCombined {
   ///@brief Inserta el nodo en la lista ordenado alfabeticamente o incrementa el numero de palabras repetidas
   void InserList(string);
   ///@brief Ordena las los nodos por numero de veces que esta repetida cada palabra
-  void QuickSort(StructreCombined*, int, int);
+  void QuickSort(NodoStructure*, int, int);
   ///@brief Devuelve el puntero al nodo con la palabra que se le paso como parametro
   NodoStructure* GetNodo(string);
-
-
-  ///@brief Pregunta si la lista alfabeticamente esta vacia
-  bool l_AlfEsVacia(); //Ver si cambiar el tipo que devuelve por uno de tipo nodo
 
   /* Metodos de Arbol */
   ///@brief Inserta el nodo en el ABB
