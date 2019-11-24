@@ -4,6 +4,7 @@
 
 #include "StructreCombined.h"
 
+int compQS = 0;
 StructreCombined::StructreCombined ()
 {
   czo = NULL;
@@ -36,6 +37,44 @@ NodoStructure *StructreCombined::GetNodo (string p)
 int StructreCombined::GetSizeStruct ()
 {
   return size;
+}
+
+/**
+ * @brief GetNumRep recibe un entero como parametro, el cual sera el numero de nodo almacenado en la lista a ordenar,
+ * buscara ese nodo, y devolvera la variable "rep" que indica la cantidad de veces que se encuentra repetida esa
+ * palabra en el texto leido
+ * @param a entero que representa el numero de nodo
+ */
+unsigned int StructreCombined::GetNumRep (int a)
+{
+  int cant = this->GetSizeStruct ();
+  if (a <= cant)
+    {
+      NodoStructure *temp = czoRep;
+      for (int i = 0; i <= a; i++)
+        {
+          temp = temp->get_nextRep ();
+        }
+      return temp->get_rep ();
+    }
+  else
+    {
+      return EXIT_FAILURE;
+    }
+
+}
+/**
+ * @TODO Debuggiar
+ * @param a
+ * @param b
+ */
+void StructreCombined::Swap (NodoStructure *a, NodoStructure *b)
+{
+  NodoStructure *temp = a;
+  a = b;
+  b = temp;
+  delete temp;
+  return;
 }
 
 /**
@@ -182,11 +221,46 @@ void StructreCombined::InserABB (string pal)
 }
 
 /**
+ * @brief Se utiliza para llamar al metodo QuickSort desde el main
+ */
+void StructreCombined::OrdenaQS ()
+{
+  QuickSort (czoRep, 0, size - 1);
+  return;
+}
+
+/**
  * Algoritmo de ordenamiento QuickSort, el mismo devuelva la lista ordenada de mayor a menor
  * teniendo en cuenta la cantidad de veces que se encuentra repetida cada palabra
- * @param l puntero a estructura combinada a ordenar.
+ * @param list puntero a la lista que vmos a ordenar
+ * @param start Inicio de la lista
+ * @param end Final de la misma
+ * @TODO Ver si se puede cambiar la logica
  */
-void StructreCombined::QuickSort (NodoStructure *, int start, int end)
+void StructreCombined::QuickSort (NodoStructure *list, int start, int end)
 {
+  int i, j, pivot;
 
+  if (end > start)
+    {
+      pivot = this->GetNumRep (end);
+
+      i = start - 1;
+      j = end;
+
+      for (;;)
+        {
+
+          while (this->GetNumRep (++i) > pivot)
+            {
+              compQS++;
+            }
+          while (this->GetNumRep (--j) < pivot && j > 1)
+            {
+              compQS++;
+            }
+          compQS += 2;
+          break;
+        }
+    }
 }

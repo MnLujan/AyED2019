@@ -44,6 +44,12 @@ class StructreCombined {
   void QuickSort(NodoStructure*, int, int);
   ///@brief Devuelve el puntero al nodo con la palabra que se le paso como parametro
   NodoStructure* GetNodo(string);
+  ///@brief Metodo encargado de llamar al metodo Quicksort y pasarle los parametros necesarios
+  void OrdenaQS();
+  ///@brief Metodo utilizado en el algoritmos QuickSort
+  void Swap(NodoStructure*,NodoStructure*);
+  ///@brief Metodo encargado de devolver el numero de veces que esta repetida la palabra, almacenada en un nodo.
+  unsigned int GetNumRep(int);
 
   /* Metodos de Arbol */
   ///@brief Inserta el nodo en el ABB

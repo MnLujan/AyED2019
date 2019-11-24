@@ -25,5 +25,8 @@ int main ()
     }
   input.close ();
 
+  /* Llamo al metodo QuickSort */
+  l->OrdenaQS ();
+
   return EXIT_SUCCESS;
 }
