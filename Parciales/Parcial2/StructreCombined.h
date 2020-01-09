@@ -41,13 +41,14 @@ class StructreCombined {
   ///@brief Inserta el nodo en la lista ordenado alfabeticamente o incrementa el numero de palabras repetidas
   void InserList(string);
   ///@brief Ordena las los nodos por numero de veces que esta repetida cada palabra
-  void QuickSort(NodoStructure*, int, int);
+  void QuickSort(int, int);
   ///@brief Devuelve el puntero al nodo con la palabra que se le paso como parametro
   NodoStructure* GetNodo(string);
+  NodoStructure* GetNodoSwap(int);
   ///@brief Metodo encargado de llamar al metodo Quicksort y pasarle los parametros necesarios
   void OrdenaQS();
   ///@brief Metodo utilizado en el algoritmos QuickSort
-  void Swap(NodoStructure*,NodoStructure*);
+  void Swap(int,int);
   ///@brief Metodo encargado de devolver el numero de veces que esta repetida la palabra, almacenada en un nodo.
   unsigned int GetNumRep(int);
 

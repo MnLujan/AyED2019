@@ -51,7 +51,7 @@ unsigned int StructreCombined::GetNumRep (int a)
   if (a <= cant)
     {
       NodoStructure *temp = czoRep;
-      for (int i = 0; i <= a; i++)
+      for (int i = 0; i < a; i++)
         {
           temp = temp->get_nextRep ();
         }
@@ -64,17 +64,65 @@ unsigned int StructreCombined::GetNumRep (int a)
 
 }
 /**
- * @TODO Debuggiar
+ * @TODO Debuggiar, corregir, puntero se va a la mierda
  * @param a
  * @param b
  */
-void StructreCombined::Swap (NodoStructure *a, NodoStructure *b)
+void StructreCombined::Swap (int a, int b)
 {
-  NodoStructure *temp = a;
-  a = b;
-  b = temp;
-  delete temp;
+  if (a != 0)
+    {
+      NodoStructure *temp = this->GetNodoSwap (a - 1);
+      NodoStructure *temp_2 = this->GetNodoSwap (a);
+      NodoStructure *temp_5 = this->GetNodoSwap (b);
+      if (b - a != 1)
+        {
+          /* Si los nodos no se encuentran al lado se ejecuta este codigo */
+          NodoStructure *temp_3 = this->GetNodoSwap (a + 1);
+          NodoStructure *temp_4 = this->GetNodoSwap (b - 1);
+          NodoStructure *temp_6 = this->GetNodoSwap(b+1);
+
+          temp->set_nextRep (temp_5);
+          temp_2->set_nextRep (temp_6);
+          temp_5->set_nextRep (temp_3);
+          temp_4->set_nextRep (temp_2);
+        }
+      else
+        {
+          temp->set_nextRep(temp_5);
+          temp_2->set_nextRep (temp_5->get_nextRep ());
+          temp_5->set_nextRep (temp_2);
+        }
+    }
+  else
+    {
+
+      NodoStructure *temp = GetNodoSwap (b);
+      czoRep->set_nextRep (temp->get_nextRep ());
+      temp->set_nextRep (czoRep);
+      czoRep = temp;
+
+    }
   return;
+}
+
+NodoStructure *StructreCombined::GetNodoSwap (int a)
+{
+  NodoStructure *temp = czoRep;
+  if (a < size)
+    {
+      int i = 0;
+      while (i != a)
+        {
+          temp = temp->get_nextRep ();
+          i++;
+        }
+      return temp;
+    }
+  else
+    {
+      return NULL;
+    }
 }
 
 /**
@@ -221,11 +269,11 @@ void StructreCombined::InserABB (string pal)
 }
 
 /**
- * @brief Se utiliza para llamar al metodo QuickSort desde el main
+ * @brief Se utiliza para llamar al metodo QuickSort desde el main y pasarle los parametros necesarios
  */
 void StructreCombined::OrdenaQS ()
 {
-  QuickSort (czoRep, 0, size - 1);
+  QuickSort (0, size - 1);
   return;
 }
 
@@ -237,7 +285,7 @@ void StructreCombined::OrdenaQS ()
  * @param end Final de la misma
  * @TODO Ver si se puede cambiar la logica
  */
-void StructreCombined::QuickSort (NodoStructure *list, int start, int end)
+void StructreCombined::QuickSort (int start, int end)
 {
   int i, j, pivot;
 
@@ -248,9 +296,8 @@ void StructreCombined::QuickSort (NodoStructure *list, int start, int end)
       i = start - 1;
       j = end;
 
-      for (;;)
+      while (true)
         {
-
           while (this->GetNumRep (++i) > pivot)
             {
               compQS++;
@@ -260,7 +307,15 @@ void StructreCombined::QuickSort (NodoStructure *list, int start, int end)
               compQS++;
             }
           compQS += 2;
-          break;
+          if (i >= j)
+            { break; }
+          else if (this->GetNumRep (i) != this->GetNumRep (j))
+            {
+              Swap (i, j);
+            }
         }
+      Swap (i, end);
+      QuickSort (start, i - 1);
+      QuickSort (i + 1, end);
     }
-}
+  }
