@@ -64,9 +64,9 @@ unsigned int StructreCombined::GetNumRep (int a)
 
 }
 /**
- * @TODO Debuggiar, corregir, puntero se va a la mierda
- * @param a
- * @param b
+ * @brief Funcion encargada del intercambio de nodos para el ordenamiento mediante QuickSort
+ * @param a Nodo inferior de la lista a ordenar
+ * @param b Nodo Superior de la lista a ordenar
  */
 void StructreCombined::Swap (int a, int b)
 {
@@ -97,11 +97,14 @@ void StructreCombined::Swap (int a, int b)
   else
     {
 
-      NodoStructure *temp = GetNodoSwap (b);
-      czoRep->set_nextRep (temp->get_nextRep ());
-      temp->set_nextRep (czoRep);
-      czoRep = temp;
+          NodoStructure *temp = GetNodoSwap(b);
+          NodoStructure *temp_1 = GetNodoSwap(b + 1);
+          NodoStructure *temp_2 = GetNodoSwap(b - 1);
 
+          temp_2->setnextRep(czoRep);
+          czoRep->setnextRep(temp_1);
+          czoRep = temp;
+          czoRep->setnextRep(temp_2);
     }
   return;
 }
@@ -130,7 +133,7 @@ NodoStructure *StructreCombined::GetNodoSwap (int a)
  * ordenamiento de este mismo
  * @param x palabra a agregar.
  * @TODO Reescribir metodo para poder insertar en la lista y ABB al mismo tiempo, se aconseja divirlo en dos metods
- * mas pequeÃ±os. Primero ver si existe la palabra recorriendo el arbol
+ * mas pequeños. Primero ver si existe la palabra recorriendo el arbol
  */
 void StructreCombined::AddPal (string x)
 {
