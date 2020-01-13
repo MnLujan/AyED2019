@@ -80,7 +80,7 @@ void StructreCombined::Swap (int a, int b)
           /* Si los nodos no se encuentran al lado se ejecuta este codigo */
           NodoStructure *temp_3 = this->GetNodoSwap (a + 1);
           NodoStructure *temp_4 = this->GetNodoSwap (b - 1);
-          NodoStructure *temp_6 = this->GetNodoSwap(b+1);
+          NodoStructure *temp_6 = this->GetNodoSwap (b + 1);
 
           temp->set_nextRep (temp_5);
           temp_2->set_nextRep (temp_6);
@@ -89,26 +89,43 @@ void StructreCombined::Swap (int a, int b)
         }
       else
         {
-          temp->set_nextRep(temp_5);
+          temp->set_nextRep (temp_5);
           temp_2->set_nextRep (temp_5->get_nextRep ());
           temp_5->set_nextRep (temp_2);
         }
     }
   else
     {
+        NodoStructure *temp = GetNodoSwap (b);
+        NodoStructure *temp_1 = GetNodoSwap (b + 1);
 
-          NodoStructure *temp = GetNodoSwap(b);
-          NodoStructure *temp_1 = GetNodoSwap(b + 1);
-          NodoStructure *temp_2 = GetNodoSwap(b - 1);
+      /* Me aseguro que los nodos a intercambiar no sean los 2 primeros */
+      if( b != 1)
+        {
+          NodoStructure *temp_2 = GetNodoSwap (a + 1);
+          NodoStructure *temp_3 = GetNodoSwap (b - 1);
 
-          temp_2->setnextRep(czoRep);
-          czoRep->setnextRep(temp_1);
+          temp_3->set_nextRep(czoRep);
+          czoRep->set_nextRep (temp_1);
           czoRep = temp;
-          czoRep->setnextRep(temp_2);
+          czoRep->set_nextRep (temp_2);
+
+        }else{
+
+          czoRep->set_nextRep(temp_1);
+          temp->set_nextRep(czoRep);
+          czoRep = temp;
+
+      }
     }
   return;
 }
 
+/**
+ * @brief Metodo utilizado para la busqueda de los nodos a intercambiar en la funcion Swap
+ * @param a Numero de Nodo a buscar de la lista
+ * @return Puntero al nodo de la lista
+ */
 NodoStructure *StructreCombined::GetNodoSwap (int a)
 {
   NodoStructure *temp = czoRep;
@@ -133,7 +150,7 @@ NodoStructure *StructreCombined::GetNodoSwap (int a)
  * ordenamiento de este mismo
  * @param x palabra a agregar.
  * @TODO Reescribir metodo para poder insertar en la lista y ABB al mismo tiempo, se aconseja divirlo en dos metods
- * mas pequeños. Primero ver si existe la palabra recorriendo el arbol
+ * mas pequeï¿½os. Primero ver si existe la palabra recorriendo el arbol
  */
 void StructreCombined::AddPal (string x)
 {
@@ -286,12 +303,12 @@ void StructreCombined::OrdenaQS ()
  * @param list puntero a la lista que vmos a ordenar
  * @param start Inicio de la lista
  * @param end Final de la misma
- * @TODO Ver si se puede cambiar la logica
  */
 void StructreCombined::QuickSort (int start, int end)
 {
   int i, j, pivot;
 
+  // Mientras no se cruzen los Ã­ndices busco una palabra mas larga que el pivot a la izquierda y mas corta que el pivot a la derecha
   if (end > start)
     {
       pivot = this->GetNumRep (end);
@@ -310,6 +327,7 @@ void StructreCombined::QuickSort (int start, int end)
               compQS++;
             }
           compQS += 2;
+          //una vez encontradas las palabras, si los indices no se crusaron aun, realizo el intercambio
           if (i >= j)
             { break; }
           else if (this->GetNumRep (i) != this->GetNumRep (j))
@@ -317,8 +335,9 @@ void StructreCombined::QuickSort (int start, int end)
               Swap (i, j);
             }
         }
+
       Swap (i, end);
       QuickSort (start, i - 1);
       QuickSort (i + 1, end);
     }
-  }
+}
