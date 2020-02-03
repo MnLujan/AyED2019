@@ -2,9 +2,6 @@
 // Created by mlujan on 5/5/19.
 //
 
-/**
- * @TODO Ver que falta, agregar metodos de ser necesario
- */
 #include "Nodo_Var.h"
 
 Nodo_Var::Nodo_Var ()

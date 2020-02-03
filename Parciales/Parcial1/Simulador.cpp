@@ -6,9 +6,6 @@
 #include "Simulador.h"
 
 /**
- * @TODO Cambiar lo del string en la funcion IF
- */
-/**
  * Constructor de la calse Simulador
  * @param l puntero a lista de instrucciones
  */
