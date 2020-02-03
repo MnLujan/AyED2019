@@ -12,10 +12,6 @@ using namespace std;
 /**
  * @brief Estructura combinada, la cual esta constituida por punteros a nodos. En conjunto se forma
  * 2 listas y un ABB. Tambien se almacena la cantidad de nodos que forman la estructura.
- *
- * @TODO implementar QuickSort para ordenar por cantidad de palabras repetidas (ultimo)
- * @TODO Borre varios metodos
- * @TODO Implementar QuickSort aca
  */
 class StructreCombined {
  private:

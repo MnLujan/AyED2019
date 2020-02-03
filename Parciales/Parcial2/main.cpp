@@ -1,14 +1,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
-#include <jmorecfg.h>
 #include "StructreCombined.h"
 
 using namespace std;
-/**
- * @TODO Lograr que pueda enviar todas las palabras pero en minuscula para poder ordenarlas.
- * @return
- */
 
 int main ()
 {

@@ -6,9 +6,6 @@
 #define _NODOSTRUCTURE_H_
 #include "Palabra.h"
 
-/**
- *@TODO Terminar la documentacion de cada metodo
- */
 class NodoStructure{
  private:
   /**@brief Puntero a objeto Palabra*/
