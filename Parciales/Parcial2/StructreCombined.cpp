@@ -4,13 +4,15 @@
 
 #include "StructreCombined.h"
 
-int compQS = 0;
 StructreCombined::StructreCombined ()
 {
   czo = NULL;
   raiz = NULL;
   czoRep = NULL;
   size = 0;
+  compLIST = 0;
+  compQS = 0;
+  compABB = 0;
 }
 
 StructreCombined::StructreCombined (string x)
@@ -96,27 +98,29 @@ void StructreCombined::Swap (int a, int b)
     }
   else
     {
-        NodoStructure *temp = GetNodoSwap (b);
-        NodoStructure *temp_1 = GetNodoSwap (b + 1);
+      NodoStructure *temp = GetNodoSwap (b);
+      NodoStructure *temp_1 = GetNodoSwap (b + 1);
 
       /* Me aseguro que los nodos a intercambiar no sean los 2 primeros */
-      if( b != 1)
+      if (b != 1)
         {
           NodoStructure *temp_2 = GetNodoSwap (a + 1);
           NodoStructure *temp_3 = GetNodoSwap (b - 1);
 
-          temp_3->set_nextRep(czoRep);
+          temp_3->set_nextRep (czoRep);
           czoRep->set_nextRep (temp_1);
           czoRep = temp;
           czoRep->set_nextRep (temp_2);
 
-        }else{
+        }
+      else
+        {
 
-          czoRep->set_nextRep(temp_1);
-          temp->set_nextRep(czoRep);
+          czoRep->set_nextRep (temp_1);
+          temp->set_nextRep (czoRep);
           czoRep = temp;
 
-      }
+        }
     }
   return;
 }
@@ -149,8 +153,6 @@ NodoStructure *StructreCombined::GetNodoSwap (int a)
  * @brief AddPal se encarga de insertar un nodo a la lista ordenada alfabeticamente y luego al ABB respetando el
  * ordenamiento de este mismo
  * @param x palabra a agregar.
- * @TODO Reescribir metodo para poder insertar en la lista y ABB al mismo tiempo, se aconseja divirlo en dos metods
- * mas peque�os. Primero ver si existe la palabra recorriendo el arbol
  */
 void StructreCombined::AddPal (string x)
 {
@@ -187,9 +189,9 @@ void StructreCombined::InserList (string pal)
 
   for (int i = 0; i < size_struct; i++)
     { /* En caso que la palabra se deba ordenar antes que la actual */
-      if (czo->GetDataPal ().compare (pal) > 0)
+      if ((temp->GetDataPal ().compare (pal)) > 0)
         {
-          if (temp_2 != czo)
+          if (temp != czo)
             {
               temp_2->set_nextAlf (nuevo);
               nuevo->set_nextAlf (temp);
@@ -200,12 +202,14 @@ void StructreCombined::InserList (string pal)
               czo->set_nextAlf (temp);
             }
           size = size + 1;
+          compLIST++;
           break;
         } /* Si es igual incrementa el numero de repeticiones */
       else if ((temp->GetDataPal ().compare (pal)) == 0)
         {
           delete nuevo;
           temp->IncreaseRep ();
+          compLIST++;
           break;
         } /* Si se llego al final de la lista se crea un nuevo nodo y se lo inserta */
       else if (temp->get_nextAlf () == NULL)
@@ -219,6 +223,7 @@ void StructreCombined::InserList (string pal)
           temp_2 = temp;
           temp = temp->get_nextAlf ();
         }
+      compLIST += 2;
     }
 
   if (size_struct != size)
@@ -257,15 +262,18 @@ void StructreCombined::InserABB (string pal)
 
       if (temp->GetDataPal ().compare (pal) > 0)
         {
+          compABB++;
           temp = temp->GetIzqABB ();
         }
       else if (temp->GetDataPal ().compare (pal) == 0)
         { /* No incremento el valor de rep porque ya se hizo desde el metodo de lista */
           temp = NULL;
           anterior = NULL;
+          compABB++;
         }
       else
         {
+          compABB++;
           temp = temp->GetDerABB ();
         }
     }
@@ -273,10 +281,12 @@ void StructreCombined::InserABB (string pal)
     {
       if (anterior->GetDataPal ().compare (pal) > 0)
         {
+          compABB++;
           anterior->set_izq (this->GetNodo (pal));
         }
       else
         {
+          compABB++;
           anterior->set_der (this->GetNodo (pal));
         }
     }
@@ -339,5 +349,30 @@ void StructreCombined::QuickSort (int start, int end)
       Swap (i, end);
       QuickSort (start, i - 1);
       QuickSort (i + 1, end);
+    }
+}
+
+/**
+ * El metodo busca el nodo que se le paso como parametro dentro de la lista ordeanda alfabeticamente y retorna
+ * su direccion
+ * @param a Numero de nodo
+ * @return Puntero al nodo
+ */
+NodoStructure *StructreCombined::GetNodoAlf (int a)
+{
+  NodoStructure *temp = czo;
+  if (a < size)
+    {
+      int i = 0;
+      while (i != a)
+        {
+          temp = temp->get_nextAlf ();
+          i++;
+        }
+      return temp;
+    }
+  else
+    {
+      return NULL;
     }
 }
