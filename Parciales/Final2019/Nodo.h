@@ -10,7 +10,7 @@
 template<class Tipe>
 class Nodo {
  private:
-  Tipe *dato;
+  Tipe dato;
   Nodo<Tipe> *next;
  public:
   Tipe getdato ();
@@ -18,7 +18,7 @@ class Nodo {
   Nodo ();
   Nodo (Tipe d);
   Nodo (Tipe d, Nodo<Tipe> *p);
-  Nodo<Tipe> getnext ();
+  Nodo<Tipe> *getnext ();
   void setnext (Nodo<Tipe> *p);
   void BorrarDato ();
 
@@ -63,7 +63,7 @@ Tipe Nodo<Tipe>::getdato ()
  * @return Puntero al nodo
  */
 template<class Tipe>
-Nodo<Tipe> Nodo<Tipe>::getnext ()
+Nodo<Tipe>* Nodo<Tipe>::getnext ()
 {
   return next;
 }
