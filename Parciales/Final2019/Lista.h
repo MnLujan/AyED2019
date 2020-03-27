@@ -92,7 +92,7 @@ Nodo<Tipe> *Lista<Tipe>::get_nodo (int a)
 
 /**
  * Metodo que devuelve un dato de tipo booleano que nos indica si la lista se encuentra vacia o no.
- * @return true o false
+ * @return true en el caso de que este vacia o false en caso contrario
  */
 template<class Tipe>
 bool Lista<Tipe>::esvacia ()
@@ -102,7 +102,7 @@ bool Lista<Tipe>::esvacia ()
 
 /**
  * Metodo que devuelve el dato del nodo actual.
- * @return dato de tipo Tipe
+ * @return dato de tipo Tipe que sera especificado en la declaracion.
  */
 template<class Tipe>
 Tipe Lista<Tipe>::get_dato ()
@@ -113,7 +113,6 @@ Tipe Lista<Tipe>::get_dato ()
 /**
  * Metodo para agregar un dato a la lista que lo invoca, en caso de que se encuentre vacia lo colocara al comienzo,
  * si no, al final de esta.
- * @tparam Tipe
  * @param a dato a agregar a la lista
  */
 template<class Tipe>
