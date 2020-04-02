@@ -17,7 +17,7 @@ Pagina::Pagina ()
 /**
  * Inicializa los valores con los datos pasados por parametro. (Constructor 2)
  */
-Pagina::Pagina (char d, u_int8_t o, u_int8_t dest)
+Pagina::Pagina (string d, u_int8_t o, u_int8_t dest)
 {
   dato = d;
   Origen = o;

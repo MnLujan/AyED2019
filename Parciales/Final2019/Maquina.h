@@ -12,13 +12,19 @@ class Maquina {
   uint8_t IpMaquina;
   int PaginasEnviadas;
   int BW;
-  Lista<string> envio;
-  Lista<string> recep;
+  Lista<string> *envio;
+  Lista<Pagina> *recep;
   int cantPag;
-  void CrearPalabras();
-
+  void CrearDatos();
+  void CrearAux();
  public:
-  Pagina* SendPage();
+  Pagina* CreatedPage(uint8_t);
+  Maquina(uint8_t, int);
+  int GetCantPag();
+  int GetBW();
+  uint8_t getIP();
+  void setBW(int);
+  void toReceive(Pagina*);
 
 };
 

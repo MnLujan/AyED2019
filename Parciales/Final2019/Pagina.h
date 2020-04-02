@@ -5,21 +5,22 @@
 #ifndef _PAGINA_H_
 #define _PAGINA_H_
 #include <string>
+#include <stdint.h>
 
 using namespace std;
 
 class Pagina {
  private:
   string dato;
-  u_int8_t Origen;
-  u_int8_t Destino;
+  uint8_t Origen;
+  uint8_t Destino;
 
  public:
-  Pagina();
-  Pagina(char, u_int8_t, u_int8_t);
-  u_int8_t getOrigen();
-  u_int8_t getDestino();
-  string getDato();
+  Pagina ();
+  Pagina (string, uint8_t, uint8_t);
+  uint8_t getOrigen ();
+  uint8_t getDestino ();
+  string getDato ();
 
 };
 

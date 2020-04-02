@@ -20,6 +20,7 @@ class Lista {
   Nodo<Tipe> *get_next ();
   void Add (Tipe);
   int get_size ();
+  void borrarCabeza();
 };
 
 /**
@@ -30,7 +31,7 @@ template<class Tipe>
 Lista<Tipe>::Lista ()
 {
   czo = NULL;
-  size = 1;
+  size = 0;
 }
 
 /**
@@ -135,5 +136,16 @@ void Lista<Tipe>::Add (Tipe a)
       size++;
     }
   return;
+}
+
+/**
+ * Metodo encargado de borrar el primer nodo de la lista
+ * @tparam Tipe tipo designado en la construccion de la lista.
+ */
+template<class Tipe>
+void Lista<Tipe>::borrarCabeza() {
+  Nodo<Tipe> *temp = czo->getnext ();
+  delete (czo);
+  czo = temp;
 }
 #endif //_LISTA_H_

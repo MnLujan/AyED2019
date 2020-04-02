@@ -1,10 +1,11 @@
 #include <iostream>
 #include <stdlib.h>
-#include "Lista.h"
+#include "Maquina.h"
 using namespace std;
 
 int main ()
 {
-
-  return 0;
+  Maquina *m = new Maquina(245, 5);
+  m->toReceive (m->CreatedPage (45));
+  return EXIT_SUCCESS;
 }
