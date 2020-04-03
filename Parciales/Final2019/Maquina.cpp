@@ -14,7 +14,7 @@
 using namespace std;
 
 /**
- * Constructor de la clase maquina, inicializa todas las variables, crea un numero
+ * @brief Constructor de la clase maquina, inicializa todas las variables, crea un numero
  * aleatorio de datos que se enviaran y crea los datos a enviar.
  * @param ip
  * @param bw
@@ -35,7 +35,7 @@ Maquina::Maquina (uint8_t ip, int bw)
 }
 
 /**
- * Metodo encargado de crear palabras, para despues almacenarlas en una lista. Estas palabras seran las que
+ * @brief Metodo encargado de crear palabras, para despues almacenarlas en una lista. Estas palabras seran las que
  * se enviaran posteriormente en forma de paginas.
  */
 void Maquina::CrearDatos ()
@@ -59,7 +59,7 @@ void Maquina::CrearDatos ()
 }
 
 /**
- * Metodo que devuelve entero de 8bits que forma el ip de la maquina
+ * @brief Metodo que devuelve entero de 8bits que forma el ip de la maquina
  * @return IpMaquina
  */
 uint8_t Maquina::getIP ()
@@ -68,7 +68,7 @@ uint8_t Maquina::getIP ()
 }
 
 /**
- * Metodo encargado de devolver el ancho de banda asignado a la maquina
+ * @brief Metodo encargado de devolver el ancho de banda asignado a la maquina
  * @return BW
  */
 int Maquina::GetBW ()
@@ -77,7 +77,7 @@ int Maquina::GetBW ()
 }
 
 /**
- * Metodo encargado de actualizar el valor de ancho de banda en el caso de que
+ * @brief Metodo encargado de actualizar el valor de ancho de banda en el caso de que
  * cambie.
  * @param bw nuevo ancho de banda a setear
  */
@@ -88,7 +88,7 @@ void Maquina::setBW (int bw)
 }
 
 /**
- * Metodo encargado de devolver la cantidad de paginas que enviara la maquina
+ * @brief Metodo encargado de devolver la cantidad de paginas que enviara la maquina
  * @return cantPag
  */
 int Maquina::GetCantPag ()
@@ -97,7 +97,7 @@ int Maquina::GetCantPag ()
 }
 
 /**
- * Metodo encarcado de extraer un dato generado aleatoriamente en el constructor y crear una pagina
+ * @brief Metodo encarcado de extraer un dato generado aleatoriamente en el constructor y crear una pagina
  * para posteriormente enviarla al router. Borra el dato extraido de la lista.
  * @param dest direccion de destino para la pagina
  * @return puntero a una pagina
@@ -121,7 +121,7 @@ Pagina *Maquina::CreatedPage (uint8_t dest)
 }
 
 /**
- * Metodo creado con el fin de debagiar el trabajo
+ * @brief Metodo creado con el fin de debagiar el trabajo
  */
 void Maquina::CrearAux ()
 {
@@ -145,7 +145,7 @@ void Maquina::CrearAux ()
 }
 
 /**
- * Metodo encargado de recibir la pagina entregada por el router y almacenarla en la lista de recepcion.
+ * @brief Metodo encargado de recibir la pagina entregada por el router y almacenarla en la lista de recepcion.
  * Saca por pantalla el dato de la pagina reciba.
  * @param p puntero a la pagina recibida.
  */
@@ -154,5 +154,20 @@ void Maquina::toReceive (Pagina *p)
   Pagina *temp = p;
   recep->Add (*temp);
   cout << "El dato recibido es el siguiente: " << temp->getDato () << endl;
+}
 
+/**
+ * @brief Metodo encargado de devolver la cantidad de paginas que recibio la maquina.
+ * @return int size
+ */
+int Maquina::cantPagReceive() {
+  return recep->get_size();
+}
+
+/**
+ * @brief Metodo encargado de verificar si la maquina tiene paginas pendientes por enviar
+ * @return true si hay paginas pendientes o false caso contrario
+ */
+bool Maquina::Pending() {
+  return this->cantPag != 0;
 }

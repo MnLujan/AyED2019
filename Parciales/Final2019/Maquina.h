@@ -25,6 +25,8 @@ class Maquina {
   uint8_t getIP();
   void setBW(int);
   void toReceive(Pagina*);
+  int cantPagReceive();
+  bool Pending();
 
 };
 
