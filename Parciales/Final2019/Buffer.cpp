@@ -11,8 +11,8 @@
  */
 Buffer::Buffer (Lista<Pagina*> *colaN ,uint8_t id)
 {
-  cola = colaN;
-  ID = id;
+  this->cola = colaN;
+  this->ID = id;
 }
 
 /**
@@ -20,7 +20,7 @@ Buffer::Buffer (Lista<Pagina*> *colaN ,uint8_t id)
  * @return numero de 8 bits que representa el ID
  */
 uint8_t Buffer::getID() {
-  return ID;
+  return this->ID;
 }
 
 /**
@@ -28,5 +28,5 @@ uint8_t Buffer::getID() {
  * @return Pagina* cola
  */
 Lista<Pagina *> * Buffer::getLista() {
-  return cola;
+  return this->cola;
 }

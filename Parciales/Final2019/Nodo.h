@@ -63,7 +63,7 @@ Tipe Nodo<Tipe>::getdato ()
  * @return Puntero al nodo
  */
 template<class Tipe>
-Nodo<Tipe>* Nodo<Tipe>::getnext ()
+Nodo<Tipe> *Nodo<Tipe>::getnext ()
 {
   return next;
 }
