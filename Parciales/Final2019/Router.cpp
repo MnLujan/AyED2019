@@ -20,6 +20,21 @@ Router::Router (uint8_t ip, uint8_t nr)
 {
   IPRouter = ip;
   N_R = nr;
+
+  ///@brief Lista de router vecinos
+  this->Rvecinos = new Lista<Router *>;
+
+  ///@brief Lista de Maquinas conectadas
+  this->Maqui = new Lista<Maquina *>;
+
+  ///@brief Lista de paquetes a enviar
+  this->paquetes = new Lista<Packages *>;
+
+  ///@brief Lista de paginas armadas para las maquinas
+  this->Pag = new Lista<Pagina *>;
+
+  ///@brief Lista de colas de salida del router
+  this->Buffers = new Lista<Buffer *>;
 }
 
 /**
@@ -106,3 +121,36 @@ uint8_t Router::getN_R ()
 {
   return N_R;
 }
+
+/**
+ * @brief Metodo encargado de recibir la pagina a enviar y hacer los checkeos
+ * correspondientes para las direcciones IP a las que se debe enviar.
+ *
+void Router::toRecivePag (Pagina *p)
+{
+
+}
+ */
+
+/**
+ * @brief Metodo encargado de conectar un nuevo router vecino
+ * @param R Router a conectar
+ */
+void Router::linkRouter (Router *R)
+{
+  this->Rvecinos->Add (R);
+  Buffer *temp = new Buffer (NULL, R->getIpRouter ());
+  this->Buffers->Add (temp);
+}
+
+/**
+ * @brief Metodo encargado de conectar una maquina al router actual.
+ * @param M maquina a conectar
+ */
+void Router::linkMachine (Maquina *M)
+{
+  this->Maqui->Add (M);
+  Buffer *temp = new Buffer (NULL, M->getIP ());
+  this->Buffers->Add (temp);
+}
+

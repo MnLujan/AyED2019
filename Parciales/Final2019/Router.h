@@ -16,6 +16,7 @@ class Router {
   Lista<Pagina *> *Pag = nullptr;
   Lista<Maquina *> *Maqui = nullptr;
   Lista<Router *> *Rvecinos = nullptr;
+  Lista<Buffer *> *Buffers = nullptr;
   uint8_t N_R;
  public:
   Router();
@@ -26,7 +27,9 @@ class Router {
   Lista<Packages *> *getPackList ();
   Lista<Maquina *> *getMaquiList ();
   Lista<Router *> *getRouterList ();
-  void toRecivePag (Pagina *);
+  ///@TODO void toRecivePag (Pagina *);
+  void linkMachine(Maquina*);
+  void linkRouter(Router*);
 
 
 };
