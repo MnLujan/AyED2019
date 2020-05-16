@@ -18,7 +18,7 @@ class Maquina {
   void CrearDatos();
   void CrearAux();
  public:
-  Pagina* CreatedPage(uint8_t);
+  Pagina* CreatedPage(Lista<uint8_t>*);
   Maquina(uint8_t, int);
   int GetCantPag();
   int GetBW();

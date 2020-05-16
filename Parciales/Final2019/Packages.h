@@ -13,13 +13,15 @@ class Packages {
   uint8_t destino;
   int frame;
   int frameTotal;
+  uint8_t idpag;
  public:
-  Packages(char, uint8_t, uint8_t, int, int);
+  Packages(char, uint8_t, uint8_t, int, int, uint8_t);
   uint8_t getOrigen();
   uint8_t getDestino();
   int getFrame();
   int getFrameTotal();
   char getletra();
+  uint8_t getIdPag();
 
 };
 

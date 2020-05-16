@@ -49,7 +49,7 @@ int Packages::getFrame ()
 }
 
 /**
- * @brief Metodo encargado de devolver el numero total de paquetes que conforman el
+ * @brief Metodo encargado de devolver el numero total de Input que conforman el
  * dato que se esta enviando a traves de la red
  * @return int frametotal
  */
@@ -65,4 +65,12 @@ int Packages::getFrameTotal ()
 char Packages::getletra ()
 {
   return this->letra;
+}
+
+/**
+ * Metodo encargado de devolver el ID de la pagina a la que pertenece el paquete
+ * @return
+ */
+uint8_t Packages::getIdPag() {
+  return this->idpag;
 }

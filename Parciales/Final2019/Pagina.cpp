@@ -17,18 +17,20 @@ Pagina::Pagina ()
 /**
  * Inicializa los valores con los datos pasados por parametro. (Constructor 2)
  */
-Pagina::Pagina (string d, u_int8_t o, u_int8_t dest)
+Pagina::Pagina (string d, uint8_t o, uint8_t dest, uint8_t idpag)
 {
-  dato = d;
-  Origen = o;
-  Destino = dest;
+  this->dato = d;
+  this->Origen = o;
+  this->Destino = dest;
+  this->IDpag = idpag;
 }
 
 /**
  * Devuelve el dato almacenado en la pagina. Dato a enviar.
  * @return string
  */
-string Pagina::getDato() {
+string Pagina::getDato ()
+{
   return dato;
 }
 
@@ -36,7 +38,8 @@ string Pagina::getDato() {
  * Devuelve el Ip de origen, que es de la maquina que fue enviada la pagina
  * @return  Origen de tipo unsigned int de 8 bits.
  */
-u_int8_t Pagina::getOrigen() {
+uint8_t Pagina::getOrigen ()
+{
   return Origen;
 }
 
@@ -44,6 +47,16 @@ u_int8_t Pagina::getOrigen() {
  * Devuelve el Ip de destino almacenado en la pagina a enviar.
  * @return Destino de tipo unsigned int de 8 bits.
  */
-u_int8_t Pagina::getDestino() {
+uint8_t Pagina::getDestino ()
+{
   return Destino;
+}
+
+/**
+ * Metodo encargado de retornar el ID de la pagina
+ * @return ID de la pagina tipo unsigned int de 8 bits.
+ */
+uint8_t Pagina::getIDpag ()
+{
+  return this->IDpag;
 }

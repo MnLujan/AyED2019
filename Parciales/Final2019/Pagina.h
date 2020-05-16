@@ -14,13 +14,15 @@ class Pagina {
   string dato;
   uint8_t Origen;
   uint8_t Destino;
+  uint8_t IDpag;
 
  public:
   Pagina ();
-  Pagina (string, uint8_t, uint8_t);
+  Pagina (string, uint8_t, uint8_t, uint8_t);
   uint8_t getOrigen ();
   uint8_t getDestino ();
   string getDato ();
+  uint8_t getIDpag();
 
 };
 

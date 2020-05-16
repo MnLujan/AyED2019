@@ -2,8 +2,9 @@
 // Created by mlujan on 4/3/20.
 //
 
+#include <libzvbi.h>
 #include "Router.h"
-
+using namespace std;
 /**
  * @brief Inicializa las variables, contrsuctor sin parametros. (Constructor 1)
  */
@@ -27,21 +28,24 @@ Router::Router (uint8_t ip, uint8_t nr)
   ///@brief Lista de Maquinas conectadas
   this->Maqui = new Lista<Maquina *>;
 
-  ///@brief Lista de paquetes a enviar
-  this->paquetes = new Lista<Packages *>;
+  ///@brief Lista de Input a enviar
+  this->Input = new Lista<Packages *>;
 
   ///@brief Lista de paginas armadas para las maquinas
   this->Pag = new Lista<Pagina *>;
 
   ///@brief Lista de colas de salida del router
-  this->Buffers = new Lista<Buffer *>;
+  this->BuffersSalida = new Lista<Buffer *>;
+
+  ///@brief Lista de Listas de paquetes a compaginar para armar las paginas a entregar
+  this->package2pag = new Lista<Lista<Packages *> *>;
 }
 
 /**
  * @brief Metodo encargado de retornar el numero de Ip del router.
  * @return uint8_t IPRouter
  */
-uint8_t Router::getIpRouter ()
+uint8_t Router::getIpRouter () const
 {
   return IPRouter;
 }
@@ -52,26 +56,26 @@ uint8_t Router::getIpRouter ()
  */
 Lista<Pagina *> *Router::getPagList ()
 {
-  if (Pag != NULL)
+  if (Pag != nullptr)
     {
       return this->Pag;
     }
   else
     {
-      return NULL;
+      return nullptr;
     }
 }
 
 /**
  * @brief Metodo encargado de retornar el el puntero a la lista donde se encuentran
- * almacenado los paquetes.
- * @return Puntero de tipo lista. paquetes.
+ * almacenado los Input.
+ * @return Puntero de tipo lista. Input.
  */
-Lista<Packages *> *Router::getPackList ()
+Lista<Packages *> *Router::getInputList ()
 {
-  if (paquetes != NULL)
+  if (Input != nullptr)
     {
-      return paquetes;
+      return Input;
     }
   else
     {
@@ -123,14 +127,21 @@ uint8_t Router::getN_R ()
 }
 
 /**
- * @brief Metodo encargado de recibir la pagina a enviar y hacer los checkeos
- * correspondientes para las direcciones IP a las que se debe enviar.
- *
+ * @brief Metodo encargado de recibir la pagina y desarmarla en los Input necesarrios para transimitir.
+ * Estos los coloca en la cola de entrada del router.
+ **/
 void Router::toRecivePag (Pagina *p)
 {
+  string data = p->getDato ();
+  for (int i = 0; i < data.size (); i++)
+    {
+      char dataAux = data[i];
+      auto auxPackage = new Packages (dataAux, p->getOrigen (), p->getDestino (), i, data.size (), p->getIDpag ());
+      /* Lo agrego a la cola de entrada del router */
+      this->getInputList ()->Add (auxPackage);
+    }
 
 }
- */
 
 /**
  * @brief Metodo encargado de conectar un nuevo router vecino
@@ -139,8 +150,9 @@ void Router::toRecivePag (Pagina *p)
 void Router::linkRouter (Router *R)
 {
   this->Rvecinos->Add (R);
-  Buffer *temp = new Buffer (NULL, R->getIpRouter ());
-  this->Buffers->Add (temp);
+  /* Crea el buffer, posteriormente se le pasara la lista de paginas */
+  auto *temp = new Buffer (nullptr, R->getIpRouter ());
+  this->BuffersSalida->Add (temp);
 }
 
 /**
@@ -150,7 +162,72 @@ void Router::linkRouter (Router *R)
 void Router::linkMachine (Maquina *M)
 {
   this->Maqui->Add (M);
-  Buffer *temp = new Buffer (NULL, M->getIP ());
-  this->Buffers->Add (temp);
+  /* Crea el buffer, posteriormente se le pasara la lista de paginas */
+  auto *temp = new Buffer (nullptr, M->getIP ());
+  this->BuffersSalida->Add (temp);
 }
 
+/**
+ * @brief Metodo encargado de consultar si hay elementos en la cola de entrada.
+ * @return True en caso de que la cola este vacia, False, caso contrario
+ */
+bool Router::StateInput ()
+{
+  return this->getInputList ()->esvacia ();
+}
+
+/**
+ * @brief Metodo encargado de recibir un paquete proveniente de otro Router, identificar para quien es y
+ * colocarlo en la cola correspondiente. En caso de que no pertenezca a ninguna maquina hija, se coloca en la cola
+ * de entrada del Router, para despues ver que hacer.
+ */
+void Router::toRecivePackage (Packages *newPack)
+{
+  for (int i = 0; i < this->getMaquiList ()->get_size (); i++)
+    {
+      /* Verifico si el paquete recibido es para alguna de las maquinas conectadas */
+      if (this->getMaquiList ()->get_nodo (i)->getdato ()->getIP () == newPack->getDestino ())
+        {
+          encolar (newPack, 0);
+          return;
+        }
+    }
+  /* En caso de que no sea para alguna maquina hija se envia a la cola de entrada */
+  encolar (newPack, newPack->getDestino ());
+}
+
+/**
+ * @brief Metodo encargado de buscar y colocar el paquete en la cola de paquetes a compaginar o colocar el
+ * paquete en la cola de entrada.
+ * @param newPackage Puntero al paquete a encolar
+ * @param ip direccion del paquete.
+ */
+void Router::encolar (Packages *newPackage, int ip)
+{
+  if (ip == 0)
+    {
+      for (int i = 0; i < this->package2pag->get_size (); i++)
+        {
+          bool match = false;
+          /* Verifico que el IDpag, origen y destino correspondan con alguno de los paquetes. Los tres deben coincidir */
+          if (this->package2pag->get_nodo (i)->getdato ()->get_dato ()->getIdPag () == newPackage->getIdPag () &&
+              this->package2pag->get_nodo (i)->getdato ()->get_dato ()->getDestino () == newPackage->getDestino () &&
+              this->package2pag->get_nodo (i)->getdato ()->get_dato ()->getOrigen () == newPackage->getOrigen ())
+            {
+              this->package2pag->get_nodo (i)->getdato ()->Add (newPackage);
+              match = true;
+            }
+          if (!match)
+            {
+              /* En caso de no haber encontrado el paquete en la lista, lo agrego */
+              this->package2pag->Add (new Lista<Packages *>);
+              this->package2pag->get_nodo (0)->getdato ()->Add (newPackage);
+            }
+        }
+    }
+  else
+    {
+      /* En caso de q no sea para mi, lo mando a la cola de entrada y verifico para quien es, para redireccionar */
+      this->getInputList ()->Add (newPackage);
+    }
+}

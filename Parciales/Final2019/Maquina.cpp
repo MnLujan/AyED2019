@@ -99,16 +99,23 @@ int Maquina::GetCantPag ()
 /**
  * @brief Metodo encarcado de extraer un dato generado aleatoriamente en el constructor y crear una pagina
  * para posteriormente enviarla al router. Borra el dato extraido de la lista.
- * @param dest direccion de destino para la pagina
+ * @param dest puntero a un Lista de posibles destinos. La maquina decide cual es.
  * @return puntero a una pagina
  */
-Pagina *Maquina::CreatedPage (uint8_t dest)
+Pagina *Maquina::CreatedPage (Lista<uint8_t> *dest)
 {
   if (cantPag != 0)
     {
+      uint8_t ipDes = this->getIP();
       string data = envio->get_dato ();
       envio->borrarCabeza ();
-      Pagina *nuevo = new Pagina (data, this->getIP (), dest);
+
+      /* Obtengo un nodo al azar y extraigo el IP, siempre distinto del IP propio de la maquina */
+      while(ipDes == this->getIP())
+        {
+          ipDes = dest->get_nodo (rand () % (sizeof (dest) - 1))->getdato ();
+        }
+      auto *nuevo = new Pagina (data, this->getIP (), ipDes, cantPag);
       this->cantPag--;
       return nuevo;
     }

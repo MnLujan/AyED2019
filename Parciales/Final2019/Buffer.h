@@ -15,6 +15,7 @@ class Buffer {
   Buffer (Lista<Pagina *> *, uint8_t);
   uint8_t getID ();
   Lista<Pagina *> *getLista ();
+  void AddListPag(Lista<Pagina*>*);
 };
 
 #endif //_BUFFER_H_
