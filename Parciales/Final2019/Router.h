@@ -9,11 +9,11 @@
 #include "Packages.h"
 #include "Maquina.h"
 /***
- * @TODO enviarpaquetes, encolarpaquetes y ?
+ * @TODO enviarpaquetes
  */
 class Router {
  private:
-  uint8_t IPRouter;
+  uint16_t IPRouter;
   Lista<Packages *> *Input = nullptr;
   Lista<Pagina *> *Pag = nullptr;
   Lista<Maquina *> *Maqui = nullptr;
@@ -23,8 +23,8 @@ class Router {
   uint8_t N_R;
  public:
   Router ();
-  Router (uint8_t, uint8_t);
-  uint8_t getIpRouter () const;
+  Router (uint16_t, uint8_t);
+  uint16_t getIpRouter () const;
   uint8_t getN_R ();
   Lista<Pagina *> *getPagList ();
   Lista<Packages *> *getInputList ();

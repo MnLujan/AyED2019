@@ -9,7 +9,7 @@
 
 class Maquina {
  private:
-  uint8_t IpMaquina;
+    uint16_t IpMaquina;
   int PaginasEnviadas;
   int BW;
   Lista<string> *envio;
@@ -19,10 +19,10 @@ class Maquina {
   void CrearAux();
  public:
   Pagina* CreatedPage(Lista<uint8_t>*);
-  Maquina(uint8_t, int);
+  Maquina(uint16_t, int);
   int GetCantPag();
   int GetBW();
-  uint8_t getIP();
+  uint16_t getIP();
   void setBW(int);
   void toReceive(Pagina*);
   int cantPagReceive();

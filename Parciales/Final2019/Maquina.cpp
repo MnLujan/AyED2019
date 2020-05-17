@@ -19,7 +19,7 @@ using namespace std;
  * @param ip
  * @param bw
  */
-Maquina::Maquina (uint8_t ip, int bw)
+Maquina::Maquina (uint16_t ip, int bw)
 {
   this->IpMaquina = ip;
   this->BW = bw;
@@ -62,7 +62,7 @@ void Maquina::CrearDatos ()
  * @brief Metodo que devuelve entero de 8bits que forma el ip de la maquina
  * @return IpMaquina
  */
-uint8_t Maquina::getIP ()
+uint16_t Maquina::getIP ()
 {
   return this->IpMaquina;
 }

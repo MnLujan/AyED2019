@@ -9,15 +9,15 @@
 class Packages {
  private:
   char letra;
-  uint8_t origen;
-  uint8_t destino;
+  uint16_t origen;
+  uint16_t destino;
   int frame;
   int frameTotal;
   uint8_t idpag;
  public:
-  Packages(char, uint8_t, uint8_t, int, int, uint8_t);
-  uint8_t getOrigen();
-  uint8_t getDestino();
+  Packages(char, uint16_t, uint16_t, int, int, uint8_t);
+  uint16_t getOrigen();
+  uint16_t getDestino();
   int getFrame();
   int getFrameTotal();
   char getletra();

@@ -17,7 +17,7 @@ Router::Router ()
 /**
  * @brief Se inicializan las variables con los parametros pasados. (Constructor 2).
  */
-Router::Router (uint8_t ip, uint8_t nr)
+Router::Router (uint16_t ip, uint8_t nr)
 {
   IPRouter = ip;
   N_R = nr;
@@ -45,7 +45,7 @@ Router::Router (uint8_t ip, uint8_t nr)
  * @brief Metodo encargado de retornar el numero de Ip del router.
  * @return uint8_t IPRouter
  */
-uint8_t Router::getIpRouter () const
+uint16_t Router::getIpRouter () const
 {
   return IPRouter;
 }
@@ -137,6 +137,7 @@ void Router::toRecivePag (Pagina *p)
     {
       char dataAux = data[i];
       auto auxPackage = new Packages (dataAux, p->getOrigen (), p->getDestino (), i, data.size (), p->getIDpag ());
+
       /* Lo agrego a la cola de entrada del router */
       this->getInputList ()->Add (auxPackage);
     }

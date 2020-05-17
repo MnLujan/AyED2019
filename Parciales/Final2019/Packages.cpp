@@ -12,20 +12,21 @@
  * @param f numero de frame que pertenece el paquete
  * @param ft numero de frame totales que hay
  */
-Packages::Packages (char l, uint8_t o, uint8_t d, int f, int ft)
+Packages::Packages (char l, uint16_t o, uint16_t d, int f, int ft, uint8_t idpag)
 {
   this->letra = l;
   this->origen = o;
   this->destino = d;
   this->frame = f;
   this->frameTotal = ft;
+  this->idpag = idpag;
 }
 
 /**
  * @brief Metodo que devuelve la direccion de origen del paquete
  * @return entero de 8 bits de origen
  */
-uint8_t Packages::getOrigen ()
+uint16_t Packages::getOrigen ()
 {
   return this->origen;
 }
@@ -34,7 +35,7 @@ uint8_t Packages::getOrigen ()
  * @brief Metodo encargado de entregar la direccion de destino del paquete
  * @return entero de 8 bits de destino
  */
-uint8_t Packages::getDestino ()
+uint16_t Packages::getDestino ()
 {
   return this->destino;
 }
