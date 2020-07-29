@@ -37,7 +37,7 @@ void Administrador::BuildGraph() {
   uint16_t Ip_R1 = 0;
   uint16_t Ip_R2 = 0;
 
-
+  
 
 }
 
