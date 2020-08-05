@@ -19,12 +19,11 @@ class NodoGrafo {
   int BW;
   int id;
  public:
-  NodoGrafo (Router *p, int bw, int id);
+  NodoGrafo (Router*, int);
   void setRouter (Router *p);
   Router *getRouter ();
   void setPeso (int);
   int getPeso ();
-  int getID ();
 };
 
 #endif //_NODOGRAFO_H_

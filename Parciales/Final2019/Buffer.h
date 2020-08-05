@@ -10,10 +10,10 @@
 class Buffer {
  private:
   Lista<Pagina *> *cola;
-  uint8_t ID;
+  uint16_t ID;
  public:
-  Buffer (Lista<Pagina *> *, uint8_t);
-  uint8_t getID ();
+  Buffer (Lista<Pagina *> *, uint16_t);
+  uint16_t getID ();
   Lista<Pagina *> *getLista ();
   void AddListPag(Lista<Pagina*>*);
 };

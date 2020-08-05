@@ -233,3 +233,10 @@ void Router::encolar (Packages *newPackage, int ip)
       this->getInputList ()->Add (newPackage);
     }
 }
+
+/**
+ * @brief Metodo encargado de agregar un Buffer de conexion en el router.
+ */
+void Router::agreeBuffer(Buffer *newB) {
+  this->BuffersSalida->Add(newB);
+}

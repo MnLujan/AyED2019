@@ -23,7 +23,7 @@ class Lista {
   void borrarCabeza ();
   void DeleteList (Lista<Tipe> *);
   Nodo<Tipe> *getCabeza ();
-
+  Tipe Pop();
 };
 
 /**
@@ -186,4 +186,15 @@ void Lista<Tipe>::DeleteList (Lista<Tipe> *)
     }
   return;
 }
+
+template<class Tipe>
+Tipe Lista<Tipe>::Pop ()
+{
+  Tipe temp = czo->getdato();
+  Nodo<Tipe> *temp2 = czo->getnext();
+  delete (czo);
+  czo = temp2;
+  return temp;
+}
+
 #endif //_LISTA_H_

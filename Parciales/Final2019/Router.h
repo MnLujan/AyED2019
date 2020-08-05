@@ -36,6 +36,7 @@ class Router {
   bool StateInput ();
   void toRecivePackage (Packages *);
   void encolar (Packages *, int);
+  void agreeBuffer(Buffer*);
 
 
 };

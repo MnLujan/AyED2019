@@ -18,12 +18,15 @@ class Administrador {
  private:
     Lista<Lista<NodoGrafo*>*> *links;
     Lista<Router*> *routers;
-    uint16_t addressAvailabe;
+    uint16_t addressAvailabe[65600];
     int quantAddres = 0;
     int pagReceive;
-    int pag2Send;
+    int pagtoSend;
     Lista<string>* ReadFile();
     void BuildGraph();
+    void ListRouter(uint16_t, uint16_t);
+    void linkMachines(uint16_t, uint16_t, uint16_t, uint16_t);
+    void pag2Send();
  public:
     Administrador();
     Router *getRouter(uint16_t);

@@ -9,11 +9,10 @@
  * @param p puntero a un objeto Router.
  * @param bw ancho de banda que tendra el router.
  */
-NodoGrafo::NodoGrafo (Router *p, int bw, int ID)
+NodoGrafo::NodoGrafo (Router *p, int bw)
 {
   this->R = p;
   this->BW = bw;
-  this->id = ID;
 }
 
 /**
@@ -52,13 +51,4 @@ Router *NodoGrafo::getRouter ()
 void NodoGrafo::setPeso (int pe)
 {
   this->peso = pe;
-}
-
-/**
- * Metodo encargado de devolver el numero de ID del nodo.
- * @return id
- */
-int NodoGrafo::getID ()
-{
-  return this->id;
 }

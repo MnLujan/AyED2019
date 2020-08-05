@@ -1,11 +1,11 @@
 #include <iostream>
 #include <stdlib.h>
-#include "Maquina.h"
+#include "Administrador.h"
 using namespace std;
 
 int main ()
 {
-  Maquina *m = new Maquina (245, 5);
-  //m->toReceive (m->CreatedPage (45));
+  Administrador *admin = new Administrador();
+
   return EXIT_SUCCESS;
 }
