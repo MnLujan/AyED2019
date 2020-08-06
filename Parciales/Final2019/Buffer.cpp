@@ -9,7 +9,7 @@
  * @param cola
  * @param id
  */
-Buffer::Buffer (Lista<Pagina *> *colaN, uint16_t id)
+Buffer::Buffer (Lista<Packages *> *colaN, uint16_t id)
 {
   this->cola = colaN;
   this->ID = id;
@@ -28,7 +28,7 @@ uint16_t Buffer::getID ()
  * Metodo encargado de devolver la lista que contiene las paginas para enviar
  * @return Pagina* cola
  */
-Lista<Pagina *> *Buffer::getLista ()
+Lista<Packages *> *Buffer::getLista ()
 {
   return this->cola;
 }
@@ -37,7 +37,7 @@ Lista<Pagina *> *Buffer::getLista ()
  * Metodo encargado de agregar la lista de paginas asociadas al buffer
  * @param Lis Lista de paginas
  */
-void Buffer::AddListPag (Lista<Pagina *> *Lis)
+void Buffer::AddListPag (Lista<Packages *> *Lis)
 {
   if (this->cola == NULL)
     {

@@ -2,6 +2,7 @@
 // Created by mlujan on 5/17/20.
 //
 
+#include <iostream>
 #include "Administrador.h"
 
 /**
@@ -43,7 +44,7 @@ void Administrador::BuildGraph ()
 
   int bucle = info->get_size ();
   //pedir cabeza y borrar
-  for (int i = 0; i < info->get_size(); ++i)
+  for (int i = 0; i < info->get_size (); ++i)
     {
       if (info->getCabeza ()->getdato () == "+")
         {
@@ -77,14 +78,15 @@ void Administrador::BuildGraph ()
           this->links->get_nodo (N_R2 - 1)->getdato ()->Add (link1); //Router 2
 
           //Creo los buffers de los routers con la correspondiente IP.
-          auto *buffer1to2 = new Buffer (new Lista<Pagina *>, tempR2->getIpRouter ());
-          auto *buffer2to1 = new Buffer (new Lista<Pagina *>, tempR1->getIpRouter ());
+          auto *buffer1to2 = new Buffer (new Lista<Packages *>, tempR2->getIpRouter ());
+          auto *buffer2to1 = new Buffer (new Lista<Packages *>, tempR1->getIpRouter ());
 
           tempR1->agreeBuffer (buffer1to2);
           tempR2->agreeBuffer (buffer2to1);
 
-          tempR1->linkRouter(tempR2);
-          tempR2->linkRouter(tempR1);
+          //Indico el router vecino
+          tempR1->linkRouter (tempR2);
+          tempR2->linkRouter (tempR1);
 
         }
       else
@@ -109,7 +111,7 @@ Lista<string> *Administrador::ReadFile ()
   string file = "ConfigRed";
   ifstream fi (file);
 
-  Lista<string> *characters = new Lista<string> ();
+  auto *characters = new Lista<string> ();
   char *ptr;
   char del[4] = " \n\t";
 
@@ -192,5 +194,43 @@ void Administrador::pag2Send ()
           //Le pido la cantidad de paginas a enviar a cada maquina que tiene el router actual.
           this->pagtoSend += temp->getMaquiList ()->get_nodo (j)->getdato ()->GetCantPag ();
         }
+    }
+}
+
+/**
+ * @brief Calcula los pesos entre los routers del grafo.
+ */
+void Administrador::weighing ()
+{
+  for (int i = 0; i < this->links->get_size (); i++)
+    {
+
+      //Voy router por router viendo sus vecinos
+      NodoGrafo *father = this->links->get_nodo (i)->getdato ()->get_dato ();
+      for (int j = 1; j < this->links->get_nodo (i)->getdato ()->get_size (); j++)
+        {
+          //Obtengo cada uno de los routers vecinos
+          NodoGrafo *son = this->links->get_nodo (i)->getdato ()->get_nodo (j)->getdato ();
+
+          uint16_t ip_son = son->getRouter()->getIpRouter();
+
+          int lenghtQueue = father->getRouter()->getColaSalida(ip_son);
+
+          //BW entre routers
+          uint8_t bw = son->getBW();
+
+          /* Calculo */
+          int peso = (lenghtQueue/bw) + 1;
+
+          /* Actualizo el peso */
+          son->setPeso(peso);
+
+          string msj = "R"+to_string(father->getRouter()->getN_R())+" IP: "+to_string(father->getRouter()->getIpRouter())+" y R"+to_string(son->getRouter()->getN_R())+" IP: "
+                        +to_string(ip_son)+" | Recompuntan su peso | Peso actualizado: "+to_string(peso)+"\n";
+
+          //Ver si lo escribo en un log tmb
+          cout<<msj<<endl;
+        }
+
     }
 }

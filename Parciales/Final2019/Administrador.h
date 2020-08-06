@@ -27,10 +27,12 @@ class Administrador {
     void ListRouter(uint16_t, uint16_t);
     void linkMachines(uint16_t, uint16_t, uint16_t, uint16_t);
     void pag2Send();
+
  public:
     Administrador();
     Router *getRouter(uint16_t);
     vector<uint16_t> getRoute(int, int);
+    void weighing();
 };
 
 #endif //_ADMINISTRADOR_H_

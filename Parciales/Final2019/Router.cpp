@@ -46,7 +46,7 @@ Router::Router (uint16_t ip, uint8_t nr)
  * @brief Metodo encargado de retornar el numero de Ip del router.
  * @return uint8_t IPRouter
  */
-uint16_t Router::getIpRouter () const
+uint16_t Router::getIpRouter ()
 {
   return IPRouter;
 }
@@ -237,6 +237,37 @@ void Router::encolar (Packages *newPackage, int ip)
 /**
  * @brief Metodo encargado de agregar un Buffer de conexion en el router.
  */
-void Router::agreeBuffer(Buffer *newB) {
-  this->BuffersSalida->Add(newB);
+void Router::agreeBuffer (Buffer *newB)
+{
+  this->BuffersSalida->Add (newB);
+}
+
+/**
+ * @brief Metodo encargado de consultar la cola de salida para la direccion de ip pasada por parametro.
+ * @param ip direccion de ip que corresponde al router asociado
+ * @return numero entero con el tamaño de la cola
+ */
+int Router::getColaSalida (uint16_t ip)
+{
+  if (!this->BuffersSalida->esvacia ())
+    {/* Busco en todos los buffers del router */
+      for (int i = 0; i < this->BuffersSalida->get_size (); i++)
+        { /* Verifico si el buffer corresponde a la direccion de IP recibida */
+          if (this->BuffersSalida->get_nodo (i)->getdato ()->getID () == ip)
+            {
+              if (!this->BuffersSalida->get_nodo (i)->getdato ()->getLista ()->esvacia ())
+                { /* Si corresponde y no esta vacio, pregunto el largo */
+                  return this->BuffersSalida->get_nodo (i)->getdato ()->getLista ()->get_size ();
+                }
+              else
+                {
+                  return 0;
+                }
+            }
+        }
+    }
+  else
+    {
+      return 0;
+    }
 }

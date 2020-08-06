@@ -24,7 +24,7 @@ class Router {
  public:
   Router ();
   Router (uint16_t, uint8_t);
-  uint16_t getIpRouter () const;
+  uint16_t getIpRouter ();
   uint8_t getN_R ();
   Lista<Pagina *> *getPagList ();
   Lista<Packages *> *getInputList ();
@@ -37,8 +37,7 @@ class Router {
   void toRecivePackage (Packages *);
   void encolar (Packages *, int);
   void agreeBuffer(Buffer*);
-
-
+  int getColaSalida(uint16_t);
 };
 
 #endif //_ROUTER_H_

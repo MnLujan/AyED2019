@@ -53,3 +53,12 @@ void NodoGrafo::setPeso (int pe)
 {
   this->peso = pe;
 }
+
+/**
+ * @brief Retorna el ancho de banda del nodo.
+ * @return bw
+ */
+uint8_t NodoGrafo::getBW ()
+{
+  return this->BW;
+}

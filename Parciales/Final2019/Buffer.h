@@ -5,17 +5,17 @@
 #ifndef _BUFFER_H_
 #define _BUFFER_H_
 #include "Lista.h"
-#include "Pagina.h"
+#include "Packages.h"
 
 class Buffer {
  private:
-  Lista<Pagina *> *cola;
+  Lista<Packages *> *cola;
   uint16_t ID;
  public:
-  Buffer (Lista<Pagina *> *, uint16_t);
+  Buffer (Lista<Packages *> *, uint16_t);
   uint16_t getID ();
-  Lista<Pagina *> *getLista ();
-  void AddListPag(Lista<Pagina*>*);
+  Lista<Packages *> *getLista ();
+  void AddListPag(Lista<Packages*>*);
 };
 
 #endif //_BUFFER_H_

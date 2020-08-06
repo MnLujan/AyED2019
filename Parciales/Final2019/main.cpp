@@ -6,6 +6,7 @@ using namespace std;
 int main ()
 {
   Administrador *admin = new Administrador();
+  admin->weighing();
 
   return EXIT_SUCCESS;
 }

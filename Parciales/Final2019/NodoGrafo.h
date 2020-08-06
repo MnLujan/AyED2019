@@ -10,19 +10,20 @@
  * V = vertices, es decir plazas (estados, nodos)
  * E = Arcos, se marca con (origen, destino)
  *
- * */
+ */
 
 class NodoGrafo {
  private:
   Router *R;
   int peso;
-  int BW;
+  uint8_t BW;
  public:
   NodoGrafo (Router*, int);
   void setRouter (Router *p);
   Router *getRouter ();
   void setPeso (int);
   int getPeso ();
+  uint8_t getBW();
 };
 
 #endif //_NODOGRAFO_H_
