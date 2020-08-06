@@ -83,6 +83,9 @@ void Administrador::BuildGraph ()
           tempR1->agreeBuffer (buffer1to2);
           tempR2->agreeBuffer (buffer2to1);
 
+          tempR1->linkRouter(tempR2);
+          tempR2->linkRouter(tempR1);
+
         }
       else
         {
@@ -141,7 +144,7 @@ Lista<string> *Administrador::ReadFile ()
 void Administrador::ListRouter (uint16_t ip, uint16_t n_r)
 {
   //Se agrega a la lista de routers
-  Router *router = new Router (ip, n_r);
+  auto *router = new Router (ip, n_r);
   this->routers->Add (router);
 
   //Se agrega en la lista de conexiones

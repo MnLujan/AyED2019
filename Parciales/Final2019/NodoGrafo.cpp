@@ -13,6 +13,7 @@ NodoGrafo::NodoGrafo (Router *p, int bw)
 {
   this->R = p;
   this->BW = bw;
+  this->peso = 0;
 }
 
 /**

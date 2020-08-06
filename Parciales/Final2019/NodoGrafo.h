@@ -17,7 +17,6 @@ class NodoGrafo {
   Router *R;
   int peso;
   int BW;
-  int id;
  public:
   NodoGrafo (Router*, int);
   void setRouter (Router *p);
