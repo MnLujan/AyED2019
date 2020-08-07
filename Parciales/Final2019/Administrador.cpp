@@ -16,8 +16,13 @@ Administrador::Administrador ()
   this->pagtoSend = 0;
   //Construyo el grafo
   this->BuildGraph ();
-  //Seteo la cantidad de paginas a enviar.
+
+  /*Seteo la cantidad de paginas a enviar.*/
   pag2Send ();
+
+  /* Creo el objeto necesario para ejecutra Dijkstra */
+  Mpls *route = new Mpls (this->links);
+
 }
 
 /**
@@ -212,25 +217,76 @@ void Administrador::weighing ()
           //Obtengo cada uno de los routers vecinos
           NodoGrafo *son = this->links->get_nodo (i)->getdato ()->get_nodo (j)->getdato ();
 
-          uint16_t ip_son = son->getRouter()->getIpRouter();
+          uint16_t ip_son = son->getRouter ()->getIpRouter ();
 
-          int lenghtQueue = father->getRouter()->getColaSalida(ip_son);
+          int lenghtQueue = father->getRouter ()->getColaSalida (ip_son);
 
           //BW entre routers
-          uint8_t bw = son->getBW();
+          uint8_t bw = son->getBW ();
 
           /* Calculo */
-          int peso = (lenghtQueue/bw) + 1;
+          int peso = (lenghtQueue / bw) + 1;
 
           /* Actualizo el peso */
-          son->setPeso(peso);
+          son->setPeso (peso);
 
-          string msj = "R"+to_string(father->getRouter()->getN_R())+" IP: "+to_string(father->getRouter()->getIpRouter())+" y R"+to_string(son->getRouter()->getN_R())+" IP: "
-                        +to_string(ip_son)+" | Recompuntan su peso | Peso actualizado: "+to_string(peso)+"\n";
+          string msj = "R" + to_string (father->getRouter ()->getN_R ()) + " IP: "
+                       + to_string (father->getRouter ()->getIpRouter ()) + " y R"
+                       + to_string (son->getRouter ()->getN_R ()) + " IP: "
+                       + to_string (ip_son) + " | Recompuntan su peso | Peso actualizado: " + to_string (peso) + "\n";
 
           //Ver si lo escribo en un log tmb
-          cout<<msj<<endl;
+          cout << msj << endl;
         }
 
     }
 }
+
+/**
+ * @brief Metodo encargado de ejecutar los metodos necesarios para crear la ruta entre el origen y el destino pasados
+ * como parametro
+ * @param init direccion inicial
+ * @param dest direccion de destino
+ * @return vector con cada uno de los vertices
+ */
+vector<uint16_t> Administrador::getRoad (int init, int dest)
+{
+
+  /* Calculo los pesos nuevamente */
+  this->weighing ();
+
+  /* Se calculan los caminos */
+  route->Dijkstra (init);
+
+  /* Construyo la Ruta */
+  route->BuildRoute (dest);
+
+  /* Retorno la ruta */
+  return route->getRoute ();
+
+}
+
+/**
+ * @brief Muestra por pantalla el grafo de la red.
+ */
+void Administrador::printGraph ()
+{
+  /* Muestro los routers */
+  string msj = "--------------------------------------------------------\n"
+               "                 Routers de la red\n"
+               "----------------------------------------------------------\n";
+  for (int i = 0; i < this->routers->get_size (); i++)
+    {
+      auto *temp = this->routers->get_nodo (i)->getdato ();
+      msj = msj + "->R" + to_string (temp->getN_R ()) + " IP: " +
+            to_string (temp->getIpRouter ());
+      for (int j = 0; i < temp->getMaquiList ()->get_size (); j++)
+        {
+          msj = msj +" -->Maquina"+to_string(j)+" IP: "+to_string(temp->getMaquiList()->get_nodo(j)->getdato()->getIP())+"\n";
+        }
+    }
+    /* Saco por pantalla */
+    cout<<msj<<endl;
+
+}
+
