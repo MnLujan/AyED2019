@@ -8,12 +8,14 @@
 /**
  * @brief Constructor de la clase
  */
-Administrador::Administrador ()
+Administrador::Administrador (Logger *log)
 {
   this->links = new Lista<Lista<NodoGrafo *> *> ();
   this->routers = new Lista<Router *> ();
   this->pagReceive = 0;
   this->pagtoSend = 0;
+  this->log = log;
+
   //Construyo el grafo
   this->BuildGraph ();
 
@@ -235,8 +237,12 @@ void Administrador::weighing ()
                        + to_string (son->getRouter ()->getN_R ()) + " IP: "
                        + to_string (ip_son) + " | Recompuntan su peso | Peso actualizado: " + to_string (peso) + "\n";
 
-          //Ver si lo escribo en un log tmb
+          /* Muestro en pantalla */
           cout << msj << endl;
+
+          /* Escribo en el log */
+          log->write(msj);
+
         }
 
     }
@@ -251,7 +257,6 @@ void Administrador::weighing ()
  */
 vector<uint16_t> Administrador::getRoad (int init, int dest)
 {
-
   /* Calculo los pesos nuevamente */
   this->weighing ();
 
@@ -263,7 +268,6 @@ vector<uint16_t> Administrador::getRoad (int init, int dest)
 
   /* Retorno la ruta */
   return route->getRoute ();
-
 }
 
 /**
@@ -273,20 +277,56 @@ void Administrador::printGraph ()
 {
   /* Muestro los routers */
   string msj = "--------------------------------------------------------\n"
-               "                 Routers de la red\n"
-               "----------------------------------------------------------\n";
+               "                 Composicion de la Red\n"
+               "--------------------------------------------------------";
   for (int i = 0; i < this->routers->get_size (); i++)
     {
       auto *temp = this->routers->get_nodo (i)->getdato ();
-      msj = msj + "->R" + to_string (temp->getN_R ()) + " IP: " +
+      msj = msj + "\n->R" + to_string (temp->getN_R ()) + " IP: " +
             to_string (temp->getIpRouter ());
-      for (int j = 0; i < temp->getMaquiList ()->get_size (); j++)
+      for (int j = 0; j < temp->getMaquiList ()->get_size (); j++)
         {
-          msj = msj +" -->Maquina"+to_string(j)+" IP: "+to_string(temp->getMaquiList()->get_nodo(j)->getdato()->getIP())+"\n";
+          msj = msj + "\n    |-->Maquina-" + to_string (j) + " IP: "
+                + to_string (temp->getMaquiList ()->get_nodo (j)->getdato ()->getIP ());
         }
     }
-    /* Saco por pantalla */
-    cout<<msj<<endl;
+
+  msj = msj + "\n---------------------------------------------------------\n"
+              "                 Conexiones entre Routers\n"
+              "-----------------------------------------------------------";
+  for (int i = 0; i < this->links->get_size (); ++i)
+    {
+      auto *temp = this->links->get_nodo (i)->getdato ();
+      msj = msj + "\nR" + to_string (temp->get_nodo (0)->getdato ()->getRouter ()->getN_R ()) + " IP: "
+            + to_string (temp->get_nodo (0)->getdato ()->getRouter ()->getIpRouter ());
+      for (int j = 1; j < temp->get_size (); ++j)
+        {
+          msj = msj + "\n |_____R" + to_string (temp->get_nodo (j)->getdato ()->getRouter ()->getN_R ()) + " IP: "
+                + to_string (temp->get_nodo (j)->getdato ()->getRouter ()->getIpRouter ());
+        }
+    }
+
+  msj = msj + "\n--------------------------------------------------------\n"
+              "               Paginas a enviar por Maquina:\n"
+              "--------------------------------------------------------";
+  for (int i = 0; i < this->routers->get_size (); ++i)
+    {
+      auto *temp = this->routers->get_nodo (i)->getdato ();
+      msj = msj + "\n R" + to_string (temp->getN_R ()) + ": ";
+      for (int j = 0; j < temp->getMaquiList ()->get_size (); ++j)
+        {
+          msj = msj + "\n    |->Maquina-" + to_string (j) + " enviara: "
+                + to_string (temp->getMaquiList ()->get_nodo (j)->getdato ()->GetCantPag ());
+        }
+    }
+
+  msj = msj + "\n Paginas totales a enviar: " + to_string (this->pagtoSend);
+
+  /* Saco por pantalla */
+  cout << msj << endl;
+
+  /* Escribo en el Log */
+  log->write (msj);
 
 }
 

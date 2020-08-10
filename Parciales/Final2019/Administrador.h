@@ -12,6 +12,7 @@
 #include <cstring>
 #include <cstdint>
 #include "Mpls.h"
+#include "Logger.h"
 
 class Administrador {
  private:
@@ -22,6 +23,8 @@ class Administrador {
   int pagReceive;
   int pagtoSend;
   Mpls *route;
+  Logger *log;
+
   Lista<string> *ReadFile ();
   void BuildGraph ();
   void ListRouter (uint16_t, uint16_t);
@@ -29,8 +32,7 @@ class Administrador {
   void pag2Send ();
   vector<uint16_t> getRoad (int, int);
  public:
-  Administrador ();
-  //Router *getRouter (uint16_t);
+  Administrador (Logger*);
   void printGraph ();
   void weighing ();
 };
