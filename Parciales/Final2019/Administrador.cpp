@@ -221,7 +221,7 @@ void Administrador::weighing ()
 
           uint16_t ip_son = son->getRouter ()->getIpRouter ();
 
-          int lenghtQueue = father->getRouter ()->getColaSalida (ip_son);
+          int lenghtQueue = father->getRouter ()->getSizeQueueOut (ip_son);
 
           //BW entre routers
           uint8_t bw = son->getBW ();
@@ -351,7 +351,7 @@ void Administrador::SendPag (Maquina *m)
 
       log->write (msj);
 
-      this->getRouter (pag2send->getOrigen() & 0xFF00)->toRecivePag (pag2send);
+      this->getRouter (pag2send->getOrigen () & 0xFF00)->toRecivePag (pag2send);
 
     }
 }
@@ -383,4 +383,79 @@ Router *Administrador::getRouter (uint16_t ipR)
 void Administrador::Test ()
 {
   this->SendPag (this->routers->get_nodo (2)->getdato ()->getMaquiList ()->get_nodo (1)->getdato ());
+}
+
+/**
+ * @brief Metodo encargado de unir los paquetes correspondientes para formar la pagina a enviar.
+ * @param r router encargado de la tarea
+ */
+void Administrador::Pack2Pag (Router *r)
+{
+  for (int i = 0; i < r->getListPackages ()->get_size (); ++i)
+    {
+      /* Busco en la lista de listas de paquetes */
+      auto *temp = r->getListPackages ()->get_nodo (i)->getdato ();
+
+      int frame_total = temp->get_dato ()->getFrameTotal ();
+
+      if (frame_total == temp->get_size ())
+        {
+
+        }
+      else
+        {
+          break;
+        }
+    }
+
+}
+
+/**
+ * @brief Metodo encargado de mover los paquetes de la cola de entrada a los buffers de salida
+ * que correspondan
+ * @param router Router encargado de hacer dicha tarea
+ * @TODO cuando lo llame al metodo verificar que dicho router tenga algo en la cola de entrada
+ */
+void Administrador::InputToOutput (Router *router)
+{
+  auto *temp = router->getInputList ();
+
+  for (int i = 0; i < temp->get_size (); ++i)
+    {
+      Packages *packmove = temp->get_dato ();
+      temp->borrarCabeza ();
+
+      /* Determino a donde muevo el paquete */
+      uint16_t ipOrigen = packmove->getOrigen ();
+      uint16_t ipDest = packmove->getDestino ();
+      uint16_t ROrigen = packmove->getOrigen () & 0xFF00;
+      uint16_t RDest = packmove->getDestino () & 0xFF00;
+      uint16_t R_A = router->getN_R ();
+
+      uint16_t next;
+      /* Si las direcciones son distintas calculo la ruta con Dijsktra */
+      if (ROrigen == RDest)
+        {
+          next = RDest;
+        }
+      else
+        {
+          vector<uint16_t> route = this->getRoad (R_A, RDest);
+          next = route[1];
+        }
+      /* Obtengo el Ip del siguiente router al que debo saltar */
+      uint16_t Ip_next = this->routers->get_nodo (next)->getdato ()->getIpRouter ();
+
+      if (Ip_next == router->getIpRouter ())
+        {
+          router->encolar (packmove, 0);
+        }
+      else
+        {
+
+          /* Busco en mi lista de buffer y lo agrego a la lista de paquetes */
+          router->getQueueOut (next)->getLista ()->Add (packmove);
+        }
+
+    }
 }

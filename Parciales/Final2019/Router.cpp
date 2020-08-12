@@ -211,10 +211,12 @@ void Router::encolar (Packages *newPackage, int ip)
       for (int i = 0; i < this->package2pag->get_size (); i++)
         {
           bool match = false;
+          /* Nodo temporal para realizar las consultas */
+          auto *temp = this->package2pag->get_nodo (i)->getdato ()->get_dato ();
           /* Verifico que el IDpag, origen y destino correspondan con alguno de los paquetes. Los tres deben coincidir */
-          if (this->package2pag->get_nodo (i)->getdato ()->get_dato ()->getIdPag () == newPackage->getIdPag () &&
-              this->package2pag->get_nodo (i)->getdato ()->get_dato ()->getDestino () == newPackage->getDestino () &&
-              this->package2pag->get_nodo (i)->getdato ()->get_dato ()->getOrigen () == newPackage->getOrigen ())
+          if (temp->getIdPag () == newPackage->getIdPag () &&
+              temp->getDestino () == newPackage->getDestino () &&
+              temp->getOrigen () == newPackage->getOrigen ())
             {
               this->package2pag->get_nodo (i)->getdato ()->Add (newPackage);
               match = true;
@@ -247,7 +249,7 @@ void Router::agreeBuffer (Buffer *newB)
  * @param ip direccion de ip que corresponde al router asociado
  * @return numero entero con el tamaño de la cola
  */
-int Router::getColaSalida (uint16_t ip)
+int Router::getSizeQueueOut (uint16_t ip)
 {
   if (!this->BuffersSalida->esvacia ())
     {/* Busco en todos los buffers del router */
@@ -270,4 +272,43 @@ int Router::getColaSalida (uint16_t ip)
     {
       return 0;
     }
+}
+
+/**
+ * @brief Metodo encargado de devolver la lista de lista de paquetes a compaginar
+ * @return puntero a lista de lista
+ */
+Lista<Lista<Packages *> *> *Router::getListPackages ()
+{
+  return this->package2pag;
+}
+
+/**
+ * @brief Metodo encargado de devolver la lista de paquetes correspondientes al buffer con
+ * la direccion Ip pasada como paramatero
+ * @param ip direccion Ip del buffer
+ * @return puntero a la lista de paquetes.
+ */
+Buffer *Router::getQueueOut (uint16_t ip)
+{
+  if (!this->BuffersSalida->esvacia ())
+    {
+      auto *temp = this->BuffersSalida->getCabeza ();
+      for (int i = 0; i < this->BuffersSalida->get_size (); ++i)
+        {
+          if (temp->getdato ()->getID () == ip)
+            {
+              return temp->getdato ();
+            }
+          else
+            {
+              temp = temp->getnext ();
+            }
+        }
+    }
+  else
+    {
+      return nullptr;
+    }
+
 }

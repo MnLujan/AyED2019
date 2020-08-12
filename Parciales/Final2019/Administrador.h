@@ -35,6 +35,8 @@ class Administrador {
   vector<uint16_t> getRoad (int, int);
   void SendPag(Maquina *);
   Router* getRouter(uint16_t);
+  void Pack2Pag(Router*);
+  void InputToOutput(Router*);
  public:
   Administrador (Logger*);
   void printGraph ();

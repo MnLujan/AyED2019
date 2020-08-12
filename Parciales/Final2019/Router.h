@@ -30,6 +30,7 @@ class Router {
   Lista<Packages *> *getInputList ();
   Lista<Maquina *> *getMaquiList ();
   Lista<Router *> *getRouterList ();
+  Lista<Lista<Packages*>*> *getListPackages();
   void toRecivePag (Pagina *);
   void linkMachine (Maquina *);
   void linkRouter (Router *);
@@ -37,7 +38,10 @@ class Router {
   void toRecivePackage (Packages *);
   void encolar (Packages *, int);
   void agreeBuffer(Buffer*);
-  int getColaSalida(uint16_t);
+  int getSizeQueueOut(uint16_t);
+  Buffer* getQueueOut(uint16_t);
+
+
 };
 
 #endif //_ROUTER_H_

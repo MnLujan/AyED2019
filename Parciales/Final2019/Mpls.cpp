@@ -125,7 +125,7 @@ void Mpls::SeeRoute (int init, int dest)
 }
 
 /**
- * @brief Metodo encargado de construir la el camino mas corto.
+ * @brief Metodo encargado de construir el camino mas corto.
  * @param dest destino al que quiero llegar
  */
 void Mpls::BuildRoute (int dest)
