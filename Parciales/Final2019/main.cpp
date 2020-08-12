@@ -11,9 +11,9 @@ int main ()
 
   auto *admin = new Administrador (log);
 
-  //admin->weighing();
+  admin->weighing();
   admin->printGraph ();
-
+  admin->Test();
   log->close_Log ();
 
   return EXIT_SUCCESS;

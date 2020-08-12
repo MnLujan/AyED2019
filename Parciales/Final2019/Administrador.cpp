@@ -241,7 +241,7 @@ void Administrador::weighing ()
           cout << msj << endl;
 
           /* Escribo en el log */
-          log->write(msj);
+          log->write (msj);
 
         }
 
@@ -261,13 +261,13 @@ vector<uint16_t> Administrador::getRoad (int init, int dest)
   this->weighing ();
 
   /* Se calculan los caminos */
-  route->Dijkstra (init);
+  this->route->Dijkstra (init);
 
   /* Construyo la Ruta */
-  route->BuildRoute (dest);
+  this->route->BuildRoute (dest);
 
   /* Retorno la ruta */
-  return route->getRoute ();
+  return this->route->getRoute ();
 }
 
 /**
@@ -330,3 +330,57 @@ void Administrador::printGraph ()
 
 }
 
+/**
+ * @brief Metodo encargado de enviar paginas de la maquina a el router posible.
+ * @param m maquina que debera enviar la pagina
+ */
+void Administrador::SendPag (Maquina *m)
+{
+  if (m->Pending ())
+    {
+
+      /* Le pido a la maquina que genera una pagina con una direccion posible  */
+
+      auto *pag2send = m->CreatedPage (this->addressAvailabe, this->quantAddres);
+
+      string msj = "\nPagina Num: " + to_string (pag2send->getIDpag ()) + " De: " + to_string (m->GetCantPag ()) + " | "
+                   + pag2send->getDato () + " | " + to_string (pag2send->getOrigen ()) + " | " +
+                   to_string (pag2send->getDestino ()) + " | " + to_string (pag2send->getDato ().size ());
+
+      cout << msj << endl;
+
+      log->write (msj);
+
+      this->getRouter (pag2send->getOrigen() & 0xFF00)->toRecivePag (pag2send);
+
+    }
+}
+
+/**
+ * @brief Metodo encargado de buscar el router en la lista de routers y retornarlo
+ * @param ipR direccion IP del router buscado
+ * @return puntero al router.
+ */
+Router *Administrador::getRouter (uint16_t ipR)
+{
+  auto *temp = this->routers->getCabeza ();
+  for (int i = 0; i < this->routers->get_size (); ++i)
+    {
+      if (temp->getdato ()->getIpRouter () == ipR)
+        {
+          return temp->getdato ();
+        }
+      else
+        {
+          temp = temp->getnext ();
+        }
+    }
+
+  //No se encontro el router
+  return nullptr;
+}
+
+void Administrador::Test ()
+{
+  this->SendPag (this->routers->get_nodo (2)->getdato ()->getMaquiList ()->get_nodo (1)->getdato ());
+}

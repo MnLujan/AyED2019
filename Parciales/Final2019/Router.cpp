@@ -140,7 +140,7 @@ void Router::toRecivePag (Pagina *p)
       auto auxPackage = new Packages (dataAux, p->getOrigen (), p->getDestino (), i, data.size (), p->getIDpag ());
 
       /* Lo agrego a la cola de entrada del router */
-      this->getInputList ()->Add (auxPackage);
+      this->Input->Add (auxPackage);
     }
 
 }

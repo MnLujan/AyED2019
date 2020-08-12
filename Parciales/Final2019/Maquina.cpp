@@ -59,7 +59,7 @@ void Maquina::CrearDatos ()
 }
 
 /**
- * @brief Metodo que devuelve entero de 8bits que forma el ip de la maquina
+ * @brief Metodo que devuelve entero de 16bits que forma el ip de la maquina
  * @return IpMaquina
  */
 uint16_t Maquina::getIP ()
@@ -102,20 +102,21 @@ int Maquina::GetCantPag ()
  * @param dest puntero a un Lista de posibles destinos. La maquina decide cual es.
  * @return puntero a una pagina
  */
-Pagina *Maquina::CreatedPage (Lista<uint8_t> *dest)
+Pagina *Maquina::CreatedPage (const uint16_t dest[], int numDir)
 {
   if (cantPag != 0)
     {
-      uint8_t ipDes = this->getIP();
+
+      uint16_t ipDes = this->getIP();
       string data = envio->get_dato ();
       envio->borrarCabeza ();
-
       /* Obtengo un nodo al azar y extraigo el IP, siempre distinto del IP propio de la maquina */
       while(ipDes == this->getIP())
         {
-          ipDes = dest->get_nodo (rand () % (sizeof (dest) - 1))->getdato ();
+          ipDes = dest[uint16_t (rand () % (numDir - 1))];
         }
-      auto *nuevo = new Pagina (data, this->getIP (), ipDes, cantPag);
+      auto *nuevo = new Pagina (data, this->getIP (), ipDes, this->PaginasEnviadas + 1);
+      this->PaginasEnviadas++;
       this->cantPag--;
       return nuevo;
     }

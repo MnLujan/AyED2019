@@ -16,6 +16,7 @@
 
 class Administrador {
  private:
+  /* Variables */
   Lista<Lista<NodoGrafo *> *> *links;
   Lista<Router *> *routers;
   uint16_t addressAvailabe[65600];
@@ -25,16 +26,20 @@ class Administrador {
   Mpls *route;
   Logger *log;
 
+  /* Metodos privado usados solo por la clase */
   Lista<string> *ReadFile ();
   void BuildGraph ();
   void ListRouter (uint16_t, uint16_t);
   void linkMachines (uint16_t, uint16_t, uint16_t, uint16_t);
   void pag2Send ();
   vector<uint16_t> getRoad (int, int);
+  void SendPag(Maquina *);
+  Router* getRouter(uint16_t);
  public:
   Administrador (Logger*);
   void printGraph ();
   void weighing ();
+  void Test();
 };
 
 #endif //_ADMINISTRADOR_H_
