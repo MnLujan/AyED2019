@@ -24,6 +24,21 @@ Mpls::Mpls (Lista<Lista<NodoGrafo *> *> *auxlink)
 }
 
 /**
+ * @brief Funcion encargada de reiniciar los valores por defecto para un proximo
+ * calculo de ruta.
+ */
+void Mpls::reboot ()
+{
+  for (int i = 0; i <= this->routers; ++i)
+    {
+      this->distancia[i] = INF;  //inicializamos todas las distancias con valor infinito
+      this->isVisited[i] = false; //inicializamos todos los vértices como no visitados
+      this->prev[i] = -1;      //inicializamos el previo del vertice i con -1
+
+    }
+}
+
+/**
  * @brief metodo auxiliar para la funcion de dijktra
  * @param actual step actual
  * @param adyacente step siguiente
@@ -132,7 +147,7 @@ void Mpls::BuildRoute (int dest)
 {
   if (prev[dest] != -1)
     {
-      BuildRoute (dest);
+      BuildRoute (prev[dest]);
     }
   int newPush = dest;
   this->route.push_back (newPush);

@@ -23,7 +23,7 @@ Administrador::Administrador (Logger *log)
   pag2Send ();
 
   /* Creo el objeto necesario para ejecutra Dijkstra */
-  Mpls *route = new Mpls (this->links);
+  this->route = new Mpls (this->links);
 
 }
 
@@ -232,13 +232,13 @@ void Administrador::weighing ()
           /* Actualizo el peso */
           son->setPeso (peso);
 
-          string msj = "R" + to_string (father->getRouter ()->getN_R ()) + " IP: "
+          string msj = "\nRecompuntan su peso | R" + to_string (father->getRouter ()->getN_R ()) + " IP: "
                        + to_string (father->getRouter ()->getIpRouter ()) + " y R"
                        + to_string (son->getRouter ()->getN_R ()) + " IP: "
-                       + to_string (ip_son) + " | Recompuntan su peso | Peso actualizado: " + to_string (peso) + "\n";
+                       + to_string (ip_son) + " | Peso actualizado: " + to_string (peso);
 
           /* Muestro en pantalla */
-          cout << msj << endl;
+          cout << msj;
 
           /* Escribo en el log */
           log->write (msj);
@@ -257,6 +257,9 @@ void Administrador::weighing ()
  */
 vector<uint16_t> Administrador::getRoad (int init, int dest)
 {
+  /* Reinicio los valores por defecto */
+  this->route->reboot();
+
   /* Calculo los pesos nuevamente */
   this->weighing ();
 
@@ -276,7 +279,7 @@ vector<uint16_t> Administrador::getRoad (int init, int dest)
 void Administrador::printGraph ()
 {
   /* Muestro los routers */
-  string msj = "--------------------------------------------------------\n"
+  string msj = "\n--------------------------------------------------------\n"
                "                 Composicion de la Red\n"
                "--------------------------------------------------------";
   for (int i = 0; i < this->routers->get_size (); i++)
@@ -383,6 +386,8 @@ Router *Administrador::getRouter (uint16_t ipR)
 void Administrador::Test ()
 {
   this->SendPag (this->routers->get_nodo (2)->getdato ()->getMaquiList ()->get_nodo (1)->getdato ());
+
+  this->InputToOutput(this->routers->get_nodo(2)->getdato());
 }
 
 /**
@@ -428,23 +433,23 @@ void Administrador::InputToOutput (Router *router)
       /* Determino a donde muevo el paquete */
       uint16_t ipOrigen = packmove->getOrigen ();
       uint16_t ipDest = packmove->getDestino ();
-      uint16_t ROrigen = packmove->getOrigen () & 0xFF00;
-      uint16_t RDest = packmove->getDestino () & 0xFF00;
+      uint16_t ROrigen = (packmove->getOrigen () & 0xFF00)>>8;
+      uint16_t RDest = (packmove->getDestino () & 0xFF00)>>8;
       uint16_t R_A = router->getN_R ();
 
       uint16_t next;
       /* Si las direcciones son distintas calculo la ruta con Dijsktra */
       if (ROrigen == RDest)
         {
-          next = RDest;
+          next = R_A;
         }
       else
         {
-          vector<uint16_t> route = this->getRoad (R_A, RDest);
-          next = route[1];
+          vector<uint16_t> road = this->getRoad (R_A, RDest);
+          next = road[1];
         }
       /* Obtengo el Ip del siguiente router al que debo saltar */
-      uint16_t Ip_next = this->routers->get_nodo (next)->getdato ()->getIpRouter ();
+      uint16_t Ip_next = this->routers->get_nodo (next-1)->getdato ()->getIpRouter ();
 
       if (Ip_next == router->getIpRouter ())
         {
@@ -454,8 +459,14 @@ void Administrador::InputToOutput (Router *router)
         {
 
           /* Busco en mi lista de buffer y lo agrego a la lista de paquetes */
-          router->getQueueOut (next)->getLista ()->Add (packmove);
+          router->getQueueOut (Ip_next)->getLista ()->Add (packmove);
         }
 
+      string msj = "\nRuteo | NºPaquete " + to_string (packmove->getFrame ()) + " Pag " +
+                   to_string (packmove->getIdPag ()) + " | " + packmove->getletra () + " | " +
+                   to_string (packmove->getOrigen ()) + " | " + to_string (packmove->getDestino ()) + " | " +
+                   to_string (next);
+
+      this->log->write(msj);
     }
 }

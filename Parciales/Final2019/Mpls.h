@@ -43,6 +43,7 @@ class Mpls {
   void SeeRoute (int, int);
   void BuildRoute (int);
   vector<uint16_t> getRoute ();
+  void reboot();
 };
 
 #endif //_MPLS_H_
