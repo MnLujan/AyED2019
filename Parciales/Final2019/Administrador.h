@@ -35,9 +35,12 @@ class Administrador {
   vector<uint16_t> getRoad (int, int);
   void SendPag(Maquina *);
   Router* getRouter(uint16_t);
-  void Pack2Pag(Router*);
+  void RouterToMachine(Router*);
   void InputToOutput(Router*);
+  void RouterToRouter(Router *);
+  uint8_t getlinksBW(uint16_t, uint16_t);
  public:
+  /* Metodo publicos llamados desde el Main */
   Administrador (Logger*);
   void printGraph ();
   void weighing ();

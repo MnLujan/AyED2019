@@ -258,7 +258,7 @@ void Administrador::weighing ()
 vector<uint16_t> Administrador::getRoad (int init, int dest)
 {
   /* Reinicio los valores por defecto */
-  this->route->reboot();
+  this->route->reboot ();
 
   /* Calculo los pesos nuevamente */
   this->weighing ();
@@ -387,14 +387,17 @@ void Administrador::Test ()
 {
   this->SendPag (this->routers->get_nodo (2)->getdato ()->getMaquiList ()->get_nodo (1)->getdato ());
 
-  this->InputToOutput(this->routers->get_nodo(2)->getdato());
+  this->InputToOutput (this->routers->get_nodo (2)->getdato ());
+
+  this->RouterToRouter (this->routers->get_nodo (2)->getdato ());
+
 }
 
 /**
  * @brief Metodo encargado de unir los paquetes correspondientes para formar la pagina a enviar.
  * @param r router encargado de la tarea
  */
-void Administrador::Pack2Pag (Router *r)
+void Administrador::RouterToMachine (Router *r)
 {
   for (int i = 0; i < r->getListPackages ()->get_size (); ++i)
     {
@@ -433,8 +436,8 @@ void Administrador::InputToOutput (Router *router)
       /* Determino a donde muevo el paquete */
       uint16_t ipOrigen = packmove->getOrigen ();
       uint16_t ipDest = packmove->getDestino ();
-      uint16_t ROrigen = (packmove->getOrigen () & 0xFF00)>>8;
-      uint16_t RDest = (packmove->getDestino () & 0xFF00)>>8;
+      uint16_t ROrigen = (packmove->getOrigen () & 0xFF00) >> 8;
+      uint16_t RDest = (packmove->getDestino () & 0xFF00) >> 8;
       uint16_t R_A = router->getN_R ();
 
       uint16_t next;
@@ -449,7 +452,7 @@ void Administrador::InputToOutput (Router *router)
           next = road[1];
         }
       /* Obtengo el Ip del siguiente router al que debo saltar */
-      uint16_t Ip_next = this->routers->get_nodo (next-1)->getdato ()->getIpRouter ();
+      uint16_t Ip_next = this->routers->get_nodo (next - 1)->getdato ()->getIpRouter ();
 
       if (Ip_next == router->getIpRouter ())
         {
@@ -467,6 +470,84 @@ void Administrador::InputToOutput (Router *router)
                    to_string (packmove->getOrigen ()) + " | " + to_string (packmove->getDestino ()) + " | " +
                    to_string (next);
 
-      this->log->write(msj);
+      this->log->write (msj);
     }
+}
+
+/**
+ * @brief Metodo encargado de mover los paquetes de las colas de salida a los routers vecinos
+ * @param router Router que realizara la tarea
+ */
+void Administrador::RouterToRouter (Router *router)
+{
+  for (int i = 0; i < router->getListQueue ()->get_size (); ++i)
+    {
+      auto buffaux = router->getListQueue ()->get_nodo (i)->getdato ();
+
+      /* Procedo solo si tengo elementos dentro del buffer */
+      if (!buffaux->getLista ()->esvacia ())
+        {
+
+          uint16_t ip_salida = router->getIpRouter ();
+          uint16_t ip_llegada = buffaux->getID ();
+
+          uint8_t BW = this->getlinksBW (ip_salida, ip_llegada);
+
+          while (BW)
+            {
+
+              /* Si no hay mas elementos rompo loop */
+              if (buffaux->getLista ()->esvacia ())
+                {
+                  break;
+                }
+              int sizeBuff = buffaux->getLista ()->get_size ();
+              for (int j = 0; j < buffaux->getLista ()->get_size (); ++j)
+                {
+
+                  auto *package = buffaux->getLista ()->get_nodo (j)->getdato ();
+                  //uint16_t ip_dest = package->getDestino();
+
+                  /* Elimino el elemento extraido */
+                  buffaux->getLista ()->borrarCabeza ();
+                  this->getRouter (ip_llegada)->toRecivePackage (package);
+                  BW--;
+
+                  string msj = "\nRuteo | IPOrigen " + to_string (package->getOrigen ()) + " | IPDestino "
+                               + to_string (package->getDestino ()) +
+                               "| Router IP: " + to_string (ip_salida) + " a Router IP: " + to_string (ip_llegada);
+
+                }
+
+            }
+
+        }
+
+    }
+}
+
+/**
+ * @brief Metodo encargado de retornar el ancho de banda de la conexion entre 2 routers
+ * @param ipA Ip del router de salida
+ * @param ipB Ip del router de llegada
+ * @return BW
+ */
+uint8_t Administrador::getlinksBW (uint16_t ipA, uint16_t ipB)
+{
+  for (int i = 0; i < this->links->get_size (); ++i)
+    {
+      auto *temp = this->links->get_nodo (i)->getdato ();
+      if (ipA == temp->get_dato ()->getRouter ()->getIpRouter ())
+        {
+          for (int j = 0; j < temp->get_size (); ++j)
+            {
+              if (ipB == temp->get_nodo (j)->getdato ()->getRouter ()->getIpRouter ())
+                {
+                  return temp->get_nodo (j)->getdato ()->getBW ();
+                }
+            }
+
+        }
+    }
+  return 0;
 }

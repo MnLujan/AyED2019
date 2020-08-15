@@ -23,7 +23,8 @@ class Lista {
   void borrarCabeza ();
   void DeleteList (Lista<Tipe> *);
   Nodo<Tipe> *getCabeza ();
-  Tipe Pop();
+  Tipe Pop ();
+  void Swap (int, int);
 };
 
 /**
@@ -190,11 +191,44 @@ void Lista<Tipe>::DeleteList (Lista<Tipe> *)
 template<class Tipe>
 Tipe Lista<Tipe>::Pop ()
 {
-  Tipe temp = czo->getdato();
-  Nodo<Tipe> *temp2 = czo->getnext();
+  Tipe temp = czo->getdato ();
+  Nodo<Tipe> *temp2 = czo->getnext ();
   delete (czo);
   czo = temp2;
   return temp;
+}
+
+/**
+ * @brief Metodo encargado de intercambiar 2 nodos pasados como parametro
+ * @param a numero de nodo a cambiar
+ * @param b numero de nodo a cambiar
+ * @tparam Tipe tipo designado en la construccion de la lista.
+ */
+template<class Tipe>
+void Lista<Tipe>::Swap (int a, int b)
+{
+  Nodo<Tipe> *pos1 = this->get_nodo (a);
+  auto *pos2 = this->get_nodo (b);
+
+  if (a != 0)
+    {
+      auto *auxPos1 = this->get_nodo (a - 1);
+      auto *nextPos2 = pos2->get_next ();
+
+      //Swap
+      pos1->setnext (nextPos2);
+      pos2->senext (pos1);
+      auxPos1->senext (pos2);
+    }
+  else
+    {
+      auto *nextPos2 = pos2->get_next ();
+
+      //Swap
+      this->czo = pos2;
+      pos2->setnext (pos1);
+      pos1->setnext (nextPos2);
+    }
 }
 
 #endif //_LISTA_H_

@@ -9,7 +9,7 @@
 #include "Packages.h"
 #include "Maquina.h"
 /***
- * @TODO enviarpaquetes
+ * @TODO pack2pag enviarpaquetes
  */
 class Router {
  private:
@@ -40,6 +40,9 @@ class Router {
   void agreeBuffer(Buffer*);
   int getSizeQueueOut(uint16_t);
   Buffer* getQueueOut(uint16_t);
+  Lista<Buffer*> *getListQueue();
+  void packToPag(Lista<Packages *> *);
+  Lista<Packages*> *Order(Lista<Packages*>*);
 
 
 };

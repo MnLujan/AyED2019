@@ -153,8 +153,8 @@ void Router::linkRouter (Router *R)
 {
   this->Rvecinos->Add (R);
   /* Crea el buffer, posteriormente se le pasara la lista de paginas */
-  auto *temp = new Buffer (nullptr, R->getIpRouter ());
-  this->BuffersSalida->Add (temp);
+  // auto *temp = new Buffer (nullptr, R->getIpRouter ());
+  //this->BuffersSalida->Add (temp);
 }
 
 /**
@@ -165,8 +165,8 @@ void Router::linkMachine (Maquina *M)
 {
   this->Maqui->Add (M);
   /* Crea el buffer, posteriormente se le pasara la lista de paginas */
-  auto *temp = new Buffer (nullptr, M->getIP ());
-  this->BuffersSalida->Add (temp);
+  // auto *temp = new Buffer (nullptr, M->getIP ());
+  // this->BuffersSalida->Add (temp);
 }
 
 /**
@@ -278,7 +278,8 @@ int Router::getSizeQueueOut (uint16_t ip)
  * @brief Metodo encargado de devolver la lista de lista de paquetes a compaginar
  * @return puntero a lista de lista
  */
-Lista<Lista<Packages *> *> *Router::getListPackages ()
+Lista<Lista<Packages *> *> *
+Router::getListPackages ()
 {
   return this->package2pag;
 }
@@ -310,5 +311,52 @@ Buffer *Router::getQueueOut (uint16_t ip)
     {
       return nullptr;
     }
+
+}
+
+/**
+ * @brief Metodo encargado de devolver la lista de buffer del router
+ * @return puntero a lista de buffers
+ */
+Lista<Buffer *> *Router::getListQueue ()
+{
+  return this->BuffersSalida;
+}
+
+/**
+ * @brief Metodo encargado de recibir una lista de paqutes y ordenarlos para posteriormente
+ * armar una pagina
+ * @param paquetes lista de paquetes a ordenar
+ * @return lista de paquetes ordendos
+ */
+Lista<Packages *> *Router::Order (Lista<Packages *> *paquetes)
+{
+  auto *aux = paquetes;
+  bool change = true;
+  while (change)
+    {
+      change = false;
+      for (int i = 0; i < aux->get_size (); ++i)
+        {
+          Packages *pack1 = aux->get_nodo (i)->getdato ();
+          Packages *pack2 = aux->get_nodo (i + 1)->getdato ();
+          if (pack1->getFrame () > pack2->getFrame ())
+            {
+              aux->Swap (i, i + 1);
+              change = true;
+            }
+        }
+    }
+  return aux;
+}
+
+/**
+ * @brief Metodo encargado de obtener todos los paqutes necesarios para la generacion de una pagina.
+ * @param paquetes lista de paquetes a compaginar
+ */
+void Router::packToPag (Lista<Packages *> *paquetes)
+{
+  //Obtengo la lista de paquetes ordenados
+  auto packOrder = this->Order(paquetes);
 
 }
