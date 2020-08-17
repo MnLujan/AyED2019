@@ -357,6 +357,25 @@ Lista<Packages *> *Router::Order (Lista<Packages *> *paquetes)
 void Router::packToPag (Lista<Packages *> *paquetes)
 {
   //Obtengo la lista de paquetes ordenados
-  auto packOrder = this->Order(paquetes);
+  auto packOrder = this->Order (paquetes);
+  string auxPag;
+  auto *aux = packOrder->get_nodo (0)->getdato ();
+  uint16_t Ip_origen = aux->getOrigen ();
+  uint16_t Ip_Dest = aux->getDestino ();
+  uint8_t numPag = aux->getIdPag ();
+
+  for (int i = 0; i < packOrder->get_size (); ++i)
+    {
+      auxPag += packOrder->get_nodo (i)->getdato ()->getletra ();
+    }
+
+  auto *PagGen = new Pagina (auxPag, Ip_origen, Ip_Dest, numPag);
+
+  /* agrego la pagina  */
+  this->Pag->Add (PagGen);
+
+  /* Borro la lista de datos */
+  paquetes->Delet ();
+  delete (paquetes);
 
 }

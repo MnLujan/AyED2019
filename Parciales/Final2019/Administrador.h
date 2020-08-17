@@ -45,6 +45,7 @@ class Administrador {
   void printGraph ();
   void weighing ();
   void Test();
+  void Simulate();
 };
 
 #endif //_ADMINISTRADOR_H_

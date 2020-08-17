@@ -188,6 +188,15 @@ void Administrador::linkMachines (uint16_t n_r, uint16_t nhost, uint16_t ip_r, u
 }
 
 /**
+ * @brief Metodo encargado de simular la red, indica los turnos para ejecutar las distintas tareas
+ * de Routers y maquinas.
+ */
+void Administrador::Simulate ()
+{
+
+}
+
+/**
  * @brief Establece la cantidad de paginas a enviar, tomando este numero desde los routers.
  */
 void Administrador::pag2Send ()
@@ -391,6 +400,8 @@ void Administrador::Test ()
 
   this->RouterToRouter (this->routers->get_nodo (2)->getdato ());
 
+  this->RouterToMachine (this->routers->get_nodo (3)->getdato ());
+
 }
 
 /**
@@ -408,6 +419,10 @@ void Administrador::RouterToMachine (Router *r)
 
       if (frame_total == temp->get_size ())
         {
+          r->packToPag (temp);
+          temp->Delet ();
+          delete (temp);
+          this->pagtoSend++;
 
         }
       else
@@ -491,8 +506,8 @@ void Administrador::RouterToRouter (Router *router)
           uint16_t ip_salida = router->getIpRouter ();
           uint16_t ip_llegada = buffaux->getID ();
 
-          uint8_t BW = this->getlinksBW (ip_salida, ip_llegada);
-
+          int BW = this->getlinksBW (ip_salida, ip_llegada);
+          int borrar = 0;
           while (BW)
             {
 
@@ -504,25 +519,28 @@ void Administrador::RouterToRouter (Router *router)
               int sizeBuff = buffaux->getLista ()->get_size ();
               for (int j = 0; j < buffaux->getLista ()->get_size (); ++j)
                 {
+                  if (BW)
+                    {
+                      auto *package = buffaux->getLista ()->get_nodo (j)->getdato ();
 
-                  auto *package = buffaux->getLista ()->get_nodo (j)->getdato ();
-                  //uint16_t ip_dest = package->getDestino();
+                      /* Elimino el elemento extraido */
+                      this->getRouter (ip_llegada)->toRecivePackage (package);
+                      BW--;
+                      borrar++;
 
-                  /* Elimino el elemento extraido */
-                  buffaux->getLista ()->borrarCabeza ();
-                  this->getRouter (ip_llegada)->toRecivePackage (package);
-                  BW--;
-
-                  string msj = "\nRuteo | IPOrigen " + to_string (package->getOrigen ()) + " | IPDestino "
-                               + to_string (package->getDestino ()) +
-                               "| Router IP: " + to_string (ip_salida) + " a Router IP: " + to_string (ip_llegada);
-
+                      string msj = "\nRuteo | IPOrigen " + to_string (package->getOrigen ()) + " | IPDestino "
+                                   + to_string (package->getDestino ()) +
+                                   "| Router IP: " + to_string (ip_salida) + " a Router IP: " + to_string (ip_llegada);
+                      this->log->write (msj);
+                    }
                 }
 
             }
-
+          for (int j = 0; j < borrar; ++j)
+            {
+              buffaux->getLista ()->borrarCabezaAux ();
+            }
         }
-
     }
 }
 

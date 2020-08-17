@@ -25,6 +25,9 @@ class Lista {
   Nodo<Tipe> *getCabeza ();
   Tipe Pop ();
   void Swap (int, int);
+  void Delet ();
+  void borrarCabezaAux ();
+
 };
 
 /**
@@ -152,6 +155,7 @@ void Lista<Tipe>::borrarCabeza ()
   Nodo<Tipe> *temp = czo->getnext ();
   delete (czo);
   czo = temp;
+
 }
 
 /**
@@ -213,22 +217,61 @@ void Lista<Tipe>::Swap (int a, int b)
   if (a != 0)
     {
       auto *auxPos1 = this->get_nodo (a - 1);
-      auto *nextPos2 = pos2->get_next ();
+      auto *nextPos2 = pos2->getnext ();
 
       //Swap
       pos1->setnext (nextPos2);
-      pos2->senext (pos1);
-      auxPos1->senext (pos2);
+      pos2->setnext (pos1);
+      auxPos1->setnext (pos2);
     }
   else
     {
-      auto *nextPos2 = pos2->get_next ();
+      auto *nextPos2 = pos2->getnext ();
 
       //Swap
       this->czo = pos2;
       pos2->setnext (pos1);
       pos1->setnext (nextPos2);
     }
+}
+
+/**
+ * @brief Metodo encargado de borrar por completo la lista.
+ * @tparam Tipe tipo designado en la construccion de la lista.
+ */
+template<class Tipe>
+void Lista<Tipe>::Delet ()
+{
+  if (czo == nullptr)
+    {
+      return;
+    }
+
+  while (this->czo->getnext () != nullptr)
+    {
+      auto aux = this->czo;
+      aux->BorrarDato ();
+      auto *aux2 = aux->getnext ();
+      delete (aux);
+      this->czo = aux2;
+    }
+  this->czo->BorrarDato ();
+  delete (this->czo);
+  this->czo = nullptr;
+
+}
+
+/**
+ * @brief Misma funcion que "borrarCabeza()" pero disminuyendo size
+ * @tparam Tipe tipo designado en la construccion de la lista
+ */
+template<class Tipe>
+void Lista<Tipe>::borrarCabezaAux ()
+{
+  Nodo<Tipe> *temp = czo->getnext ();
+  delete (czo);
+  czo = temp;
+  size--;
 }
 
 #endif //_LISTA_H_
