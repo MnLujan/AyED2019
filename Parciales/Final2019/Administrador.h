@@ -11,11 +11,13 @@
 #include <fstream>
 #include <cstring>
 #include <cstdint>
+#include <iostream>
 #include "Mpls.h"
 #include "Logger.h"
 
 class Administrador {
  private:
+
   /* Variables */
   Lista<Lista<NodoGrafo *> *> *links;
   Lista<Router *> *routers;
@@ -40,12 +42,12 @@ class Administrador {
   void RouterToRouter (Router *);
   uint8_t getlinksBW (uint16_t, uint16_t);
   bool match(Lista<uint16_t>*, uint16_t);
+
  public:
   /* Metodo publicos llamados desde el Main */
   Administrador (Logger *);
   void printGraph ();
   void weighing ();
-  void Test ();
   void Simulate ();
   bool Finalize ();
 };

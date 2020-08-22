@@ -51,21 +51,6 @@ uint16_t Router::getIpRouter ()
   return IPRouter;
 }
 
-/**
- * @brief Metodo encargado de retornar el puntero a la lista de paginas almacenadas en el Router.
- * @return puntero de tipo Lista<Pagina *>, NULL en caso que no exista dicha Lista.
- */
-Lista<Pagina *> *Router::getPagList ()
-{
-  if (Pag != nullptr)
-    {
-      return this->Pag;
-    }
-  else
-    {
-      return nullptr;
-    }
-}
 
 /**
  * @brief Metodo encargado de retornar el el puntero a la lista donde se encuentran
@@ -94,23 +79,6 @@ Lista<Maquina *> *Router::getMaquiList ()
   if (Maqui != NULL)
     {
       return Maqui;
-    }
-  else
-    {
-      return NULL;
-    }
-}
-
-/**
- * @brief Metodo encargado de retornar el puntero a la Lista de router que se encuentran
- * conectados a este.
- * @return puntero del tipo Lista. Rvecinos.
- */
-Lista<Router *> *Router::getRouterList ()
-{
-  if (Rvecinos != NULL)
-    {
-      return Rvecinos;
     }
   else
     {
@@ -369,12 +337,6 @@ void Router::packToPag (Lista<Packages *> *paquetes)
   this->getMachine (PagGen->getDestino ())->toReceive (PagGen);
 
   this->Pag->Add (PagGen);
-
-  /* Borro la lista de datos */
-//  paquetes->Delet ();
-
-  /* Borro el puntero desde aca */
-  //delete (paquetes);
 
 }
 

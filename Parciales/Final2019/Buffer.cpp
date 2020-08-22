@@ -32,16 +32,3 @@ Lista<Packages *> *Buffer::getLista ()
 {
   return this->cola;
 }
-
-/**
- * Metodo encargado de agregar la lista de paginas asociadas al buffer
- * @param Lis Lista de paginas
- */
-void Buffer::AddListPag (Lista<Packages *> *Lis)
-{
-  if (this->cola == NULL)
-    {
-      this->cola = Lis;
-      printf ("Listas encoladas en buffer\n");
-    }
-}

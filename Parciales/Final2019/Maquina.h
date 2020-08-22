@@ -4,6 +4,11 @@
 
 #ifndef _MAQUINA_H_
 #define _MAQUINA_H_
+#include <stdint.h>
+#include <time.h>
+#include <stdlib.h>
+#include <iostream>
+#include <fstream>
 #include "Pagina.h"
 #include "Lista.h"
 #include "Logger.h"

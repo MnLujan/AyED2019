@@ -19,6 +19,7 @@ int main ()
       admin->Simulate ();
     }
 
+  /* Cierro LOG */
   log->close_Log ();
 
   return EXIT_SUCCESS;

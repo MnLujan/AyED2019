@@ -162,7 +162,7 @@ void Mpls::BuildRoute (int dest)
  * @brief Metodo encargado de devolver en un vector la ruta mas corta
  * @return vector con la ruta mas corta
  */
-vector<uint16_t> Mpls::getRoute ()
+vector <uint16_t> Mpls::getRoute ()
 {
   return this->route;
 }

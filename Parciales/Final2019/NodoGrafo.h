@@ -6,12 +6,6 @@
 #define _NODOGRAFO_H_
 #include "Router.h"
 
-/**
- * V = vertices, es decir plazas (estados, nodos)
- * E = Arcos, se marca con (origen, destino)
- *
- */
-
 class NodoGrafo {
  private:
   Router *R;
@@ -19,7 +13,6 @@ class NodoGrafo {
   uint8_t BW;
  public:
   NodoGrafo (Router*, int);
-  void setRouter (Router *p);
   Router *getRouter ();
   void setPeso (int);
   int getPeso ();

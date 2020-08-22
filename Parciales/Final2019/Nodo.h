@@ -14,7 +14,6 @@ class Nodo {
   Nodo<Tipe> *next;
  public:
   Tipe getdato ();
-  Tipe setdato ();
   Nodo ();
   Nodo (Tipe d);
   Nodo (Tipe d, Nodo<Tipe> *p);

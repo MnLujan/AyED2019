@@ -15,7 +15,6 @@ class Buffer {
   Buffer (Lista<Packages *> *, uint16_t);
   uint16_t getID ();
   Lista<Packages *> *getLista ();
-  void AddListPag(Lista<Packages*>*);
 };
 
 #endif //_BUFFER_H_

@@ -26,10 +26,8 @@ class Router {
   Router (uint16_t, uint8_t);
   uint16_t getIpRouter ();
   uint8_t getN_R ();
-  Lista<Pagina *> *getPagList ();
   Lista<Packages *> *getInputList ();
   Lista<Maquina *> *getMaquiList ();
-  Lista<Router *> *getRouterList ();
   Lista<Lista<Packages*>*> *getListPackages();
   void toRecivePag (Pagina *);
   void linkMachine (Maquina *);

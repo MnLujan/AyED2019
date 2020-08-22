@@ -2,7 +2,6 @@
 // Created by mlujan on 5/17/20.
 //
 
-#include <iostream>
 #include "Administrador.h"
 
 /**
@@ -454,18 +453,6 @@ Router *Administrador::getRouter (uint16_t ipR)
   return nullptr;
 }
 
-void Administrador::Test ()
-{
-  this->SendPag (this->routers->get_nodo (2)->getdato ()->getMaquiList ()->get_nodo (1)->getdato ());
-
-  this->InputToOutput (this->routers->get_nodo (2)->getdato ());
-
-  this->RouterToRouter (this->routers->get_nodo (2)->getdato ());
-
-  this->RouterToMachine (this->routers->get_nodo (3)->getdato ());
-
-}
-
 /**
  * @brief Metodo encargado de unir los paquetes correspondientes para formar la pagina a enviar.
  * @param r router encargado de la tarea
@@ -505,7 +492,6 @@ void Administrador::RouterToMachine (Router *r)
  * @brief Metodo encargado de mover los paquetes de la cola de entrada a los buffers de salida
  * que correspondan
  * @param router Router encargado de hacer dicha tarea
- * @TODO Verificar que se muevan todos los paquetes a los buffers
  */
 void Administrador::InputToOutput (Router *router)
 {
@@ -568,7 +554,6 @@ void Administrador::InputToOutput (Router *router)
 /**
  * @brief Metodo encargado de mover los paquetes de las colas de salida a los routers vecinos
  * @param router Router que realizara la tarea
- * @TODO Chequear que los elementos ya fueron enviados lista de ya enviados
  */
 void Administrador::RouterToRouter (Router *router)
 {

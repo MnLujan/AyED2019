@@ -17,18 +17,6 @@ NodoGrafo::NodoGrafo (Router *p, int bw)
 }
 
 /**
- * Metodo encargado de setear el router en caso de que en el constructor no se haya hecho.
- * @param p puntero a objeto Router.
- */
-void NodoGrafo::setRouter (Router *p)
-{
-  if (p != nullptr)
-    {
-      this->R = p;
-    }
-}
-
-/**
  * Metodo encargado de devolver el peso del enlace
  * @return int peso
  */

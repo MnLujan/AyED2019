@@ -2,11 +2,6 @@
 // Created by mlujan on 3/30/20.
 //
 
-#include <stdint.h>
-#include <time.h>
-#include <stdlib.h>
-#include <iostream>
-#include <fstream>
 
 #include "Maquina.h"
 
@@ -31,9 +26,9 @@ Maquina::Maquina (uint16_t ip, int bw, Logger *l)
   srand (IpMaquina * time (nullptr));
   cantPag = rand () % 10 + 1;
   //cantPag = 2;
-  //CrearDatos ();
-  //this->CrearAux ();
-  this->CrearDatos();
+
+  this->CrearAux ();
+  //this->CrearDatos();
 
 }
 

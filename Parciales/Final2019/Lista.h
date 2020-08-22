@@ -21,7 +21,6 @@ class Lista {
   void Add (Tipe);
   int get_size ();
   void borrarCabeza ();
-  void DeleteList (Lista<Tipe> *);
   Nodo<Tipe> *getCabeza ();
   Tipe Pop ();
   void Swap (int, int);
@@ -148,7 +147,7 @@ void Lista<Tipe>::Add (Tipe a)
 }
 
 /**
- * @brief Metodo encargado de borrar el primer nodo de la lista
+ * @brief Metodo encargado de borrar el primer nodo de la lista. No modifica el size.
  * @tparam Tipe tipo designado en la construccion de la lista.
  */
 template<class Tipe>
@@ -176,28 +175,10 @@ Nodo<Tipe> *Lista<Tipe>::getCabeza ()
 }
 
 /**
- * @brief Metodo que elimina la lista por completo de la memoria.
- * @tparam Tipe tipo designado en la construccion de la lista.
+ * @brief Metodo encargado de extraer el primer elemento de la lista. Modifica el size.
+ * @tparam Tipe tipo designado en la construccion de la lista
+ * @return Dato de tipo Tipe almacenado en dicho nodo
  */
-template<class Tipe>
-void Lista<Tipe>::DeleteList (Lista<Tipe> *)
-{
-  if (this->esvacia ())
-    {
-      return;
-    }
-
-  Nodo<Tipe> *temp;
-  while (czo != NULL)
-    {
-      czo->BorrarDato ();
-      temp = czo->getnext ();
-      delete (czo);
-      czo = temp;
-    }
-  return;
-}
-
 template<class Tipe>
 Tipe Lista<Tipe>::Pop ()
 {
@@ -319,7 +300,7 @@ Nodo<Tipe> *Lista<Tipe>::getLast ()
 }
 
 /**
- * @brief Metodo encargado de borrar un nodo en especifico.
+ * @brief Metodo encargado de borrar un nodo en especifico. Modifica el size.
  * @param a numero de nodo a borrar
  * @tparam Tipe tipo designado en la construccion de la lista
  */
@@ -353,7 +334,7 @@ void Lista<Tipe>::DeletNode (int a)
 }
 
 /**
- * @brief Metodo encargado de borrar el ultimo nodo de la Lista
+ * @brief Metodo encargado de borrar el ultimo nodo de la Lista. Modifica el size.
  * @tparam Tipe tipo designado en la construccion de la lista
  */
 template<class Tipe>
