@@ -9,7 +9,6 @@
 #include <fstream>
 
 #include "Maquina.h"
-#include "Pagina.h"
 
 using namespace std;
 
@@ -19,19 +18,23 @@ using namespace std;
  * @param ip
  * @param bw
  */
-Maquina::Maquina (uint16_t ip, int bw)
+Maquina::Maquina (uint16_t ip, int bw, Logger *l)
 {
   this->IpMaquina = ip;
   this->BW = bw;
   this->PaginasEnviadas = 0;
   this->envio = new Lista<string>;
-  this->recep = new Lista<Pagina>;
+  this->recep = new Lista<Pagina *>;
+  this->log = l;
 
   /* Genero aleatoriamente la cantidad de paginas que va a enviar la maquina */
   srand (IpMaquina * time (nullptr));
   cantPag = rand () % 10 + 1;
+  //cantPag = 2;
   //CrearDatos ();
-  CrearAux ();
+  //this->CrearAux ();
+  this->CrearDatos();
+
 }
 
 /**
@@ -52,7 +55,7 @@ void Maquina::CrearDatos ()
           s[j] = dic[rand () % (sizeof (dic) - 1)];
         }
       string std = string (s);
-      envio->Add (std);
+      this->envio->Add (std);
       fin++;
     }
   return;
@@ -107,11 +110,13 @@ Pagina *Maquina::CreatedPage (const uint16_t dest[], int numDir)
   if (cantPag != 0)
     {
 
-      uint16_t ipDes = this->getIP();
-      string data = envio->get_dato ();
-      envio->borrarCabeza ();
+      uint16_t ipDes = this->getIP ();
+      /* Dato aleatorio */
+      int random = rand () % (this->envio->get_size ());
+      string data = this->envio->get_nodo (random)->getdato ();
+      this->envio->DeletNode(random);
       /* Obtengo un nodo al azar y extraigo el IP, siempre distinto del IP propio de la maquina */
-      while(ipDes == this->getIP())
+      while (ipDes == this->getIP ())
         {
           ipDes = dest[uint16_t (rand () % (numDir - 1))];
         }
@@ -159,23 +164,29 @@ void Maquina::CrearAux ()
  */
 void Maquina::toReceive (Pagina *p)
 {
-  Pagina *temp = p;
-  recep->Add (*temp);
-  cout << "El dato recibido es el siguiente: " << temp->getDato () << endl;
+  this->recep->Add (p);
+  string msj =
+      "\nRecepcion | Nº Pag " + to_string (p->getIDpag ()) + " | Origen " + to_string (p->getOrigen ()) + " | Destino "
+      + to_string (p->getDestino ()) + " | Dato: " + p->getDato ();
+  cout << msj << endl;
+  this->log->write (msj);
+
 }
 
 /**
  * @brief Metodo encargado de devolver la cantidad de paginas que recibio la maquina.
  * @return int size
  */
-int Maquina::cantPagReceive() {
-  return recep->get_size();
+int Maquina::cantPagReceive ()
+{
+  return recep->get_size ();
 }
 
 /**
  * @brief Metodo encargado de verificar si la maquina tiene paginas pendientes por enviar
  * @return true si hay paginas pendientes o false caso contrario
  */
-bool Maquina::Pending() {
+bool Maquina::Pending ()
+{
   return this->cantPag != 0;
 }

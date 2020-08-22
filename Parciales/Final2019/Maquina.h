@@ -6,6 +6,7 @@
 #define _MAQUINA_H_
 #include "Pagina.h"
 #include "Lista.h"
+#include "Logger.h"
 
 class Maquina {
  private:
@@ -13,21 +14,22 @@ class Maquina {
   int PaginasEnviadas;
   int BW;
   Lista<string> *envio;
-  Lista<Pagina> *recep;
+  Lista<Pagina *> *recep;
   int cantPag;
-  void CrearDatos();
-  void CrearAux();
+  Logger *log;
+  void CrearDatos ();
+  void CrearAux ();
 
  public:
-  Maquina(uint16_t, int);
-  int GetCantPag();
-  int GetBW();
-  uint16_t getIP();
-  void setBW(int);
-  void toReceive(Pagina*);
-  int cantPagReceive();
-  bool Pending();
-  Pagina* CreatedPage(const uint16_t [], int);
+  Maquina (uint16_t, int, Logger *);
+  int GetCantPag ();
+  int GetBW ();
+  uint16_t getIP ();
+  void setBW (int);
+  void toReceive (Pagina *);
+  int cantPagReceive ();
+  bool Pending ();
+  Pagina *CreatedPage (const uint16_t [], int);
 
 };
 

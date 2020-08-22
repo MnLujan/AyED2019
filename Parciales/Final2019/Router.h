@@ -43,6 +43,7 @@ class Router {
   Lista<Buffer*> *getListQueue();
   void packToPag(Lista<Packages *> *);
   Lista<Packages*> *Order(Lista<Packages*>*);
+  Maquina* getMachine(uint16_t);
 
 
 };

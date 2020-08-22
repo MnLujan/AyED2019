@@ -64,7 +64,7 @@ void Administrador::BuildGraph ()
           Ip_R += (1 << 8);
 
           this->ListRouter (Ip_R, N_R);
-          this->linkMachines (N_R, Host, Ip_R, BW);
+          this->linkMachines (N_R, Host, Ip_R, BW, this->log);
         }
       else if (info->getCabeza ()->getdato () == "-")
         {
@@ -170,14 +170,14 @@ void Administrador::ListRouter (uint16_t ip, uint16_t n_r)
  * @param ip_r ip del router padre
  * @param nhost numero de maquina
  */
-void Administrador::linkMachines (uint16_t n_r, uint16_t nhost, uint16_t ip_r, uint16_t bw)
+void Administrador::linkMachines (uint16_t n_r, uint16_t nhost, uint16_t ip_r, uint16_t bw, Logger *l)
 {
   //Direccionamiento disponible
   static int indice = 0;
 
   for (int i = 1; i <= nhost; i++)
     {
-      auto *maquina = new Maquina (ip_r + i, bw);
+      auto *maquina = new Maquina (ip_r + i, bw, l);
       //Busco el router en la lista, pido el nodo y agrego la maquina
       this->routers->get_nodo (n_r - 1)->getdato ()->linkMachine (maquina);
 
@@ -193,7 +193,68 @@ void Administrador::linkMachines (uint16_t n_r, uint16_t nhost, uint16_t ip_r, u
  */
 void Administrador::Simulate ()
 {
+  static int turno = 1;
 
+  /* Primero se buscara las maquinas de cada router y se enviaran las paginas al router padre */
+  for (int i = 0; i < this->routers->get_size (); ++i)
+    {
+      auto *temp = this->routers->get_nodo (i)->getdato ();
+      for (int j = 0; j < temp->getMaquiList ()->get_size (); ++j)
+        {
+          /* Pregunto si la maquina tiene paginas pendientes por enviar */
+          if (temp->getMaquiList ()->get_nodo (j)->getdato ()->Pending ())
+            {
+              /* envio la maquina a enviar sus paginas */
+              this->SendPag (temp->getMaquiList ()->get_nodo (j)->getdato ());
+            }
+        }
+    }
+
+
+  /* A continuacion se busca paginas completas en los routers, se compaginan y envian a las maquinas */
+  for (int i = 0; i < this->routers->get_size (); ++i)
+    {
+      this->RouterToMachine (this->routers->get_nodo (i)->getdato ());
+    }
+
+  /* Por ultimo ruteo los paquetes */
+  for (int i = 0; i < this->routers->get_size (); ++i)
+    {
+      this->RouterToRouter (this->routers->get_nodo (i)->getdato ());
+    }
+
+  /* se mueven los paquetes desde la cola de entrada de los routers a los respectivos Buffers de salida */
+  for (int i = 0; i < this->routers->get_size (); ++i)
+    {
+      /* Consulto si hay elementos dentro de la cola de entrada del router */
+      if (!this->routers->get_nodo (i)->getdato ()->StateInput ())
+        {
+          this->InputToOutput (this->routers->get_nodo (i)->getdato ());
+        }
+    }
+
+  //Incremento el turno
+  turno++;
+}
+
+/**
+ * @brief Metodo encargado de verificar si quedan paginas por enviar.
+ * @return True en caso de que se hayan enviado todas las pagianas, false caso contrario.
+ */
+bool Administrador::Finalize ()
+{
+  int PagxMachine = 0;
+  for (int i = 0; i < this->routers->get_size (); ++i)
+    {
+      auto *r = this->routers->get_nodo (i)->getdato ();
+      for (int j = 0; j < r->getMaquiList ()->get_size (); ++j)
+        {
+          PagxMachine += r->getMaquiList ()->get_nodo (j)->getdato ()->cantPagReceive ();
+        }
+    }
+
+  /* De ser iguales devuele True e indica q se enviaron todas las paginas */
+  return PagxMachine == this->pagtoSend;
 }
 
 /**
@@ -247,7 +308,7 @@ void Administrador::weighing ()
                        + to_string (ip_son) + " | Peso actualizado: " + to_string (peso);
 
           /* Muestro en pantalla */
-          cout << msj;
+          //cout << msj << endl;
 
           /* Escribo en el log */
           log->write (msj);
@@ -355,9 +416,10 @@ void Administrador::SendPag (Maquina *m)
 
       auto *pag2send = m->CreatedPage (this->addressAvailabe, this->quantAddres);
 
-      string msj = "\nPagina Num: " + to_string (pag2send->getIDpag ()) + " De: " + to_string (m->GetCantPag ()) + " | "
-                   + pag2send->getDato () + " | " + to_string (pag2send->getOrigen ()) + " | " +
-                   to_string (pag2send->getDestino ()) + " | " + to_string (pag2send->getDato ().size ());
+      string msj =
+          "\nPagina Num: " + to_string (pag2send->getIDpag ()) + " Restan: " + to_string (m->GetCantPag ()) + " | "
+          + pag2send->getDato () + " | " + to_string (pag2send->getOrigen ()) + " | " +
+          to_string (pag2send->getDestino ()) + " | " + to_string (pag2send->getDato ().size ());
 
       cout << msj << endl;
 
@@ -410,24 +472,30 @@ void Administrador::Test ()
  */
 void Administrador::RouterToMachine (Router *r)
 {
-  for (int i = 0; i < r->getListPackages ()->get_size (); ++i)
+  /* Chequeo que haya maquinas en el router */
+  if (r->getMaquiList ()->esvacia ())
+    {
+      return;
+    }
+  int loop = r->getListPackages ()->get_size ();
+  for (int i = loop; i > 0; --i)
     {
       /* Busco en la lista de listas de paquetes */
-      auto *temp = r->getListPackages ()->get_nodo (i)->getdato ();
+      auto *temp = r->getListPackages ()->get_nodo (i - 1)->getdato ();
 
       int frame_total = temp->get_dato ()->getFrameTotal ();
+      int size = temp->get_size();
 
       if (frame_total == temp->get_size ())
         {
           r->packToPag (temp);
-          temp->Delet ();
+          r->getListPackages ()->DeletNode (i - 1);
           delete (temp);
-          this->pagtoSend++;
-
+          this->pagReceive++;
         }
       else
         {
-          break;
+          continue;
         }
     }
 
@@ -437,16 +505,23 @@ void Administrador::RouterToMachine (Router *r)
  * @brief Metodo encargado de mover los paquetes de la cola de entrada a los buffers de salida
  * que correspondan
  * @param router Router encargado de hacer dicha tarea
- * @TODO cuando lo llame al metodo verificar que dicho router tenga algo en la cola de entrada
+ * @TODO Verificar que se muevan todos los paquetes a los buffers
  */
 void Administrador::InputToOutput (Router *router)
 {
   auto *temp = router->getInputList ();
-
-  for (int i = 0; i < temp->get_size (); ++i)
+  int size = temp->get_size ();
+  for (int i = 0; i < size; ++i)
     {
-      Packages *packmove = temp->get_dato ();
-      temp->borrarCabeza ();
+      /*
+      Packages *packmove = temp->get_nodo (i - 1)->getdato ();
+       int i = size; i > 0; --i
+       Borro el ultimo nodo extraido
+      temp->DelLast ();
+      */
+      /* Extraigo siempre el primer elemento */
+      Packages *packmove = temp->get_nodo (0)->getdato ();
+      temp->borrarCabezaAux ();
 
       /* Determino a donde muevo el paquete */
       uint16_t ipOrigen = packmove->getOrigen ();
@@ -455,7 +530,7 @@ void Administrador::InputToOutput (Router *router)
       uint16_t RDest = (packmove->getDestino () & 0xFF00) >> 8;
       uint16_t R_A = router->getN_R ();
 
-      uint16_t next;
+      uint16_t next = 0;
       /* Si las direcciones son distintas calculo la ruta con Dijsktra */
       if (ROrigen == RDest)
         {
@@ -475,15 +550,16 @@ void Administrador::InputToOutput (Router *router)
         }
       else
         {
-
           /* Busco en mi lista de buffer y lo agrego a la lista de paquetes */
           router->getQueueOut (Ip_next)->getLista ()->Add (packmove);
         }
 
-      string msj = "\nRuteo | NºPaquete " + to_string (packmove->getFrame ()) + " Pag " +
+      string msj = "\nInput | NºPaquete " + to_string (packmove->getFrame ()) + " Pag " +
                    to_string (packmove->getIdPag ()) + " | " + packmove->getletra () + " | " +
                    to_string (packmove->getOrigen ()) + " | " + to_string (packmove->getDestino ()) + " | " +
                    to_string (next);
+
+      cout << msj << endl;
 
       this->log->write (msj);
     }
@@ -492,6 +568,7 @@ void Administrador::InputToOutput (Router *router)
 /**
  * @brief Metodo encargado de mover los paquetes de las colas de salida a los routers vecinos
  * @param router Router que realizara la tarea
+ * @TODO Chequear que los elementos ya fueron enviados lista de ya enviados
  */
 void Administrador::RouterToRouter (Router *router)
 {
@@ -502,12 +579,15 @@ void Administrador::RouterToRouter (Router *router)
       /* Procedo solo si tengo elementos dentro del buffer */
       if (!buffaux->getLista ()->esvacia ())
         {
+          int borrar = 0;
+          queue<int> incDelete;
 
           uint16_t ip_salida = router->getIpRouter ();
           uint16_t ip_llegada = buffaux->getID ();
 
+          /* Obtengo el ancho de banda entre los routers */
           int BW = this->getlinksBW (ip_salida, ip_llegada);
-          int borrar = 0;
+
           while (BW)
             {
 
@@ -516,30 +596,47 @@ void Administrador::RouterToRouter (Router *router)
                 {
                   break;
                 }
+              auto *sends = new Lista<uint16_t> ();
+
               int sizeBuff = buffaux->getLista ()->get_size ();
+
               for (int j = 0; j < buffaux->getLista ()->get_size (); ++j)
                 {
-                  if (BW)
-                    {
-                      auto *package = buffaux->getLista ()->get_nodo (j)->getdato ();
+                  auto *package = buffaux->getLista ()->get_nodo (j)->getdato ();
 
-                      /* Elimino el elemento extraido */
+                  /* Envio si y solo si no se envio dicho maquete y hay BW disponible */
+                  if (!this->match (sends, package->getDestino ()) && BW)
+                    {
+                      /* Envio al router el paquete */
                       this->getRouter (ip_llegada)->toRecivePackage (package);
                       BW--;
                       borrar++;
+                      incDelete.push (j);
+                      sends->Add (package->getDestino ());
 
                       string msj = "\nRuteo | IPOrigen " + to_string (package->getOrigen ()) + " | IPDestino "
                                    + to_string (package->getDestino ()) +
-                                   "| Router IP: " + to_string (ip_salida) + " a Router IP: " + to_string (ip_llegada);
+                                   " | Router IP: " + to_string (ip_salida) + " a Router IP: " + to_string (ip_llegada);
+
+                      cout << msj << endl;
                       this->log->write (msj);
+                    }
+                }
+                int aumentar = 0;
+              /* Borro los elementos ya enviados */
+              for (int j = 0; j < sizeBuff; ++j)
+                {
+                  while (borrar)
+                    {
+                      buffaux->getLista ()->DeletNode (incDelete.front ()-aumentar);
+                      incDelete.pop ();
+                      borrar--;
+                      aumentar++;
                     }
                 }
 
             }
-          for (int j = 0; j < borrar; ++j)
-            {
-              buffaux->getLista ()->borrarCabezaAux ();
-            }
+
         }
     }
 }
@@ -568,4 +665,22 @@ uint8_t Administrador::getlinksBW (uint16_t ipA, uint16_t ipB)
         }
     }
   return 0;
+}
+
+/**
+ * @brief Metodo encargado de comprobar si el paquete ya fue enviado.
+ * @param ipPackage ip del maquete a comprobar
+ * @param send lista de direcciones de paquetes ya enviados
+ * @return True si se envio, false caso contrario
+ */
+bool Administrador::match (Lista<uint16_t> *send, uint16_t ipPackage)
+{
+  for (int i = 0; i < send->get_size (); ++i)
+    {
+      if (send->get_nodo (i)->getdato () == ipPackage)
+        {
+          return true;
+        }
+    }
+  return false;
 }

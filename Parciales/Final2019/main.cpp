@@ -6,14 +6,19 @@ using namespace std;
 
 int main ()
 {
-
   auto log = new Logger ();
 
   auto *admin = new Administrador (log);
 
-  admin->weighing();
+  /* Imprimo grafo */
   admin->printGraph ();
-  admin->Test();
+
+  /* Simulacion */
+  while (!admin->Finalize ())
+    {
+      admin->Simulate ();
+    }
+
   log->close_Log ();
 
   return EXIT_SUCCESS;

@@ -13,6 +13,8 @@ Mpls::Mpls (Lista<Lista<NodoGrafo *> *> *auxlink)
 
   this->routers = this->links->get_size ();
 
+  this->route.clear ();
+
 //inicializamos los  campos
   for (int i = 0; i <= this->routers; ++i)
     {
@@ -29,6 +31,9 @@ Mpls::Mpls (Lista<Lista<NodoGrafo *> *> *auxlink)
  */
 void Mpls::reboot ()
 {
+  /* Limpio el camino */
+  this->route.clear ();
+
   for (int i = 0; i <= this->routers; ++i)
     {
       this->distancia[i] = INF;  //inicializamos todas las distancias con valor infinito
@@ -66,10 +71,10 @@ void Mpls::constAdyacen ()
 
   for (int i = 0; i < NumR; i++)
     {
-      origen = (this->links->get_nodo (i)->getdato ()->get_nodo (0)->getdato ()->getRouter ()->getN_R ());
+      origen = (this->links->get_nodo (i)->getdato ()->get_nodo (0)->getdato ()->getRouter ()->getN_R ()) & 0x00FF;
       for (int j = 1; j < this->links->get_nodo (i)->getdato ()->get_size (); j++)
         {
-          destino = (this->links->get_nodo (i)->getdato ()->get_nodo (j)->getdato ()->getRouter ()->getN_R ());
+          destino = (this->links->get_nodo (i)->getdato ()->get_nodo (j)->getdato ()->getRouter ()->getN_R ()) & 0x00FF;
           peso = this->links->get_nodo (i)->getdato ()->get_nodo (j)->getdato ()->getPeso ();
           this->adyacen[destino].emplace_back (Node (origen, peso));
         }

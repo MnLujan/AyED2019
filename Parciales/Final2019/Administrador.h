@@ -30,22 +30,24 @@ class Administrador {
   Lista<string> *ReadFile ();
   void BuildGraph ();
   void ListRouter (uint16_t, uint16_t);
-  void linkMachines (uint16_t, uint16_t, uint16_t, uint16_t);
+  void linkMachines (uint16_t, uint16_t, uint16_t, uint16_t, Logger *);
   void pag2Send ();
   vector<uint16_t> getRoad (int, int);
-  void SendPag(Maquina *);
-  Router* getRouter(uint16_t);
-  void RouterToMachine(Router*);
-  void InputToOutput(Router*);
-  void RouterToRouter(Router *);
-  uint8_t getlinksBW(uint16_t, uint16_t);
+  void SendPag (Maquina *);
+  Router *getRouter (uint16_t);
+  void RouterToMachine (Router *);
+  void InputToOutput (Router *);
+  void RouterToRouter (Router *);
+  uint8_t getlinksBW (uint16_t, uint16_t);
+  bool match(Lista<uint16_t>*, uint16_t);
  public:
   /* Metodo publicos llamados desde el Main */
-  Administrador (Logger*);
+  Administrador (Logger *);
   void printGraph ();
   void weighing ();
-  void Test();
-  void Simulate();
+  void Test ();
+  void Simulate ();
+  bool Finalize ();
 };
 
 #endif //_ADMINISTRADOR_H_

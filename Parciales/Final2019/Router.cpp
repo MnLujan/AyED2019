@@ -152,9 +152,6 @@ void Router::toRecivePag (Pagina *p)
 void Router::linkRouter (Router *R)
 {
   this->Rvecinos->Add (R);
-  /* Crea el buffer, posteriormente se le pasara la lista de paginas */
-  // auto *temp = new Buffer (nullptr, R->getIpRouter ());
-  //this->BuffersSalida->Add (temp);
 }
 
 /**
@@ -164,9 +161,6 @@ void Router::linkRouter (Router *R)
 void Router::linkMachine (Maquina *M)
 {
   this->Maqui->Add (M);
-  /* Crea el buffer, posteriormente se le pasara la lista de paginas */
-  // auto *temp = new Buffer (nullptr, M->getIP ());
-  // this->BuffersSalida->Add (temp);
 }
 
 /**
@@ -208,9 +202,9 @@ void Router::encolar (Packages *newPackage, int ip)
 {
   if (ip == 0)
     {
+      bool match = false;
       for (int i = 0; i < this->package2pag->get_size (); i++)
         {
-          bool match = false;
           /* Nodo temporal para realizar las consultas */
           auto *temp = this->package2pag->get_nodo (i)->getdato ()->get_dato ();
           /* Verifico que el IDpag, origen y destino correspondan con alguno de los paquetes. Los tres deben coincidir */
@@ -221,12 +215,13 @@ void Router::encolar (Packages *newPackage, int ip)
               this->package2pag->get_nodo (i)->getdato ()->Add (newPackage);
               match = true;
             }
-          if (!match)
-            {
-              /* En caso de no haber encontrado el paquete en la lista, lo agrego */
-              this->package2pag->Add (new Lista<Packages *>);
-              this->package2pag->get_nodo (0)->getdato ()->Add (newPackage);
-            }
+        }
+      if (!match)
+        {
+          /* En caso de no haber encontrado el paquete en la lista, lo agrego */
+          auto listNew = new Lista<Packages *>;
+          listNew->Add (newPackage);
+          this->package2pag->Add (listNew);
         }
     }
   else
@@ -336,7 +331,7 @@ Lista<Packages *> *Router::Order (Lista<Packages *> *paquetes)
   while (change)
     {
       change = false;
-      for (int i = 0; i < aux->get_size (); ++i)
+      for (int i = 0; i < aux->get_size () - 1; ++i)
         {
           Packages *pack1 = aux->get_nodo (i)->getdato ();
           Packages *pack2 = aux->get_nodo (i + 1)->getdato ();
@@ -370,12 +365,32 @@ void Router::packToPag (Lista<Packages *> *paquetes)
     }
 
   auto *PagGen = new Pagina (auxPag, Ip_origen, Ip_Dest, numPag);
+  /* Envio la paquina a la maquina correspondiente */
+  this->getMachine (PagGen->getDestino ())->toReceive (PagGen);
 
-  /* agrego la pagina  */
   this->Pag->Add (PagGen);
 
   /* Borro la lista de datos */
-  paquetes->Delet ();
-  delete (paquetes);
+//  paquetes->Delet ();
 
+  /* Borro el puntero desde aca */
+  //delete (paquetes);
+
+}
+
+/**
+ * @brief Metodo encargado de buscar entre las maquinas hijas.
+ * @param ip de la maquina buscada
+ * @return puntero a la maquina buscada
+ */
+Maquina *Router::getMachine (uint16_t ip)
+{
+  for (int i = 0; i < this->getMaquiList ()->get_size (); ++i)
+    {
+      if (this->getMaquiList ()->get_nodo (i)->getdato ()->getIP () == ip)
+        {
+          return this->getMaquiList ()->get_nodo (i)->getdato ();
+        }
+    }
+  return nullptr;
 }

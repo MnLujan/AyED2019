@@ -27,7 +27,9 @@ class Lista {
   void Swap (int, int);
   void Delet ();
   void borrarCabezaAux ();
-
+  Nodo<Tipe> *getLast ();
+  void DeletNode (int);
+  void DelLast ();
 };
 
 /**
@@ -129,7 +131,7 @@ void Lista<Tipe>::Add (Tipe a)
   if (!esvacia ())
     {
       Nodo<Tipe> *temp = new Nodo<Tipe> (a);
-      Nodo<Tipe> *temp2 = czo;
+      Nodo<Tipe> *temp2 = this->czo;
       while (temp2->getnext () != NULL)
         {
           temp2 = temp2->getnext ();
@@ -140,7 +142,7 @@ void Lista<Tipe>::Add (Tipe a)
   else
     {
       czo = new Nodo<Tipe> (a);
-      size++;
+      size = 1;
     }
   return;
 }
@@ -152,6 +154,10 @@ void Lista<Tipe>::Add (Tipe a)
 template<class Tipe>
 void Lista<Tipe>::borrarCabeza ()
 {
+  if (this->esvacia ())
+    {
+      return;
+    }
   Nodo<Tipe> *temp = czo->getnext ();
   delete (czo);
   czo = temp;
@@ -195,11 +201,19 @@ void Lista<Tipe>::DeleteList (Lista<Tipe> *)
 template<class Tipe>
 Tipe Lista<Tipe>::Pop ()
 {
-  Tipe temp = czo->getdato ();
-  Nodo<Tipe> *temp2 = czo->getnext ();
-  delete (czo);
-  czo = temp2;
-  return temp;
+  if (!this->esvacia ())
+    {
+      Nodo<Tipe> *aux = this->czo;
+      Nodo<Tipe> *aux2 = aux->getnext ();
+      Tipe temp = aux->getdato ();
+      delete (aux);
+      this->czo = aux2;
+      return temp;
+    }
+  else
+    {
+      return NULL;
+    }
 }
 
 /**
@@ -211,27 +225,32 @@ Tipe Lista<Tipe>::Pop ()
 template<class Tipe>
 void Lista<Tipe>::Swap (int a, int b)
 {
-  Nodo<Tipe> *pos1 = this->get_nodo (a);
+  auto *pos1 = this->get_nodo (a);
   auto *pos2 = this->get_nodo (b);
 
   if (a != 0)
     {
-      auto *auxPos1 = this->get_nodo (a - 1);
-      auto *nextPos2 = pos2->getnext ();
+      auto *AauxPos1 = this->get_nodo (a - 1);
+      auto *PauxPos1 = pos1->getnext ();
+      auto *AauxPos2 = this->get_nodo (b - 1);
+      auto *PauxPos2 = pos2->getnext ();
 
       //Swap
-      pos1->setnext (nextPos2);
+      pos1->setnext (PauxPos2);
       pos2->setnext (pos1);
-      auxPos1->setnext (pos2);
+      AauxPos1->setnext (pos2);
     }
   else
     {
-      auto *nextPos2 = pos2->getnext ();
+      auto *AuxPos1 = this->get_nodo (a - 1);
+      auto *PauxPos1 = pos1->getnext ();
+      auto *AuxPos2 = this->get_nodo (b - 1);
+      auto *PauxPos2 = pos2->getnext ();
 
       //Swap
       this->czo = pos2;
       pos2->setnext (pos1);
-      pos1->setnext (nextPos2);
+      pos1->setnext (PauxPos2);
     }
 }
 
@@ -247,7 +266,7 @@ void Lista<Tipe>::Delet ()
       return;
     }
 
-  while (this->czo->getnext () != nullptr)
+  while (this->czo->getnext () != NULL)
     {
       auto aux = this->czo;
       aux->BorrarDato ();
@@ -258,6 +277,7 @@ void Lista<Tipe>::Delet ()
   this->czo->BorrarDato ();
   delete (this->czo);
   this->czo = nullptr;
+  size = 0;
 
 }
 
@@ -268,10 +288,96 @@ void Lista<Tipe>::Delet ()
 template<class Tipe>
 void Lista<Tipe>::borrarCabezaAux ()
 {
+  if (this->esvacia ())
+    {
+      return;
+    }
   Nodo<Tipe> *temp = czo->getnext ();
   delete (czo);
   czo = temp;
   size--;
+}
+
+/**
+ * @brief Metodo encargado de devolver el ultimo nodo de la lista.
+ * @tparam Tipe tipo designado en la construccion de la lista
+ * @return puntero al ultimo nodo
+ */
+template<class Tipe>
+Nodo<Tipe> *Lista<Tipe>::getLast ()
+{
+  if (this->esvacia ())
+    {
+      return nullptr;
+    }
+  auto *temp = czo;
+  while (temp->getnext () != NULL)
+    {
+      temp = temp->getnext ();
+    }
+  return temp;
+}
+
+/**
+ * @brief Metodo encargado de borrar un nodo en especifico.
+ * @param a numero de nodo a borrar
+ * @tparam Tipe tipo designado en la construccion de la lista
+ */
+template<class Tipe>
+void Lista<Tipe>::DeletNode (int a)
+{
+  if (!this->esvacia () && a >= 0 && this->size > a)
+    {
+      auto *aux = this->czo;
+      auto *aux2 = this->czo;
+      if (a)
+        {
+          for (int i = 0; i <= a; ++i)
+            {
+              if (i < a - 1)
+                {
+                  aux = aux->getnext ();
+                }
+              aux2 = aux2->getnext ();
+            }
+          delete (aux->getnext ());
+          aux->setnext (aux2);
+          size--;
+        }
+      else
+        {
+          this->Pop ();
+          size--;
+        }
+    }
+}
+
+/**
+ * @brief Metodo encargado de borrar el ultimo nodo de la Lista
+ * @tparam Tipe tipo designado en la construccion de la lista
+ */
+template<class Tipe>
+void Lista<Tipe>::DelLast ()
+{
+  if (!this->esvacia ())
+    {
+      auto aux = this->czo;
+      if (aux->getnext () == NULL)
+        {
+          delete (aux);
+          size--;
+        }
+      else
+        {
+          while (aux->getnext ()->getnext () != NULL)
+            {
+              aux = aux->getnext ();
+            }
+          delete (aux->getnext ());
+          aux->setnext (NULL);
+          size--;
+        }
+    }
 }
 
 #endif //_LISTA_H_
