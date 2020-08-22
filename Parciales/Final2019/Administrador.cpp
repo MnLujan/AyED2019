@@ -324,7 +324,7 @@ void Administrador::weighing ()
  * @param dest direccion de destino
  * @return vector con cada uno de los vertices
  */
-vector<uint16_t> Administrador::getRoad (int init, int dest)
+vector <uint16_t> Administrador::getRoad (int init, int dest)
 {
   /* Reinicio los valores por defecto */
   this->route->reboot ();
@@ -416,9 +416,10 @@ void Administrador::SendPag (Maquina *m)
       auto *pag2send = m->CreatedPage (this->addressAvailabe, this->quantAddres);
 
       string msj =
-          "\nPagina Num: " + to_string (pag2send->getIDpag ()) + " Restan: " + to_string (m->GetCantPag ()) + " | "
-          + pag2send->getDato () + " | " + to_string (pag2send->getOrigen ()) + " | " +
-          to_string (pag2send->getDestino ()) + " | " + to_string (pag2send->getDato ().size ());
+          "\nSendPag Num: " + to_string (pag2send->getIDpag ()) + " | MaquinaIp: " + to_string (m->getIP ())
+          + " | Restan: " + to_string (m->GetCantPag ()) + " | Palabra: "
+          + pag2send->getDato () + " | Origen: " + to_string (pag2send->getOrigen ()) + " | Destino: " +
+          to_string (pag2send->getDestino ()) + " | Largo: " + to_string (pag2send->getDato ().size ());
 
       cout << msj << endl;
 
@@ -471,7 +472,6 @@ void Administrador::RouterToMachine (Router *r)
       auto *temp = r->getListPackages ()->get_nodo (i - 1)->getdato ();
 
       int frame_total = temp->get_dato ()->getFrameTotal ();
-      int size = temp->get_size();
 
       if (frame_total == temp->get_size ())
         {
@@ -499,12 +499,6 @@ void Administrador::InputToOutput (Router *router)
   int size = temp->get_size ();
   for (int i = 0; i < size; ++i)
     {
-      /*
-      Packages *packmove = temp->get_nodo (i - 1)->getdato ();
-       int i = size; i > 0; --i
-       Borro el ultimo nodo extraido
-      temp->DelLast ();
-      */
       /* Extraigo siempre el primer elemento */
       Packages *packmove = temp->get_nodo (0)->getdato ();
       temp->borrarCabezaAux ();
@@ -524,7 +518,7 @@ void Administrador::InputToOutput (Router *router)
         }
       else
         {
-          vector<uint16_t> road = this->getRoad (R_A, RDest);
+          vector <uint16_t> road = this->getRoad (R_A, RDest);
           next = road[1];
         }
       /* Obtengo el Ip del siguiente router al que debo saltar */
@@ -540,10 +534,12 @@ void Administrador::InputToOutput (Router *router)
           router->getQueueOut (Ip_next)->getLista ()->Add (packmove);
         }
 
-      string msj = "\nInput | NºPaquete " + to_string (packmove->getFrame ()) + " Pag " +
-                   to_string (packmove->getIdPag ()) + " | " + packmove->getletra () + " | " +
-                   to_string (packmove->getOrigen ()) + " | " + to_string (packmove->getDestino ()) + " | " +
-                   to_string (next);
+      string msj =
+          "\nInput-Output | R" + to_string (router->getN_R ()) + " | NºPaquete " + to_string (packmove->getFrame ())
+          + " Pag Nº" +
+          to_string (packmove->getIdPag ()) + " | Dato: " + packmove->getletra () + " | Origen: " +
+          to_string (packmove->getOrigen ()) + " | Destino: " + to_string (packmove->getDestino ()) + " | Buffer a R" +
+          to_string (next);
 
       cout << msj << endl;
 
@@ -572,7 +568,7 @@ void Administrador::RouterToRouter (Router *router)
 
           /* Obtengo el ancho de banda entre los routers */
           int BW = this->getlinksBW (ip_salida, ip_llegada);
-
+          int auxBW = BW;
           while (BW)
             {
 
@@ -599,21 +595,24 @@ void Administrador::RouterToRouter (Router *router)
                       incDelete.push (j);
                       sends->Add (package->getDestino ());
 
-                      string msj = "\nRuteo | IPOrigen " + to_string (package->getOrigen ()) + " | IPDestino "
+                      string msj = "\nRuteo | R" + to_string (router->getN_R ()) + " | IPOrigen "
+                                   + to_string (package->getOrigen ()) + " | IPDestino "
                                    + to_string (package->getDestino ()) +
-                                   " | Router IP: " + to_string (ip_salida) + " a Router IP: " + to_string (ip_llegada);
+                                   " | Out RouterIP: " + to_string (ip_salida) + " to RouterIP: "
+                                   + to_string (ip_llegada) + " | BW enlace: " + to_string (auxBW)
+                                   + " | BW restante: " + to_string (BW);
 
                       cout << msj << endl;
                       this->log->write (msj);
                     }
                 }
-                int aumentar = 0;
+              int aumentar = 0;
               /* Borro los elementos ya enviados */
               for (int j = 0; j < sizeBuff; ++j)
                 {
                   while (borrar)
                     {
-                      buffaux->getLista ()->DeletNode (incDelete.front ()-aumentar);
+                      buffaux->getLista ()->DeletNode (incDelete.front () - aumentar);
                       incDelete.pop ();
                       borrar--;
                       aumentar++;

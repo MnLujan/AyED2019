@@ -212,8 +212,6 @@ void Lista<Tipe>::Swap (int a, int b)
   if (a != 0)
     {
       auto *AauxPos1 = this->get_nodo (a - 1);
-      auto *PauxPos1 = pos1->getnext ();
-      auto *AauxPos2 = this->get_nodo (b - 1);
       auto *PauxPos2 = pos2->getnext ();
 
       //Swap
@@ -223,9 +221,6 @@ void Lista<Tipe>::Swap (int a, int b)
     }
   else
     {
-      auto *AuxPos1 = this->get_nodo (a - 1);
-      auto *PauxPos1 = pos1->getnext ();
-      auto *AuxPos2 = this->get_nodo (b - 1);
       auto *PauxPos2 = pos2->getnext ();
 
       //Swap
