@@ -193,6 +193,7 @@ void Administrador::linkMachines (uint16_t n_r, uint16_t nhost, uint16_t ip_r, u
 void Administrador::Simulate ()
 {
   static int turno = 1;
+  static int peso = 0;
 
   /* Primero se buscara las maquinas de cada router y se enviaran las paginas al router padre */
   for (int i = 0; i < this->routers->get_size (); ++i)
@@ -234,6 +235,14 @@ void Administrador::Simulate ()
 
   //Incremento el turno
   turno++;
+  peso++;
+  if (peso > 1)
+    {
+      /* Se calculan los pesos nuevamente */
+      this->weighing ();
+      peso = 0;
+    }
+
 }
 
 /**
@@ -301,13 +310,13 @@ void Administrador::weighing ()
           /* Actualizo el peso */
           son->setPeso (peso);
 
-          string msj = "\nRecompuntan su peso | R" + to_string (father->getRouter ()->getN_R ()) + " IP: "
+          string msj = "\nRecomputan su peso | R" + to_string (father->getRouter ()->getN_R ()) + " IP: "
                        + to_string (father->getRouter ()->getIpRouter ()) + " y R"
                        + to_string (son->getRouter ()->getN_R ()) + " IP: "
                        + to_string (ip_son) + " | Peso actualizado: " + to_string (peso);
 
           /* Muestro en pantalla */
-          //cout << msj << endl;
+          cout << msj << endl;
 
           /* Escribo en el log */
           log->write (msj);
@@ -328,9 +337,6 @@ vector <uint16_t> Administrador::getRoad (int init, int dest)
 {
   /* Reinicio los valores por defecto */
   this->route->reboot ();
-
-  /* Calculo los pesos nuevamente */
-  this->weighing ();
 
   /* Se calculan los caminos */
   this->route->Dijkstra (init);
@@ -511,6 +517,7 @@ void Administrador::InputToOutput (Router *router)
       uint16_t R_A = router->getN_R ();
 
       uint16_t next = 0;
+      vector <uint16_t> road;
       /* Si las direcciones son distintas calculo la ruta con Dijsktra */
       if (ROrigen == RDest)
         {
@@ -518,7 +525,7 @@ void Administrador::InputToOutput (Router *router)
         }
       else
         {
-          vector <uint16_t> road = this->getRoad (R_A, RDest);
+          road = this->getRoad (R_A, RDest);
           next = road[1];
         }
       /* Obtengo el Ip del siguiente router al que debo saltar */
@@ -540,6 +547,19 @@ void Administrador::InputToOutput (Router *router)
           to_string (packmove->getIdPag ()) + " | Dato: " + packmove->getletra () + " | Origen: " +
           to_string (packmove->getOrigen ()) + " | Destino: " + to_string (packmove->getDestino ()) + " | Buffer a R" +
           to_string (next);
+
+      if (next != router->getN_R ())
+        {
+          msj += " | Camino a recorrer: ";
+          for (int i = 1; i < road.size (); ++i)
+            {
+              msj += to_string (road[i]) + " ";
+            }
+        }
+      else
+        {
+          msj += " | Ultimo salto: " + to_string (next);
+        }
 
       cout << msj << endl;
 
