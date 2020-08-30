@@ -615,7 +615,9 @@ void Administrador::RouterToRouter (Router *router)
                       incDelete.push (j);
                       sends->Add (package->getDestino ());
 
-                      string msj = "\nRuteo | R" + to_string (router->getN_R ()) + " | IPOrigen "
+                      string msj = "\nRuteo | R" + to_string (router->getN_R ()) + " | NºPaquete "
+                                   + to_string (package->getFrame ()) + " Pag Nº" + to_string (package->getIdPag ())
+                                   + " | IPOrigen "
                                    + to_string (package->getOrigen ()) + " | IPDestino "
                                    + to_string (package->getDestino ()) +
                                    " | Out RouterIP: " + to_string (ip_salida) + " to RouterIP: "
