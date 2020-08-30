@@ -217,12 +217,6 @@ void Administrador::Simulate ()
       this->RouterToMachine (this->routers->get_nodo (i)->getdato ());
     }
 
-  /* Por ultimo ruteo los paquetes */
-  for (int i = 0; i < this->routers->get_size (); ++i)
-    {
-      this->RouterToRouter (this->routers->get_nodo (i)->getdato ());
-    }
-
   /* se mueven los paquetes desde la cola de entrada de los routers a los respectivos Buffers de salida */
   for (int i = 0; i < this->routers->get_size (); ++i)
     {
@@ -233,10 +227,15 @@ void Administrador::Simulate ()
         }
     }
 
-  //Incremento el turno
+  /* Por ultimo ruteo los paquetes */
+  for (int i = 0; i < this->routers->get_size (); ++i)
+    {
+      this->RouterToRouter (this->routers->get_nodo (i)->getdato ());
+    }
+
   turno++;
   peso++;
-  if (peso > 1)
+  if (peso > 2)
     {
       /* Se calculan los pesos nuevamente */
       this->weighing ();
@@ -333,8 +332,9 @@ void Administrador::weighing ()
  * @param dest direccion de destino
  * @return vector con cada uno de los vertices
  */
-vector <uint16_t> Administrador::getRoad (int init, int dest)
+vector<uint16_t> Administrador::getRoad (int init, int dest)
 {
+
   /* Reinicio los valores por defecto */
   this->route->reboot ();
 
@@ -517,7 +517,7 @@ void Administrador::InputToOutput (Router *router)
       uint16_t R_A = router->getN_R ();
 
       uint16_t next = 0;
-      vector <uint16_t> road;
+      vector<uint16_t> road;
       /* Si las direcciones son distintas calculo la ruta con Dijsktra */
       if (ROrigen == RDest)
         {

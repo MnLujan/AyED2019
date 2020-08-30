@@ -28,9 +28,7 @@ class Maquina {
  public:
   Maquina (uint16_t, int, Logger *);
   int GetCantPag ();
-  int GetBW ();
   uint16_t getIP ();
-  void setBW (int);
   void toReceive (Pagina *);
   int cantPagReceive ();
   bool Pending ();

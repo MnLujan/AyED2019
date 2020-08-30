@@ -23,12 +23,11 @@ Maquina::Maquina (uint16_t ip, int bw, Logger *l)
   this->log = l;
 
   /* Genero aleatoriamente la cantidad de paginas que va a enviar la maquina */
-  srand (IpMaquina * time (nullptr));
+  srand (IpMaquina * time (NULL));
   cantPag = rand () % 10 + 1;
-  //cantPag = 2;
 
-  this->CrearAux ();
-  //this->CrearDatos();
+  //this->CrearAux ();
+  this->CrearDatos ();
 
 }
 
@@ -66,26 +65,6 @@ uint16_t Maquina::getIP ()
 }
 
 /**
- * @brief Metodo encargado de devolver el ancho de banda asignado a la maquina
- * @return BW
- */
-int Maquina::GetBW ()
-{
-  return this->BW;
-}
-
-/**
- * @brief Metodo encargado de actualizar el valor de ancho de banda en el caso de que
- * cambie.
- * @param bw nuevo ancho de banda a setear
- */
-void Maquina::setBW (int bw)
-{
-  this->BW = bw;
-  return;
-}
-
-/**
  * @brief Metodo encargado de devolver la cantidad de paginas que enviara la maquina
  * @return cantPag
  */
@@ -109,7 +88,8 @@ Pagina *Maquina::CreatedPage (const uint16_t dest[], int numDir)
       /* Dato aleatorio */
       int random = rand () % (this->envio->get_size ());
       string data = this->envio->get_nodo (random)->getdato ();
-      this->envio->DeletNode(random);
+      this->envio->DeletNode (random);
+
       /* Obtengo un nodo al azar y extraigo el IP, siempre distinto del IP propio de la maquina */
       while (ipDes == this->getIP ())
         {
@@ -161,7 +141,8 @@ void Maquina::toReceive (Pagina *p)
 {
   this->recep->Add (p);
   string msj =
-      "\nRecepcion | MaquinaIP: "+ to_string (this->getIP())+" | Nº Pag " + to_string (p->getIDpag ()) + " | Origen " + to_string (p->getOrigen ()) + " | Destino "
+      "\nRecepcion | MaquinaIP: " + to_string (this->getIP ()) + " | Nº Pag " + to_string (p->getIDpag ())
+      + " | Origen " + to_string (p->getOrigen ()) + " | Destino "
       + to_string (p->getDestino ()) + " | Dato: " + p->getDato ();
   cout << msj << endl;
   this->log->write (msj);
