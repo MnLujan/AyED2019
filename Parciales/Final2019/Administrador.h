@@ -38,16 +38,16 @@ class Administrador {
   void SendPag (Maquina *);
   Router *getRouter (uint16_t);
   void RouterToMachine (Router *);
-  void InputToOutput (Router *);
+  void InputToOutput (Router *, int);
   void RouterToRouter (Router *);
   uint8_t getlinksBW (uint16_t, uint16_t);
   bool match(Lista<uint16_t>*, uint16_t);
+  void weighing ();
 
  public:
   /* Metodo publicos llamados desde el Main */
   Administrador (Logger *);
   void printGraph ();
-  void weighing ();
   void Simulate ();
   bool Finalize ();
 };

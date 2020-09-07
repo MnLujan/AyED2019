@@ -223,7 +223,7 @@ void Administrador::Simulate ()
       /* Consulto si hay elementos dentro de la cola de entrada del router */
       if (!this->routers->get_nodo (i)->getdato ()->StateInput ())
         {
-          this->InputToOutput (this->routers->get_nodo (i)->getdato ());
+          this->InputToOutput (this->routers->get_nodo (i)->getdato (), turno);
         }
     }
 
@@ -235,7 +235,7 @@ void Administrador::Simulate ()
 
   turno++;
   peso++;
-  if (peso > 2)
+  if (peso > 1)
     {
       /* Se calculan los pesos nuevamente */
       this->weighing ();
@@ -499,7 +499,7 @@ void Administrador::RouterToMachine (Router *r)
  * que correspondan
  * @param router Router encargado de hacer dicha tarea
  */
-void Administrador::InputToOutput (Router *router)
+void Administrador::InputToOutput (Router *router, int turno)
 {
   auto *temp = router->getInputList ();
   int size = temp->get_size ();
@@ -542,13 +542,14 @@ void Administrador::InputToOutput (Router *router)
         }
 
       string msj =
-          "\nInput-Output | R" + to_string (router->getN_R ()) + " | NºPaquete " + to_string (packmove->getFrame ())
+          "\nInput-Output | Turno: " + to_string (turno) + " | R" + to_string (router->getN_R ()) + " | NºPaquete "
+          + to_string (packmove->getFrame ())
           + " Pag Nº" +
           to_string (packmove->getIdPag ()) + " | Dato: " + packmove->getletra () + " | Origen: " +
           to_string (packmove->getOrigen ()) + " | Destino: " + to_string (packmove->getDestino ()) + " | Buffer a R" +
           to_string (next);
 
-      if (next != router->getN_R ())
+      if (Ip_next != router->getIpRouter ())
         {
           msj += " | Camino a recorrer: ";
           for (int i = 1; i < road.size (); ++i)
@@ -558,7 +559,7 @@ void Administrador::InputToOutput (Router *router)
         }
       else
         {
-          msj += " | Ultimo salto: " + to_string (next);
+          msj += " | LLegada: " + to_string (next);
         }
 
       cout << msj << endl;

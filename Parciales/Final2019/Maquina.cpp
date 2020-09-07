@@ -59,7 +59,7 @@ void Maquina::CrearDatos ()
  * @brief Metodo que devuelve entero de 16bits que forma el ip de la maquina
  * @return IpMaquina
  */
-uint16_t Maquina::getIP ()
+uint16_t Maquina::getIP () const
 {
   return this->IpMaquina;
 }
@@ -68,7 +68,7 @@ uint16_t Maquina::getIP ()
  * @brief Metodo encargado de devolver la cantidad de paginas que enviara la maquina
  * @return cantPag
  */
-int Maquina::GetCantPag ()
+int Maquina::GetCantPag () const
 {
   return cantPag;
 }
@@ -103,7 +103,7 @@ Pagina *Maquina::CreatedPage (const uint16_t dest[], int numDir)
   else
     {
       printf ("Ya se enviaron todas las paginas que debian\n");
-      return NULL;
+      return nullptr;
     }
 
 }
