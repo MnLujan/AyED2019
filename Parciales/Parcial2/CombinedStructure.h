@@ -5,7 +5,7 @@
 #ifndef _STRUCTRECOMBINED_H_
 #define _STRUCTRECOMBINED_H_
 #include <iostream>
-#include "NodoStructure.h"
+#include "StructureNodo.h"
 
 using namespace std;
 
@@ -13,22 +13,22 @@ using namespace std;
  * @brief Estructura combinada, la cual esta constituida por punteros a nodos. En conjunto se forma
  * 2 listas y un ABB. Tambien se almacena la cantidad de nodos que forman la estructura.
  */
-class StructreCombined {
+class CombinedStructure {
  private:
 
   ///@brief Puntero a objeto Nodo
   /* Lista ordenada Alfabeticamente */
-  NodoStructure *czo;
+  StructureNodo *czo;
   /* Arbol binario */
-  NodoStructure *raiz;
+  StructureNodo *raiz;
   /* Lista Ordenada por numero de repeticiones */
-  NodoStructure *czoRep;
+  StructureNodo *czoRep;
   ///@brief Cantidad de nodos existentes dentro de la estructura
   unsigned int size;
 
  public:
-  StructreCombined ();
-  StructreCombined (string x);
+  CombinedStructure ();
+  CombinedStructure (string x);
   int GetSizeStruct () const;
 
   ///@brief Comparaciones utilizadas para Quicksort y por insercion, para arbor y lista.
@@ -42,11 +42,11 @@ class StructreCombined {
   ///@brief Ordena las los nodos por numero de veces que esta repetida cada palabra
   void QuickSort (int, int);
   ///@brief Devuelve el puntero al nodo con la palabra que se le paso como parametro
-  NodoStructure *GetNodo (string);
+  StructureNodo *GetNodo (string);
   ///@brief Devuelve el puntero a un nodo especifico de la lista ordenada por numero de repeticiones
-  NodoStructure *GetNodoSwap (int);
+  StructureNodo *GetNodoSwap (int);
   ///@brief Devuelve un puntero
-  NodoStructure *GetNodoAlf(int);
+  StructureNodo *GetNodoAlf(int);
   ///@brief Metodo encargado de llamar al metodo Quicksort y pasarle los parametros necesarios
   void OrdenaQS ();
   ///@brief Metodo utilizado en el algoritmos QuickSort
@@ -59,10 +59,10 @@ class StructreCombined {
   void InserABB (string);
 
   ///@brief El metodo devolvera el nodo siguiente izquierdo, en caso q sea el ultimo retornara NULL
-  NodoStructure *Izq ();
+  StructureNodo *Izq ();
 
   ///@brief El metodo devolvera el nodo siguiente derecho, caso que sea el ultimo retornara NULL
-  NodoStructure *Der ();
+  StructureNodo *Der ();
 };
 
 #endif //_STRUCTRECOMBINED_H_

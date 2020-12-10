@@ -6,36 +6,36 @@
 #define _NODOSTRUCTURE_H_
 #include "Palabra.h"
 
-class NodoStructure{
+class StructureNodo{
  private:
   /**@brief Puntero a objeto Palabra*/
   Palabra *Data;
   
   ///@brief Puntero al siguiente nodo de lista ordenada alfabeticamente
-  NodoStructure *l_nextAlf;
+  StructureNodo *l_nextAlf;
   
   ///@brief Puntero al siguiente nodo de lista ordenada por Repeticiones
-  NodoStructure *l_nextRep;
+  StructureNodo *l_nextRep;
   
   ///@brief Puntero a nodo derecho del ABB
-  NodoStructure *ABB_der;
+  StructureNodo *ABB_der;
   
   ///@brief Puntero a nodo izquierdo del ABB
-  NodoStructure *ABB_izq;
+  StructureNodo *ABB_izq;
  public:
   ///@brief Constructor sin parametros
-  NodoStructure ();
-  NodoStructure (string);
+  StructureNodo ();
+  StructureNodo (string);
 
   ///@brief Posiciona el nodo en la posicion deseada de la lista ordenada alfabeticamente
-  void set_nextAlf (NodoStructure *); //cambiar nombre despues
+  void set_nextAlf (StructureNodo *); //cambiar nombre despues
 
   ///@brief Posiciona el nodo en la posicion deseada de la lista ordenada por cantidad de repeticiones
-  void set_nextRep (NodoStructure *);
+  void set_nextRep (StructureNodo *);
 
   ///@brief Devuelve el nodo de la lista deseada
-  NodoStructure *get_nextAlf ();
-  NodoStructure *get_nextRep ();
+  StructureNodo *get_nextAlf ();
+  StructureNodo *get_nextRep ();
 
   unsigned int get_rep ();
   string GetDataPal ();
@@ -43,10 +43,10 @@ class NodoStructure{
   ///@brief Incrementa el numero de repeticiones de la plabra
   void IncreaseRep ();
 
-  void set_der (NodoStructure *);
-  NodoStructure *GetDerABB ();
-  void set_izq (NodoStructure *);
-  NodoStructure *GetIzqABB ();
+  void set_der (StructureNodo *);
+  StructureNodo *GetDerABB ();
+  void set_izq (StructureNodo *);
+  StructureNodo *GetIzqABB ();
 
 };
 

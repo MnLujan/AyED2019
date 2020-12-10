@@ -2,9 +2,9 @@
 // Created by mlujan on 6/7/19.
 //
 
-#include "StructreCombined.h"
+#include "CombinedStructure.h"
 
-StructreCombined::StructreCombined ()
+CombinedStructure::CombinedStructure ()
 {
   czo = nullptr;
   raiz = nullptr;
@@ -15,9 +15,9 @@ StructreCombined::StructreCombined ()
   compABB = 0;
 }
 
-StructreCombined::StructreCombined (string x)
+CombinedStructure::CombinedStructure (string x)
 {
-  czo = new NodoStructure (x);
+  czo = new StructureNodo (x);
   size = 1;
   compLIST = 0;
   compQS = 0;
@@ -29,9 +29,9 @@ StructreCombined::StructreCombined (string x)
  * @param p: palabra a buscar en la lista
  * @return Puntero al nodo encontrado
  */
-NodoStructure *StructreCombined::GetNodo (string p)
+StructureNodo *CombinedStructure::GetNodo (string p)
 {
-  NodoStructure *temp = czo;
+  StructureNodo *temp = czo;
   while (temp->GetDataPal () != p)
     {
       temp = temp->get_nextAlf ();
@@ -39,7 +39,7 @@ NodoStructure *StructreCombined::GetNodo (string p)
   return temp;
 }
 
-int StructreCombined::GetSizeStruct () const
+int CombinedStructure::GetSizeStruct () const
 {
   return size;
 }
@@ -50,12 +50,12 @@ int StructreCombined::GetSizeStruct () const
  * palabra en el texto leido
  * @param a entero que representa el numero de nodo
  */
-unsigned int StructreCombined::GetNumRep (int a)
+unsigned int CombinedStructure::GetNumRep (int a)
 {
   int cant = this->GetSizeStruct ();
   if (a <= cant)
     {
-      NodoStructure *temp = czoRep;
+      StructureNodo *temp = czoRep;
       for (int i = 0; i < a; i++)
         {
           temp = temp->get_nextRep ();
@@ -73,19 +73,19 @@ unsigned int StructreCombined::GetNumRep (int a)
  * @param a Nodo inferior de la lista a ordenar
  * @param b Nodo Superior de la lista a ordenar
  */
-void StructreCombined::Swap (int a, int b)
+void CombinedStructure::Swap (int a, int b)
 {
   if (a != 0)
     {
-      NodoStructure *temp = this->GetNodoSwap (a - 1);
-      NodoStructure *temp_2 = this->GetNodoSwap (a);
-      NodoStructure *temp_5 = this->GetNodoSwap (b);
+      StructureNodo *temp = this->GetNodoSwap (a - 1);
+      StructureNodo *temp_2 = this->GetNodoSwap (a);
+      StructureNodo *temp_5 = this->GetNodoSwap (b);
       if (b - a != 1)
         {
           /* Si los nodos no se encuentran al lado se ejecuta este codigo */
-          NodoStructure *temp_3 = this->GetNodoSwap (a + 1);
-          NodoStructure *temp_4 = this->GetNodoSwap (b - 1);
-          NodoStructure *temp_6 = this->GetNodoSwap (b + 1);
+          StructureNodo *temp_3 = this->GetNodoSwap (a + 1);
+          StructureNodo *temp_4 = this->GetNodoSwap (b - 1);
+          StructureNodo *temp_6 = this->GetNodoSwap (b + 1);
 
           temp->set_nextRep (temp_5);
           temp_2->set_nextRep (temp_6);
@@ -101,14 +101,14 @@ void StructreCombined::Swap (int a, int b)
     }
   else
     {
-      NodoStructure *temp = GetNodoSwap (b);
-      NodoStructure *temp_1 = GetNodoSwap (b + 1);
+      StructureNodo *temp = GetNodoSwap (b);
+      StructureNodo *temp_1 = GetNodoSwap (b + 1);
 
       /* Me aseguro que los nodos a intercambiar no sean los 2 primeros */
       if (b != 1)
         {
-          NodoStructure *temp_2 = GetNodoSwap (a + 1);
-          NodoStructure *temp_3 = GetNodoSwap (b - 1);
+          StructureNodo *temp_2 = GetNodoSwap (a + 1);
+          StructureNodo *temp_3 = GetNodoSwap (b - 1);
 
           temp_3->set_nextRep (czoRep);
           czoRep->set_nextRep (temp_1);
@@ -133,9 +133,9 @@ void StructreCombined::Swap (int a, int b)
  * @param a Numero de Nodo a buscar de la lista
  * @return Puntero al nodo de la lista
  */
-NodoStructure *StructreCombined::GetNodoSwap (int a)
+StructureNodo *CombinedStructure::GetNodoSwap (int a)
 {
-  NodoStructure *temp = czoRep;
+  StructureNodo *temp = czoRep;
   if (a < size)
     {
       int i = 0;
@@ -157,7 +157,7 @@ NodoStructure *StructreCombined::GetNodoSwap (int a)
  * ordenamiento de este mismo
  * @param x palabra a agregar.
  */
-void StructreCombined::AddPal (string x)
+void CombinedStructure::AddPal (string x)
 {
   if (size != 0)
     {
@@ -167,7 +167,7 @@ void StructreCombined::AddPal (string x)
   else
     {
       /* Si no hay ningun nodo lo crea y lo inserta al comienzo */
-      auto *nuevo = new NodoStructure (x);
+      auto *nuevo = new StructureNodo (x);
       czo = nuevo;
       raiz = nuevo;
       czoRep = nuevo;
@@ -182,13 +182,13 @@ void StructreCombined::AddPal (string x)
  * de esta.
  * @param pal: Se envia la palabra a insertar en el nodo
  */
-void StructreCombined::InserList (string pal)
+void CombinedStructure::InserList (string pal)
 {
   int size_struct = this->GetSizeStruct ();
-  auto *nuevo = new NodoStructure (pal);
-  NodoStructure *temp = czo;
-  NodoStructure *temp_2 = czo;
-  NodoStructure *anterior = nullptr;
+  auto *nuevo = new StructureNodo (pal);
+  StructureNodo *temp = czo;
+  StructureNodo *temp_2 = czo;
+  StructureNodo *anterior = nullptr;
 
   for (int i = 0; i < size_struct; i++)
     { /* En caso que la palabra se deba ordenar antes que la actual */
@@ -241,12 +241,12 @@ void StructreCombined::InserList (string pal)
   return;
 }
 
-NodoStructure *StructreCombined::Der ()
+StructureNodo *CombinedStructure::Der ()
 {
   return raiz->GetDerABB ();
 }
 
-NodoStructure *StructreCombined::Izq ()
+StructureNodo *CombinedStructure::Izq ()
 {
   return raiz->GetIzqABB ();
 }
@@ -255,10 +255,10 @@ NodoStructure *StructreCombined::Izq ()
  * @brief Metodo encargado de la insercion de nodos en el ABB, con sus respectivas restricciones
  * @param pal: Dato de tipo string que contiene la palabra a agregar.
  */
-void StructreCombined::InserABB (string pal)
+void CombinedStructure::InserABB (string pal)
 {
-  NodoStructure *temp = raiz;
-  NodoStructure *anterior = nullptr;
+  StructureNodo *temp = raiz;
+  StructureNodo *anterior = nullptr;
   while (temp != nullptr)
     {
       anterior = temp;
@@ -304,7 +304,7 @@ void StructreCombined::InserABB (string pal)
 /**
  * @brief Se utiliza para llamar al metodo QuickSort desde el main y pasarle los parametros necesarios
  */
-void StructreCombined::OrdenaQS ()
+void CombinedStructure::OrdenaQS ()
 {
   QuickSort (0, size - 1);
   return;
@@ -317,7 +317,7 @@ void StructreCombined::OrdenaQS ()
  * @param start Inicio de la lista
  * @param end Final de la misma
  */
-void StructreCombined::QuickSort (int start, int end)
+void CombinedStructure::QuickSort (int start, int end)
 {
   int i, j, pivot;
 
@@ -361,9 +361,9 @@ void StructreCombined::QuickSort (int start, int end)
  * @param a Numero de nodo
  * @return Puntero al nodo
  */
-NodoStructure *StructreCombined::GetNodoAlf (int a)
+StructureNodo *CombinedStructure::GetNodoAlf (int a)
 {
-  NodoStructure *temp = czo;
+  StructureNodo *temp = czo;
   if (a < size)
     {
       int i = 0;

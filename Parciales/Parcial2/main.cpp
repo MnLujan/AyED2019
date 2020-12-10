@@ -1,36 +1,42 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
-#include "StructreCombined.h"
+#include "CombinedStructure.h"
 
 using namespace std;
 
 int main() {
-    auto *l = new StructreCombined();
+    auto *l = new CombinedStructure();
     fstream input;
     string line;
     string tmp;
+    int r = 0;
     input.open("texto");
 
-    tmp = "Se procede a leer el texto, se imprimiran por pantalla en el orden que se van leyendo desde el texto: \n";
+    tmp = "--> Se procede a leer el texto, se imprimiran por pantalla en el orden que se van leyendo desde el texto: \n\n";
     cout << tmp;
     /* Se arma la estrucutra combinada */
     while (input >> line) {
         /* Paso el string a minuscula */
         for (int i = 0; i < line.length(); i++) {
             line[i] = tolower(line[i]);
-            if(line[i] == '.' || line[i] == ','){
+            if (line[i] == '.' || line[i] == ',' || line[i] == '!' || line[i] == '?') {
                 line[i] = ' ';
             }
         }
         /* Agrego la palabra a la estructura */
-        cout << line + "\n";
+        cout << line + " ";
+        r++;
+        if (r == 30) {
+            r = 0;
+            cout << endl;
+        }
         l->AddPal(line);
     }
 
     input.close();
 
-    tmp = "\nPor ultimo se genera un nuevo texto con las palabras ordenaras alfabeticamente y por repeticiones\n";
+    tmp = "\n\n-->Por ultimo se genera un nuevo texto con las palabras ordenaras alfabeticamente y por repeticiones\n";
     cout << tmp;
 
     /* Llamo al metodo QuickSort */
