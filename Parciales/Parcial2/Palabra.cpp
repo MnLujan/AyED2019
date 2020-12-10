@@ -7,6 +7,7 @@
 Palabra::Palabra ()
 {
   rep = 0;
+  dato = nullptr;
 }
 
 Palabra::Palabra (string a)

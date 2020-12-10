@@ -29,7 +29,7 @@ class StructreCombined {
  public:
   StructreCombined ();
   StructreCombined (string x);
-  int GetSizeStruct ();
+  int GetSizeStruct () const;
 
   ///@brief Comparaciones utilizadas para Quicksort y por insercion, para arbor y lista.
   unsigned int compQS, compLIST, compABB;

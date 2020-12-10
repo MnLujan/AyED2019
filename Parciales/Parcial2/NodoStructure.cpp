@@ -7,19 +7,19 @@
 NodoStructure::NodoStructure ()
 {
   Data = new Palabra ();
-  l_nextAlf = NULL;
-  l_nextRep = NULL;
-  ABB_der = NULL;
-  ABB_izq = NULL;
+  l_nextAlf = nullptr;
+  l_nextRep = nullptr;
+  ABB_der = nullptr;
+  ABB_izq = nullptr;
 }
 
 NodoStructure::NodoStructure (string a)
 {
   Data = new Palabra (a);
-  l_nextAlf = NULL;
-  l_nextRep = NULL;
-  ABB_der = NULL;
-  ABB_izq = NULL;
+  l_nextAlf = nullptr;
+  l_nextRep = nullptr;
+  ABB_der = nullptr;
+  ABB_izq = nullptr;
 }
 
 void NodoStructure::set_nextAlf (NodoStructure *n)

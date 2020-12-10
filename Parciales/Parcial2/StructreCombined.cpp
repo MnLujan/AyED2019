@@ -6,9 +6,9 @@
 
 StructreCombined::StructreCombined ()
 {
-  czo = NULL;
-  raiz = NULL;
-  czoRep = NULL;
+  czo = nullptr;
+  raiz = nullptr;
+  czoRep = nullptr;
   size = 0;
   compLIST = 0;
   compQS = 0;
@@ -19,6 +19,9 @@ StructreCombined::StructreCombined (string x)
 {
   czo = new NodoStructure (x);
   size = 1;
+  compLIST = 0;
+  compQS = 0;
+  compABB = 0;
 }
 
 /**
@@ -36,7 +39,7 @@ NodoStructure *StructreCombined::GetNodo (string p)
   return temp;
 }
 
-int StructreCombined::GetSizeStruct ()
+int StructreCombined::GetSizeStruct () const
 {
   return size;
 }
@@ -145,7 +148,7 @@ NodoStructure *StructreCombined::GetNodoSwap (int a)
     }
   else
     {
-      return NULL;
+      return nullptr;
     }
 }
 
@@ -164,7 +167,7 @@ void StructreCombined::AddPal (string x)
   else
     {
       /* Si no hay ningun nodo lo crea y lo inserta al comienzo */
-      NodoStructure *nuevo = new NodoStructure (x);
+      auto *nuevo = new NodoStructure (x);
       czo = nuevo;
       raiz = nuevo;
       czoRep = nuevo;
@@ -182,10 +185,10 @@ void StructreCombined::AddPal (string x)
 void StructreCombined::InserList (string pal)
 {
   int size_struct = this->GetSizeStruct ();
-  NodoStructure *nuevo = new NodoStructure (pal);
+  auto *nuevo = new NodoStructure (pal);
   NodoStructure *temp = czo;
   NodoStructure *temp_2 = czo;
-  NodoStructure *anterior = NULL;
+  NodoStructure *anterior = nullptr;
 
   for (int i = 0; i < size_struct; i++)
     { /* En caso que la palabra se deba ordenar antes que la actual */
@@ -212,7 +215,7 @@ void StructreCombined::InserList (string pal)
           compLIST++;
           break;
         } /* Si se llego al final de la lista se crea un nuevo nodo y se lo inserta */
-      else if (temp->get_nextAlf () == NULL)
+      else if (temp->get_nextAlf () == nullptr)
         {
           temp->set_nextAlf (nuevo);
           size = size + 1;
@@ -228,7 +231,7 @@ void StructreCombined::InserList (string pal)
 
   if (size_struct != size)
     {
-      while (temp != NULL)
+      while (temp != nullptr)
         {
           anterior = temp;
           temp = temp->get_nextRep ();
@@ -255,8 +258,8 @@ NodoStructure *StructreCombined::Izq ()
 void StructreCombined::InserABB (string pal)
 {
   NodoStructure *temp = raiz;
-  NodoStructure *anterior = NULL;
-  while (temp != NULL)
+  NodoStructure *anterior = nullptr;
+  while (temp != nullptr)
     {
       anterior = temp;
 
@@ -267,8 +270,8 @@ void StructreCombined::InserABB (string pal)
         }
       else if (temp->GetDataPal ().compare (pal) == 0)
         { /* No incremento el valor de rep porque ya se hizo desde el metodo de lista */
-          temp = NULL;
-          anterior = NULL;
+          temp = nullptr;
+          anterior = nullptr;
           compABB++;
         }
       else
@@ -277,7 +280,7 @@ void StructreCombined::InserABB (string pal)
           temp = temp->GetDerABB ();
         }
     }
-  if (anterior != NULL)
+  if (anterior != nullptr)
     {
       if (anterior->GetDataPal ().compare (pal) > 0)
         {
@@ -373,6 +376,6 @@ NodoStructure *StructreCombined::GetNodoAlf (int a)
     }
   else
     {
-      return NULL;
+      return nullptr;
     }
 }
