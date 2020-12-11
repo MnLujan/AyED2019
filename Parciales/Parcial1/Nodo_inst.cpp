@@ -7,7 +7,7 @@
 Nodo_inst::Nodo_inst (string a)
 {
   dato = a;
-  next = NULL;
+  next = nullptr;
 }
 
 void Nodo_inst::set_next (Nodo_inst *n)
@@ -27,5 +27,5 @@ Nodo_inst *Nodo_inst::get_next ()
 
 bool Nodo_inst::es_vacio ()
 {
-  return next == NULL;
+  return next == nullptr;
 }

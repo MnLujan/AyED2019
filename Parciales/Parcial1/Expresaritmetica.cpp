@@ -9,8 +9,8 @@
  */
 Expresaritmetica::Expresaritmetica ()
 {
-  p = NULL;
-  V = NULL;
+  p = nullptr;
+  V = nullptr;
 
 }
 

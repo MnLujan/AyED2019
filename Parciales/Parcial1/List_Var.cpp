@@ -49,7 +49,7 @@ void List_Var::addVar (char n, int v)
   size = size + 1;
 }
 
-bool List_Var::esvacia (void)
+bool List_Var::esvacia ()
 {
   return czo->es_vacio ();
 }
@@ -69,7 +69,7 @@ Nodo_Var *List_Var::get_nodo (int a)
   if (a > get_size ())
     {
       cout << "Error, nodo inexistente" << endl;
-      return NULL;
+      return nullptr;
     }
   else
     {

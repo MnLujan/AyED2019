@@ -7,13 +7,13 @@
 Nodo_Var::Nodo_Var ()
 {
   var = new Variables();
-  next = NULL;
+  next = nullptr;
 }
 
 Nodo_Var::Nodo_Var (char n, int v)
 {
   var = new Variables(n, v);
-  next = NULL;
+  next = nullptr;
 }
 
 void Nodo_Var::set_next (Nodo_Var *n)

@@ -6,7 +6,7 @@
 
 Lista_inst::Lista_inst ()
 {
-  czo = NULL;
+  czo = nullptr;
   size = 0;
 }
 
@@ -18,8 +18,8 @@ Lista_inst::Lista_inst(string a)
 
 void Lista_inst::add (string d)
 {
-  Nodo_inst *nuevo = new Nodo_inst (d);
-  if (czo == NULL)
+  auto *nuevo = new Nodo_inst (d);
+  if (czo == nullptr)
     {
       czo = nuevo;
     }
@@ -36,12 +36,12 @@ void Lista_inst::add (string d)
   size = size + 1;
 }
 
-bool Lista_inst::esvacia (void)
+bool Lista_inst::esvacia ()
 {
   return czo->es_vacio ();
 }
 
-string Lista_inst::cabeza (void)
+string Lista_inst::cabeza ()
 {
   if (esvacia ())
     {
@@ -65,7 +65,7 @@ Nodo_inst *Lista_inst::get_nodo (int a)
   if (a > get_size ())
     {
       cout << "Error, instruccion inexistente" << endl;
-      return NULL;
+      return nullptr;
     }
   else
     {
@@ -83,7 +83,7 @@ string Lista_inst::get_dato (int a)
   if (a > get_size ())
     {
       cout << "Error, instruccion inexistente" << endl;
-      return NULL;
+      return nullptr;
     }
   else
     {
