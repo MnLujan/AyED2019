@@ -35,7 +35,7 @@ class Mpls {
   int prev[MAX];
   vector<uint16_t> route;
  public:
-  Mpls (Lista<Lista<NodoGrafo *> *> *);
+  explicit Mpls (Lista<Lista<NodoGrafo *> *> *);
   void constAdyacen ();
   void relax (int, int, int);
   void Print (int);

@@ -17,13 +17,13 @@ class Maquina {
  private:
   uint16_t IpMaquina;
   int PaginasEnviadas;
-  int BW;
   Lista<string> *envio;
   Lista<Pagina *> *recep;
+  int BW;
   int cantPag;
   Logger *log;
   void CrearDatos ();
-  void CrearAux ();
+  void CrearAux (); /* Se utilizo para debbug */
 
  public:
   Maquina (uint16_t, int, Logger *);

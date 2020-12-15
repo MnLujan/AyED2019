@@ -1,0 +1,9 @@
+INT a
+INT b
+a=4
+b=1
+IF ( a<1 ) THEN JUMP 9
+b=b*a
+a=a-1
+JUMP 5
+SHOW b

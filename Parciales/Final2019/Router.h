@@ -8,9 +8,8 @@
 #include "Pagina.h"
 #include "Packages.h"
 #include "Maquina.h"
-/***
- * @TODO pack2pag enviarpaquetes
- */
+#include "Logger.h"
+
 class Router {
  private:
   uint16_t IPRouter;
@@ -21,11 +20,12 @@ class Router {
   Lista<Buffer *> *BuffersSalida = nullptr;
   Lista<Lista<Packages *> *> *package2pag = nullptr;
   uint8_t N_R;
+  Logger *log;
  public:
   Router ();
-  Router (uint16_t, uint8_t);
-  uint16_t getIpRouter ();
-  uint8_t getN_R ();
+  Router (uint16_t, uint8_t, Logger*);
+  uint16_t getIpRouter () const;
+  uint8_t getN_R () const;
   Lista<Packages *> *getInputList ();
   Lista<Maquina *> *getMaquiList ();
   Lista<Lista<Packages*>*> *getListPackages();
@@ -42,8 +42,6 @@ class Router {
   void packToPag(Lista<Packages *> *);
   Lista<Packages*> *Order(Lista<Packages*>*);
   Maquina* getMachine(uint16_t);
-
-
 };
 
 #endif //_ROUTER_H_

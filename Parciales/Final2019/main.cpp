@@ -6,7 +6,7 @@ using namespace std;
 
 int main ()
 {
-  auto log = new Logger ();
+  auto *log = new Logger ();
 
   auto *admin = new Administrador (log);
 
