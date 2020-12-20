@@ -51,7 +51,7 @@ while [[ 1 ]]; do
       echo ''
       cat cmake-build-debug/Log.txt | grep -E 'Input-Output \| Turno: .* \| .* \| NºPaquete '$NPack' Pag Nº'$NPag' \| Dato: '$dato' \| Origen: '$Ori' \| Destino: '$Dest' .*'
       cat cmake-build-debug/Log.txt | grep -E 'Llegada \| .* \| N°Paquete: '$NPack' Pag N°'$NPag' \| Dato: '$dato' \| Destino: '$Dest
-
+      cat cmake-build-debug/Log.txt | grep -E 'Recepcion \| MaquinaIP: '$Dest' \| N° Pag '$NPag' \| Origen '$Ori' \| Destino '$Dest' \| .*'
       echo ''
       echo ''
       read -p "----> BUSCAR OTRO DATO DE LA MISMA PAGINA? (Y/n) " -n 2 -r

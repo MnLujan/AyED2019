@@ -141,7 +141,7 @@ void Maquina::toReceive (Pagina *p)
 {
   this->recep->Add (p);
   string msj =
-      "\nRecepcion | MaquinaIP: " + to_string (this->getIP ()) + " | Nº Pag " + to_string (p->getIDpag ())
+      "\nRecepcion | MaquinaIP: " + to_string (this->getIP ()) + " | NºPag " + to_string (p->getIDpag ())
       + " | Origen " + to_string (p->getOrigen ()) + " | Destino "
       + to_string (p->getDestino ()) + " | Dato: " + p->getDato ();
   cout << msj << endl;

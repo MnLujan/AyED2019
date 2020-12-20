@@ -51,7 +51,7 @@ int main() {
     fs << endl;
     fs << "-Repeticiones:" << endl;
     for (int j = 0; j < l->GetSizeStruct(); ++j) {
-        fs << l->GetNodoSwap(j)->GetDataPal() << " ";
+        fs << l->GetNodoSwap(j)->GetDataPal() << "(" <<l->GetNumRep(j)<<") ";
     }
     fs << endl;
     fs << "-Comparaciones: \nInsercion por lista: " << l->compLIST << " / Insercsion ABB: " << l->compABB

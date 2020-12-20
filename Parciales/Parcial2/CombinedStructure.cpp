@@ -313,7 +313,6 @@ void CombinedStructure::OrdenaQS ()
 /**
  * Algoritmo de ordenamiento QuickSort, el mismo devuelva la lista ordenada de mayor a menor
  * teniendo en cuenta la cantidad de veces que se encuentra repetida cada palabra
- * @param list puntero a la lista que vmos a ordenar
  * @param start Inicio de la lista
  * @param end Final de la misma
  */
